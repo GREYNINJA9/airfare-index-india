@@ -1,0 +1,187 @@
+{
+  "_meta": {
+    "description": "SYNTHETIC fare observations for development and testing only.",
+    "is_real_data": false,
+    "warning": "This file is hand-authored synthetic data. It does NOT come from any real airline or OTA and must NOT be presented as real scraped data. Used only for Fare/Route contract testing.",
+    "schema": "models.fare.Fare (list)",
+    "record_count": 8
+  },
+  "fares": [
+    {
+      "route": {
+        "origin": "DEL",
+        "destination": "BOM",
+        "distance_km": 1138.0
+      },
+      "airline_code": "6E",
+      "price_inr": 5249.0,
+      "cabin_class": "ECONOMY",
+      "departure_at": "2026-09-15T06:00:00+00:00",
+      "scraped_at": "2026-08-27T10:00:00+00:00",
+      "trip_type": "ONE_WAY",
+      "source": {
+        "source_name": "IndiGo",
+        "source_type": "AIRLINE",
+        "raw_price": 5249.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "Economy Saver",
+        "source_url": "https://www.goindigo.in/flights/delhi-to-mumbai",
+        "raw_offer_id": "6E-DEL-BOM-20260915-0600-ECO-1"
+      }
+    },
+    {
+      "route": {
+        "origin": "DEL",
+        "destination": "BOM",
+        "distance_km": 1138.0
+      },
+      "airline_code": "6E",
+      "price_inr": 5699.0,
+      "cabin_class": "ECONOMY",
+      "departure_at": "2026-09-15T06:00:00+00:00",
+      "scraped_at": "2026-08-27T11:30:00+00:00",
+      "trip_type": "ONE_WAY",
+      "source": {
+        "source_name": "MakeMyTrip",
+        "source_type": "OTA",
+        "raw_price": 5699.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "Economy",
+        "source_url": "https://www.makemytrip.com/flights/DEL-BOM",
+        "raw_offer_id": "MMT-DEL-BOM-20260915-0600-ECO"
+      }
+    },
+    {
+      "route": {
+        "origin": "CCU",
+        "destination": "BLR",
+        "distance_km": 1561.0
+      },
+      "airline_code": "I5",
+      "price_inr": 13999.0,
+      "cabin_class": "BUSINESS",
+      "departure_at": "2026-09-20T07:00:00+00:00",
+      "scraped_at": "2026-08-27T10:00:00+00:00",
+      "trip_type": "ONE_WAY",
+      "source": {
+        "source_name": "Air India Express",
+        "source_type": "AIRLINE",
+        "raw_price": 13999.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "Business",
+        "source_url": "https://www.airindiaexpress.com/flights/ccu-to-blr",
+        "raw_offer_id": "I5-CCU-BLR-20260920-0700-BIZ"
+      }
+    },
+    {
+      "route": {
+        "origin": "MAA",
+        "destination": "HYD",
+        "distance_km": 629.0
+      },
+      "airline_code": "SG",
+      "price_inr": 8450.0,
+      "cabin_class": "ECONOMY",
+      "departure_at": "2026-10-02T14:30:00+00:00",
+      "scraped_at": "2026-08-27T11:30:00+00:00",
+      "trip_type": "ROUND_TRIP",
+      "source": {
+        "source_name": "Cleartrip",
+        "source_type": "OTA",
+        "raw_price": 8450.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "Economy Flexi",
+        "source_url": "https://www.cleartrip.com/flights/MAA-HYD",
+        "raw_offer_id": "CT-MAA-HYD-20261002-RT"
+      }
+    },
+    {
+      "route": {
+        "origin": "BOM",
+        "destination": "GOX",
+        "distance_km": 532.0
+      },
+      "airline_code": "UK",
+      "price_inr": 6200.0,
+      "cabin_class": "PREMIUM_ECONOMY",
+      "departure_at": "2026-09-18T09:15:00+00:00",
+      "scraped_at": "2026-08-27T10:00:00+00:00",
+      "trip_type": "ONE_WAY",
+      "source": {
+        "source_name": "Akasa Air",
+        "source_type": "AIRLINE",
+        "raw_price": 6200.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "Premium",
+        "source_url": "https://www.akasaair.com/flights/bom-to-gox",
+        "raw_offer_id": "AK-BOM-GOX-20260918-PE"
+      }
+    },
+    {
+      "route": {
+        "origin": "BLR",
+        "destination": "DEL",
+        "distance_km": 1737.0
+      },
+      "airline_code": "AI",
+      "price_inr": 4800.0,
+      "cabin_class": "ECONOMY",
+      "departure_at": "2026-01-12T18:00:00+00:00",
+      "scraped_at": "2026-08-27T12:00:00+00:00",
+      "trip_type": "ONE_WAY",
+      "source": {
+        "source_name": "Yatra",
+        "source_type": "OTA",
+        "raw_price": 4800.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "Economy",
+        "source_url": "https://www.yatra.com/flights/BLR-DEL",
+        "raw_offer_id": "YT-BLR-DEL-20260112-HIST"
+      }
+    },
+    {
+      "route": {
+        "origin": "DEL",
+        "destination": "CCU",
+        "distance_km": 1313.0
+      },
+      "airline_code": "AI",
+      "price_inr": 24500.0,
+      "cabin_class": "FIRST",
+      "departure_at": "2026-11-05T20:00:00+00:00",
+      "scraped_at": "2026-08-27T11:30:00+00:00",
+      "trip_type": "ROUND_TRIP",
+      "source": {
+        "source_name": "EaseMyTrip",
+        "source_type": "OTA",
+        "raw_price": 24500.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "First",
+        "source_url": "https://www.easemytrip.com/flights/DEL-CCU",
+        "raw_offer_id": "EMT-DEL-CCU-20261105-FC-RT"
+      }
+    },
+    {
+      "route": {
+        "origin": "HYD",
+        "destination": "PNQ",
+        "distance_km": 501.0
+      },
+      "airline_code": "6E",
+      "price_inr": 3399.0,
+      "cabin_class": "ECONOMY",
+      "departure_at": "2026-09-22T11:00:00+00:00",
+      "scraped_at": "2026-08-27T10:00:00+00:00",
+      "trip_type": "ONE_WAY",
+      "source": {
+        "source_name": "ixigo",
+        "source_type": "OTA",
+        "raw_price": 3399.0,
+        "raw_currency": "INR",
+        "raw_cabin_label": "economy special",
+        "source_url": "https://www.ixigo.com/flights/HYD-PNQ",
+        "raw_offer_id": "IX-HYD-PNQ-20260922-ECO"
+      }
+    }
+  ]
+}

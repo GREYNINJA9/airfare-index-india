@@ -44,6 +44,7 @@ data/processed/*
 !data/processed/.gitkeep
 data/sample/*
 !data/sample/.gitkeep
+!data/sample/synthetic_fares.json
 data/*.db
 data/*.sqlite
 
