@@ -50,9 +50,10 @@ class Scraper(Protocol):
         validation — any dict passed to ``RawFareSource.model_validate`` should
         succeed (or fail with a clear Pydantic error).
 
-        For prototype safety, scrapers should never raise on malformed input.
-        Instead, skip bad records and return an empty list if extraction fails
-        entirely.
+        For prototype safety, scrapers should never surface a total extraction
+        failure to callers as an exception. Malformed input or a page that yields
+        no valid records should result in an empty list rather than a raised
+        error.
         """
         raise NotImplementedError
 
@@ -64,8 +65,13 @@ class ScraperError(RuntimeError):
 
 
 class ExtractionError(ScraperError):
-    """Raised when a scraper cannot extract any valid fares from the input."""
+    """Internal signal that a scraper could not extract any valid fares.
+
+    The public ``Scraper.extract`` contract treats this as a safe-failure case:
+    callers should receive ``[]`` instead of seeing this exception escape.
+    """
 
     def __init__(self, message: str, html_sample: Optional[str] = None):
         super().__init__(message)
+        self.message = message
         self.html_sample = html_sample

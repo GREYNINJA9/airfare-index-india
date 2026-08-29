@@ -20,6 +20,7 @@ from __future__ import annotations
 import re
 
 from models.fare import SourceType
+from scraper.base import ExtractionError
 
 #: Mock HTML template used by tests and for demonstrating the parser's input
 #: format. Clearly mock data — not captured from the live site.
@@ -71,8 +72,8 @@ class MakeMyTripScraper:
     def extract(self, html: str) -> list[dict]:
         """Extract raw fare records from controlled HTML.
 
-        Skips cards missing required data and returns an empty list when
-        nothing valid can be parsed — never raises into the pipeline.
+        Malformed input and total extraction failures are treated as safe
+        failures: return an empty list rather than raising into the pipeline.
         """
         fares: list[dict] = []
         try:
@@ -83,6 +84,16 @@ class MakeMyTripScraper:
                 record = self._parse_card(card, i)
                 if record is not None:
                     fares.append(record)
+
+            if not fares:
+                raise ExtractionError(
+                    "No valid fares extracted from HTML.",
+                    html_sample=str(html)[:200],
+                )
+        except ExtractionError:
+            # Safe failure mode: malformed input or total extraction failure yields
+            # no records for the pipeline.
+            return []
         except Exception:
             # Safe failure mode: malformed input yields no records.
             return []
