@@ -20,6 +20,7 @@ from __future__ import annotations
 import re
 
 from models.fare import SourceType
+from models.route import Route
 from scraper.base import ExtractionError
 
 #: Mock HTML template used by tests and for demonstrating the parser's input
@@ -75,7 +76,7 @@ class ClearTripScraper:
         """Where the data originates — an OTA for this scraper."""
         return self._source_type
 
-    def extract(self, html: str) -> list[dict]:
+    def extract(self, html: str, route: Route | None = None) -> list[dict]:
         """Extract raw fare records from controlled HTML.
 
         Malformed input and total extraction failures are treated as safe
@@ -85,9 +86,14 @@ class ClearTripScraper:
         try:
             cards = _CARD_SPLIT.split(str(html))[1:]
             for i, card in enumerate(cards, 1):
-                if 'data-route="DEL-BOM"' not in card:
+                expected_route = (
+                    "DEL-BOM"
+                    if route is None
+                    else (f"{route.origin}-{route.destination}")
+                )
+                if f'data-route="{expected_route}"' not in card:
                     continue
-                record = self._parse_card(card, i)
+                record = self._parse_card(card, i, route=route)
                 if record is not None:
                     fares.append(record)
 
@@ -105,7 +111,7 @@ class ClearTripScraper:
             return []
         return fares
 
-    def _parse_card(self, card: str, index: int) -> dict | None:
+    def _parse_card(self, card: str, index: int, route: Route | None) -> dict | None:
         """Parse one flight-card fragment into a raw record, or ``None``."""
         price_inr = self._parse_price(card)
         cabin_label, cabin_class = self._parse_cabin(card)
@@ -114,11 +120,18 @@ class ClearTripScraper:
         if price_inr is None or cabin_class is None or airline_code is None:
             return None  # skip incomplete cards
 
+        if route is None:
+            origin, destination = "DEL", "BOM"
+            distance_km = 1138.0
+        else:
+            origin, destination = route.origin, route.destination
+            distance_km = route.distance_km
+
         return {
             "route": {
-                "origin": "DEL",
-                "destination": "BOM",
-                "distance_km": 1138.0,
+                "origin": origin,
+                "destination": destination,
+                "distance_km": distance_km,
             },
             "airline_code": airline_code,
             "price_inr": price_inr,
@@ -132,8 +145,8 @@ class ClearTripScraper:
                 "raw_price": price_inr,
                 "raw_currency": "INR",
                 "raw_cabin_label": cabin_label,
-                "source_url": "https://www.cleartrip.com/flights/DEL-BOM/2026-09-15",
-                "raw_offer_id": f"CT-DEL-BOM-{index}",
+                "source_url": f"https://www.cleartrip.com/flights/{origin}-{destination}/2026-09-15",
+                "raw_offer_id": f"CT-{origin}-{destination}-{index}",
             },
         }
 

@@ -4,8 +4,10 @@ This module defines the contract that every scraper must implement. It does not
 contain any scraping logic itself — that lives in individual scraper modules.
 
 The scraper protocol:
-- ``Scraper.extract(html: str) -> list[dict]`` — parse raw HTML and return a list of
-  raw fare dictionaries matching the ``RawFareSource`` contract.
+- ``Scraper.extract(html: str, route: Route | None = None) -> list[dict]`` —
+  parse raw HTML and return a list of raw fare dictionaries matching the
+  ``RawFareSource`` contract. When ``route`` is provided, the scraper should
+  constrain extraction to that (origin, destination) pair.
 - ``Scraper.name: str`` — human-readable source name used in provenance.
 - ``Scraper.source_type: SourceType`` — ``SourceType.OTA`` or ``SourceType.AIRLINE``.
 
@@ -18,6 +20,7 @@ from __future__ import annotations
 from typing import List, Optional, Protocol, runtime_checkable
 
 from models.fare import SourceType
+from models.route import Route
 
 
 @runtime_checkable
@@ -43,10 +46,12 @@ class Scraper(Protocol):
         """Where the data originates — ``SourceType.OTA`` or ``SourceType.AIRLINE``."""
         raise NotImplementedError
 
-    def extract(self, html: str) -> List[dict]:
+    def extract(self, html: str, route: Route | None = None) -> List[dict]:
         """Parse raw HTML and return a list of raw fare dictionaries.
 
-        The return value must be directly compatible with ``RawFareSource``
+        The return value must be directly compatible with ``RawFareSource``.
+        If ``route`` is provided, the scraper should constrain output to that
+        origin/destination pair.
         validation — any dict passed to ``RawFareSource.model_validate`` should
         succeed (or fail with a clear Pydantic error).
 
