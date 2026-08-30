@@ -1,0 +1,6 @@
+sources:
+  - name: MakeMyTrip
+    source_type: OTA
+    enabled: true
+    module: scraper.otas.mmt
+    class: MakeMyTripScraper
