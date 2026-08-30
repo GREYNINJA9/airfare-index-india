@@ -1,0 +1,13 @@
+routes:
+  - origin: DEL
+    destination: BOM
+  - origin: BOM
+    destination: DEL
+  - origin: DEL
+    destination: BLR
+  - origin: BLR
+    destination: DEL
+  - origin: DEL
+    destination: HYD
+  - origin: HYD
+    destination: DEL
