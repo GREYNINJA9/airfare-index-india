@@ -4,3 +4,8 @@ sources:
     enabled: true
     module: scraper.otas.mmt
     class: MakeMyTripScraper
+  - name: ClearTrip
+    source_type: OTA
+    enabled: true
+    module: scraper.otas.cleartrip
+    class: ClearTripScraper
