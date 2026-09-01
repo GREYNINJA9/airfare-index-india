@@ -21,7 +21,7 @@ def init_schema(conn: sqlite3.Connection) -> None:
 
         id               INTEGER PRIMARY KEY AUTOINCREMENT
         route_origin     TEXT    NOT NULL
-        route_destination TEXT   NOT NULL
+        route_destination TEXT    NOT NULL
         distance_km      REAL    NOT NULL
         airline_code     TEXT    NOT NULL
         price_inr        REAL    NOT NULL
@@ -39,6 +39,9 @@ def init_schema(conn: sqlite3.Connection) -> None:
 
     Indexes are added on ``route_origin``, ``route_destination``,
     and ``scraped_at`` for the index engine's time-series queries.
+
+    This module also initializes the derived ``index_results`` table for
+    persisted index computations.
     """
 
     schema_sql = """
@@ -64,6 +67,18 @@ def init_schema(conn: sqlite3.Connection) -> None:
     CREATE INDEX IF NOT EXISTS idx_fares_route_origin ON fares(route_origin);
     CREATE INDEX IF NOT EXISTS idx_fares_route_destination ON fares(route_destination);
     CREATE INDEX IF NOT EXISTS idx_fares_scraped_at ON fares(scraped_at);
+
+    CREATE TABLE IF NOT EXISTS index_results (
+        id                        INTEGER PRIMARY KEY AUTOINCREMENT,
+        base_period               TEXT    NOT NULL,
+        current_period            TEXT    NOT NULL,
+        overall_laspeyres_index   REAL    NOT NULL,
+        overall_jevons_index      REAL    NOT NULL,
+        methodology_json          TEXT    NOT NULL,
+        item_indices_json        TEXT    NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS idx_index_results_base_current
+        ON index_results(base_period, current_period);
 """
 
     conn.executescript(schema_sql)
