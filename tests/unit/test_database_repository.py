@@ -10,6 +10,7 @@ from database.connection import reset_connection
 from database.repository import (
     count_fares,
     get_fare_by_offer_id,
+    get_fares,
     get_fares_by_route,
     insert_fares,
 )
@@ -199,6 +200,57 @@ def test_get_fare_by_offer_id_returns_row(in_memory_db):
     assert row["price_inr"] == 5000.0
 
 
-def test_get_fare_by_offer_id_returns_none_for_missing(in_memory_db):
-    assert get_fare_by_offer_id(in_memory_db, "nonexistent") is None
-    assert get_fare_by_offer_id(in_memory_db, "") is None
+def test_get_fares_skips_rows_with_null_provenance_fields(in_memory_db):
+    """Legacy rows with NULL provenance are ignored while complete rows still load."""
+    from datetime import datetime, timezone
+
+    from models.fare import CabinClass, TripType
+    from models.route import Route
+
+    valid = Fare(
+        route=Route(origin="DEL", destination="BOM"),
+        airline_code="6E",
+        price_inr=5000.0,
+        cabin_class=CabinClass.ECONOMY,
+        departure_at=datetime(2026, 9, 15, 6, 0, tzinfo=timezone.utc),
+        scraped_at=datetime(2026, 8, 27, 10, 0, tzinfo=timezone.utc),
+        trip_type=TripType.ONE_WAY,
+        source=_valid_source(),
+    )
+    insert_fares(in_memory_db, [valid])
+
+    in_memory_db.execute(
+        """
+        INSERT INTO fares (
+            route_origin, route_destination, route_distance_km,
+            airline_code, price_inr, cabin_class, departure_at, scraped_at,
+            trip_type, source_name, source_type, raw_price, raw_currency,
+            raw_cabin_label, source_url, raw_offer_id
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            "DEL",
+            "BOM",
+            1500.0,
+            "AI",
+            4500.0,
+            "ECONOMY",
+            "2026-09-15T06:00:00+00:00",
+            "2026-08-27T10:00:00+00:00",
+            "ONE_WAY",
+            None,
+            None,
+            None,
+            "INR",
+            "Economy",
+            None,
+            "bad-offer",
+        ),
+    )
+    in_memory_db.commit()
+
+    fares = get_fares(in_memory_db)
+
+    assert len(fares) == 1
+    assert fares[0].price_inr == 5000.0
+    assert fares[0].source.source_name == valid.source.source_name

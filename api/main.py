@@ -3,6 +3,8 @@ from typing import Any, Dict
 
 from fastapi import FastAPI
 
+from api.routes import router as api_router
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
@@ -13,6 +15,9 @@ app = FastAPI(
     description="API foundation for India Consumer Price Index (CPI) Augmentation",
     version="0.1.0",
 )
+
+
+app.include_router(api_router)
 
 
 @app.get("/health", response_model=Dict[str, Any])
