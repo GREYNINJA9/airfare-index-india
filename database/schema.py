@@ -62,7 +62,7 @@ def init_schema(conn: sqlite3.Connection) -> None:
         raw_currency        TEXT,
         raw_cabin_label   TEXT,
         source_url          TEXT,
-        raw_offer_id        TEXT
+        raw_offer_id        TEXT UNIQUE
     );
     CREATE INDEX IF NOT EXISTS idx_fares_route_origin ON fares(route_origin);
     CREATE INDEX IF NOT EXISTS idx_fares_route_destination ON fares(route_destination);
@@ -75,7 +75,8 @@ def init_schema(conn: sqlite3.Connection) -> None:
         overall_laspeyres_index   REAL    NOT NULL,
         overall_jevons_index      REAL    NOT NULL,
         methodology_json          TEXT    NOT NULL,
-        item_indices_json        TEXT    NOT NULL
+        item_indices_json        TEXT    NOT NULL,
+        UNIQUE(base_period, current_period)
     );
     CREATE INDEX IF NOT EXISTS idx_index_results_base_current
         ON index_results(base_period, current_period);

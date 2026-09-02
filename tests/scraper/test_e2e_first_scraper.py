@@ -61,16 +61,21 @@ def test_e2e_scrape_runs_are_deterministic(conn):
     scraper = MakeMyTripScraper()
     html = _MOCK_FLIGHT_CARD
 
-    raw_batch = scraper.extract(html + html)
-    assert len(raw_batch) == 2, "Scraper should emit one record per card"
+    for run_index in range(2):
+        raw_batch = scraper.extract(html)
+        assert len(raw_batch) == 1, "Each scrape run should emit one record"
 
-    fares, bad, err = process_raw_fares(raw_batch)
-    assert err is None and not bad
-    assert len(fares) == 1, "Deduplicator should collapse identical fares"
+        fares, bad, err = process_raw_fares(raw_batch)
+        assert err is None and not bad
+        assert len(fares) == 1, "Decision pipeline should preserve the single fare"
 
-    for fare in fares:
-        insert_fare(conn, fare)
-    assert count_fares(conn) == 1
+        inserted = insert_fare(conn, fares[0])
+        if run_index == 0:
+            assert inserted > 0, "First run should persist the fare"
+        else:
+            assert inserted == 0, "Second run should be rejected as a duplicate"
+
+        assert count_fares(conn) == 1, "Duplicate persisted fares must be blocked"
 
 
 def test_e2e_bad_html_to_empty_database(conn):

@@ -89,7 +89,9 @@ def test_get_fares_by_route_returns_matching_rows(in_memory_db):
     from models.fare import CabinClass, TripType
     from models.route import Route
 
-    s = _valid_source()
+    s1 = _valid_source(raw_offer_id="route1-offer")
+    s2 = _valid_source(raw_offer_id="route2-offer")
+    s3 = _valid_source(raw_offer_id="other-route-offer")
     f1 = Fare(
         route=Route(origin="DEL", destination="BOM"),
         airline_code="6E",
@@ -98,7 +100,7 @@ def test_get_fares_by_route_returns_matching_rows(in_memory_db):
         departure_at=datetime(2026, 9, 15, 6, 0, tzinfo=timezone.utc),
         scraped_at=datetime(2026, 8, 27, 10, 0, tzinfo=timezone.utc),
         trip_type=TripType.ONE_WAY,
-        source=s,
+        source=s1,
     )
     f2 = Fare(
         route=Route(origin="DEL", destination="BOM"),
@@ -108,7 +110,7 @@ def test_get_fares_by_route_returns_matching_rows(in_memory_db):
         departure_at=datetime(2026, 9, 20, 6, 0, tzinfo=timezone.utc),
         scraped_at=datetime(2026, 8, 28, 12, 0, tzinfo=timezone.utc),
         trip_type=TripType.ONE_WAY,
-        source=s,
+        source=s2,
     )
     other = Fare(
         route=Route(origin="CCU", destination="BLR"),
@@ -118,7 +120,7 @@ def test_get_fares_by_route_returns_matching_rows(in_memory_db):
         departure_at=datetime(2026, 9, 15, 6, 0, tzinfo=timezone.utc),
         scraped_at=datetime(2026, 8, 27, 10, 0, tzinfo=timezone.utc),
         trip_type=TripType.ONE_WAY,
-        source=s,
+        source=s3,
     )
     insert_fares(in_memory_db, [f1, f2, other])
 
