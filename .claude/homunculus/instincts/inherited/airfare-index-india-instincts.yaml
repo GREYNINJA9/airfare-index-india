@@ -1,0 +1,146 @@
+# Instincts generated from https://github.com/GREYNINJA9/airfare-index-india
+# Generated: 2026-09-07T16:36:47.214Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: airfare-index-india-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Commit Length
+
+## Action
+
+Keep commit messages concise (~11 characters)
+
+## Evidence
+
+- Average commit message length: 11 chars
+- Based on 3 commits
+
+---
+id: airfare-index-india-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Naming Files
+
+## Action
+
+Use snake_case naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: snake_case
+
+---
+id: airfare-index-india-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: airfare-index-india-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: airfare-index-india-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: airfare-index-india-test-naming
+trigger: "when creating a test file"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Test Naming
+
+## Action
+
+Name test files using the pattern: *.test.ts
+
+## Evidence
+
+- File pattern: *.test.ts
+- Consistent across test files
+
+---
+id: airfare-index-india-test-types
+trigger: "when planning tests for a feature"
+confidence: 0.7
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/GREYNINJA9/airfare-index-india
+---
+
+# Airfare Index India Test Types
+
+## Action
+
+Write unit, integration, e2e tests to match project standards
+
+## Evidence
+
+- Test types detected: unit, integration, e2e
+- Coverage config: no
+
