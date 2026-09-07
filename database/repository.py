@@ -30,9 +30,9 @@ def _iso(dt: datetime) -> str:
 
 
 def insert_fare(conn: sqlite3.Connection, fare: Fare) -> int:
-    """Insert a single ``Fare`` and return its row id."""
+    """Insert a single ``Fare`` and return its row id, or 0 on conflict."""
     sql = """
-    INSERT INTO fares (
+    INSERT OR IGNORE INTO fares (
         route_origin, route_destination, route_distance_km,
         airline_code, price_inr, cabin_class, departure_at, scraped_at,
         trip_type, source_name, source_type, raw_price, raw_currency,
@@ -59,7 +59,7 @@ def insert_fare(conn: sqlite3.Connection, fare: Fare) -> int:
     )
     cur = conn.execute(sql, params)
     conn.commit()
-    return int(cur.lastrowid)
+    return int(cur.lastrowid) if cur.rowcount > 0 else 0
 
 
 def insert_fares(conn: sqlite3.Connection, fares: List[Fare]) -> int:
@@ -113,6 +113,21 @@ def get_fares(conn: sqlite3.Connection) -> List[Fare]:
 
     fares: List[Fare] = []
     for row in cur.fetchall():
+        source_name = row["source_name"]
+        source_type = row["source_type"]
+        raw_price = row["raw_price"]
+        raw_currency = row["raw_currency"]
+        raw_cabin_label = row["raw_cabin_label"]
+
+        if (
+            source_name is None
+            or source_type is None
+            or raw_price is None
+            or raw_currency is None
+            or raw_cabin_label is None
+        ):
+            continue
+
         route_distance_km = row["route_distance_km"]
         distance_km: float | None
         try:
@@ -143,11 +158,11 @@ def get_fares(conn: sqlite3.Connection) -> List[Fare]:
                     "scraped_at": scraped_at,
                     "trip_type": row["trip_type"],
                     "source": {
-                        "source_name": row["source_name"],
-                        "source_type": row["source_type"],
-                        "raw_price": float(row["raw_price"]),
-                        "raw_currency": row["raw_currency"],
-                        "raw_cabin_label": row["raw_cabin_label"],
+                        "source_name": source_name,
+                        "source_type": source_type,
+                        "raw_price": float(raw_price),
+                        "raw_currency": raw_currency,
+                        "raw_cabin_label": raw_cabin_label,
                         "source_url": row["source_url"],
                         "raw_offer_id": row["raw_offer_id"],
                     },
@@ -159,10 +174,10 @@ def get_fares(conn: sqlite3.Connection) -> List[Fare]:
 
 
 def insert_index_result(conn: sqlite3.Connection, result: IndexResult) -> int:
-    """Persist a computed :class:`models.index.IndexResult`."""
+    """Persist a computed :class:`models.index.IndexResult`, or 0 on conflict."""
 
     sql = """
-    INSERT INTO index_results (
+    INSERT OR IGNORE INTO index_results (
         base_period,
         current_period,
         overall_laspeyres_index,
@@ -183,7 +198,7 @@ def insert_index_result(conn: sqlite3.Connection, result: IndexResult) -> int:
 
     cur = conn.execute(sql, params)
     conn.commit()
-    return int(cur.lastrowid)
+    return int(cur.lastrowid) if cur.rowcount > 0 else 0
 
 
 def get_index_results(
