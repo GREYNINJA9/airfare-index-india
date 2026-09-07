@@ -30,7 +30,7 @@ COPY pyproject.toml README.md ./
 
 # Install python packages and chromium browser binary
 RUN pip install --no-cache-dir -e .[dev] \
-    && playwright install chromium --with-deps
+    && patchright install chromium
 
 COPY . .
 

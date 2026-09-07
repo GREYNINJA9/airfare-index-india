@@ -12,7 +12,7 @@ python3.11 -m venv .venv
 source .venv/bin/activate
 3. Install dependencies:
 pip install -e .[dev]
-playwright install chromium
+patchright install chromium
 4. Run Tests:
 pytest -v
 5. Start FastAPI Application:

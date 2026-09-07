@@ -1,10 +1,10 @@
 import pytest
-from playwright.async_api import async_playwright
+from patchright.async_api import async_playwright
 
 
 @pytest.mark.asyncio
-async def test_playwright_browser_launch_and_navigate() -> None:
-    """Verify Chromium launches, navigates to safe test URL, and asserts title."""
+async def test_patchright_browser_launch_and_navigate() -> None:
+    """Verify Patchright can launch Chromium and open example.com."""
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
