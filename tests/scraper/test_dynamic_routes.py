@@ -13,9 +13,7 @@ import pytest
 from pydantic import ValidationError
 
 from config.loader import load_route_objects
-from database.connection import close_connection, reset_connection
 from database.repository import get_fares_by_route, insert_fare
-from database.schema import init_schema
 from models.route import Route
 from pipeline import process_raw_fares
 from scraper.otas.cleartrip import _MOCK_FLIGHT_CARD as CT_MOCK_CARD
@@ -34,16 +32,6 @@ def _render_mock_html(template: str, route: Route) -> str:
     """
 
     return template.replace("DEL-BOM", f"{route.origin}-{route.destination}")
-
-
-@pytest.fixture()
-def conn():
-    """An isolated in-memory SQLite database with the fares schema."""
-
-    connection = reset_connection(path=":memory:")
-    init_schema(connection)
-    yield connection
-    close_connection()
 
 
 def _configured_route(origin: str, destination: str) -> Route:
@@ -102,7 +90,7 @@ def test_mmt_extract_filters_by_supplied_route() -> None:
     assert raw == []
 
 
-def test_mmt_configured_routes_pipeline_database(conn) -> None:
+def test_mmt_configured_routes_pipeline_database(db) -> None:
     scraper = MakeMyTripScraper()
 
     routes = [
@@ -122,11 +110,11 @@ def test_mmt_configured_routes_pipeline_database(conn) -> None:
     assert len(fares) == 3
 
     for fare in fares:
-        assert insert_fare(conn, fare) > 0
+        assert insert_fare(db, fare) > 0
 
-    assert len(get_fares_by_route(conn, "DEL", "BOM")) == 1
-    assert len(get_fares_by_route(conn, "BOM", "DEL")) == 1
-    assert len(get_fares_by_route(conn, "DEL", "BLR")) == 1
+    assert len(get_fares_by_route(db, "DEL", "BOM")) == 1
+    assert len(get_fares_by_route(db, "BOM", "DEL")) == 1
+    assert len(get_fares_by_route(db, "DEL", "BLR")) == 1
 
 
 # ── ClearTrip: dynamic route input ─────────────────────────────────────────
@@ -167,7 +155,7 @@ def test_cleartrip_extract_filters_by_supplied_route() -> None:
     assert raw == []
 
 
-def test_cleartrip_configured_routes_pipeline_database(conn) -> None:
+def test_cleartrip_configured_routes_pipeline_database(db) -> None:
     scraper = ClearTripScraper()
 
     routes = [
@@ -187,8 +175,8 @@ def test_cleartrip_configured_routes_pipeline_database(conn) -> None:
     assert len(fares) == 3
 
     for fare in fares:
-        assert insert_fare(conn, fare) > 0
+        assert insert_fare(db, fare) > 0
 
-    assert len(get_fares_by_route(conn, "DEL", "BOM")) == 1
-    assert len(get_fares_by_route(conn, "BOM", "DEL")) == 1
-    assert len(get_fares_by_route(conn, "DEL", "BLR")) == 1
+    assert len(get_fares_by_route(db, "DEL", "BOM")) == 1
+    assert len(get_fares_by_route(db, "BOM", "DEL")) == 1
+    assert len(get_fares_by_route(db, "DEL", "BLR")) == 1

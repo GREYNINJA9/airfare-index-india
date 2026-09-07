@@ -9,9 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from database.connection import close_connection, reset_connection
 from database.repository import count_fares, get_fares_by_route
-from database.schema import init_schema
 from pipeline import process_raw_fares
 
 
@@ -26,7 +24,7 @@ def synthetic_data():
     return payload["fares"]
 
 
-def test_full_pipeline_database_integration(synthetic_data):
+def test_full_pipeline_database_integration(synthetic_data, db):
     """Run the full pipeline on synthetic data and persist to DB."""
     # Pipeline
     fares, bad, batch_err = process_raw_fares(synthetic_data)
@@ -34,22 +32,18 @@ def test_full_pipeline_database_integration(synthetic_data):
     assert not bad, f"unexpected bad records: {bad}"
     assert len(fares) == len(synthetic_data), "every synthetic record should normalize"
 
-    # Database
-    conn = reset_connection(path=":memory:")
-    init_schema(conn)
-
     inserted = 0
     for fare in fares:
         from database.repository import insert_fare
 
-        if insert_fare(conn, fare) > 0:
+        if insert_fare(db, fare) > 0:
             inserted += 1
 
     assert inserted == len(fares)
-    assert count_fares(conn) == inserted
+    assert count_fares(db) == inserted
 
     # Spot-check a route
-    del_bom = get_fares_by_route(conn, "DEL", "BOM")
+    del_bom = get_fares_by_route(db, "DEL", "BOM")
     assert len(del_bom) >= 1, "synthetic set contains DEL→BOM"
 
     # Data integrity: price_inr is preserved
@@ -62,23 +56,18 @@ def test_full_pipeline_database_integration(synthetic_data):
     assert all(r["source_type"] for r in del_bom)
     assert all(r["raw_currency"] == "INR" for r in del_bom)
 
-    close_connection()
 
-
-def test_pipeline_database_round_trip(synthetic_data):
+def test_pipeline_database_round_trip(synthetic_data, db):
     """A Fare inserted and re-queried retains its business fields."""
     fares, bad, err = process_raw_fares(synthetic_data)
     assert not bad and err is None
 
-    conn = reset_connection(path=":memory:")
-    init_schema(conn)
-
     from database.repository import insert_fares
 
-    insert_fares(conn, fares)
+    insert_fares(db, fares)
 
     # Query back and compare
-    rows = get_fares_by_route(conn, "DEL", "BOM")
+    rows = get_fares_by_route(db, "DEL", "BOM")
     assert rows
 
     # The first DEL→BOM synthetic fare
@@ -97,5 +86,3 @@ def test_pipeline_database_round_trip(synthetic_data):
     # datetime.fromisoformat preserves them
     assert row["source_name"] == original.source.source_name
     assert row["source_type"] == original.source.source_type.value
-
-    close_connection()

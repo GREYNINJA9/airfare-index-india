@@ -1,11 +1,11 @@
-"""Integration: SQLite fares → repository → index engine → persist IndexResult.
+"""Integration: PostgreSQL fares → repository → index engine → persist IndexResult.
 
 This test validates the deterministic end-to-end chain without re-implementing
 any index math:
 
 Synthetic Fare objects
 ↓
-SQLite (fares table)
+PostgreSQL (fares table)
 ↓
 repository.get_fares (reconstruct validated Fare models)
 ↓
@@ -29,7 +29,6 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from database.connection import close_connection, reset_connection
 from database.repository import (
     get_fare_by_offer_id,
     get_fares,
@@ -37,7 +36,6 @@ from database.repository import (
     insert_fare,
     insert_index_result,
 )
-from database.schema import init_schema
 from index_engine.aggregation import aggregate_item_price_relatives
 from index_engine.api_index import compute_overall_airfare_index
 from index_engine.weights import compute_uniform_base_basket_weights
@@ -95,17 +93,7 @@ def _fare(
     )
 
 
-@pytest.fixture()
-def db():
-    conn = reset_connection(path=":memory:")
-    init_schema(conn)
-    try:
-        yield conn
-    finally:
-        close_connection()
-
-
-def test_sqlite_to_fare_reconstruction_empty_db_raises_on_aggregation(db) -> None:
+def test_fare_reconstruction_empty_db_raises_on_aggregation(db) -> None:
     fares = get_fares(db)
     assert fares == []
 
@@ -115,7 +103,7 @@ def test_sqlite_to_fare_reconstruction_empty_db_raises_on_aggregation(db) -> Non
         aggregate_item_price_relatives(fares, current_period=current_period)
 
 
-def test_sqlite_to_fare_reconstruction_route_enum_datetime_ordering(db) -> None:
+def test_fare_reconstruction_route_enum_datetime_ordering(db) -> None:
     d0 = datetime(2026, 8, 27, 10, 0, tzinfo=timezone.utc)
     d1 = datetime(2026, 8, 28, 10, 0, tzinfo=timezone.utc)
 
@@ -232,7 +220,7 @@ def test_end_to_end_index_db_integration_round_trip(db) -> None:
         ),
     ]
 
-    # Insert them into SQLite.
+    # Insert them into PostgreSQL.
     for fare in fares:
         assert insert_fare(db, fare) > 0
 

@@ -8,9 +8,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from api.main import app
-from database.connection import close_connection, reset_connection
 from database.repository import insert_fare
-from database.schema import init_schema
 from index_engine.aggregation import aggregate_item_price_relatives
 from index_engine.api_index import compute_overall_airfare_index
 from index_engine.weights import compute_uniform_base_basket_weights
@@ -69,18 +67,6 @@ def _fare(
 
 
 @pytest.fixture()
-def api_db():
-    """Isolated in-memory DB for each API test."""
-
-    conn = reset_connection(path=":memory:")
-    init_schema(conn)
-    try:
-        yield conn
-    finally:
-        close_connection()
-
-
-@pytest.fixture()
 async def client():
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
@@ -116,7 +102,7 @@ async def test_docs_and_openapi_present(client: AsyncClient) -> None:
 
 
 @pytest.mark.asyncio
-async def test_fares_empty_db_returns_empty_list(api_db, client: AsyncClient) -> None:
+async def test_fares_empty_db_returns_empty_list(db, client: AsyncClient) -> None:
     response = await client.get("/fares")
     assert response.status_code == 200
     assert response.json() == []
@@ -124,7 +110,7 @@ async def test_fares_empty_db_returns_empty_list(api_db, client: AsyncClient) ->
 
 @pytest.mark.asyncio
 async def test_fares_route_filter_requires_both_origin_and_destination(
-    api_db, client: AsyncClient
+    db, client: AsyncClient
 ) -> None:
     response = await client.get("/fares", params={"origin": "DEL"})
     assert response.status_code == 400
@@ -133,7 +119,7 @@ async def test_fares_route_filter_requires_both_origin_and_destination(
 
 @pytest.mark.asyncio
 async def test_fares_route_filter_returns_expected_rows(
-    api_db, client: AsyncClient
+    db, client: AsyncClient
 ) -> None:
     d0 = datetime(2026, 8, 27, 10, 0, tzinfo=timezone.utc)
 
@@ -163,7 +149,7 @@ async def test_fares_route_filter_returns_expected_rows(
     ]
 
     for f in fares:
-        assert insert_fare(api_db, f) > 0
+        assert insert_fare(db, f) > 0
 
     response = await client.get(
         "/fares", params={"origin": "DEL", "destination": "BOM"}
@@ -177,7 +163,7 @@ async def test_fares_route_filter_returns_expected_rows(
 
 
 @pytest.mark.asyncio
-async def test_index_empty_db_returns_400(api_db, client: AsyncClient) -> None:
+async def test_index_empty_db_returns_400(db, client: AsyncClient) -> None:
     response = await client.get("/index", params={"current_period": "2026-08-28"})
     assert response.status_code == 400
     assert response.json()["detail"]
@@ -185,7 +171,7 @@ async def test_index_empty_db_returns_400(api_db, client: AsyncClient) -> None:
 
 @pytest.mark.asyncio
 async def test_index_invalid_current_period_returns_422(
-    api_db, client: AsyncClient
+    db, client: AsyncClient
 ) -> None:
     response = await client.get("/index", params={"current_period": "bad"})
     assert response.status_code == 422
@@ -193,7 +179,7 @@ async def test_index_invalid_current_period_returns_422(
 
 @pytest.mark.asyncio
 async def test_index_endpoint_computes_persists_and_history_works(
-    api_db, client: AsyncClient
+    db, client: AsyncClient
 ) -> None:
     d0 = datetime(2026, 8, 27, 10, 0, tzinfo=timezone.utc)
     d1 = datetime(2026, 8, 28, 10, 0, tzinfo=timezone.utc)
@@ -249,7 +235,7 @@ async def test_index_endpoint_computes_persists_and_history_works(
     ]
 
     for f in fares:
-        assert insert_fare(api_db, f) > 0
+        assert insert_fare(db, f) > 0
 
     # Expected from existing engine (no formula duplication).
     relatives = aggregate_item_price_relatives(fares, current_period=d1.date())

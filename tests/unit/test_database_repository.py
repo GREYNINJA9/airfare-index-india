@@ -1,12 +1,8 @@
 """Deterministic unit tests for database schema and repository.
 
-Uses an in-memory SQLite database; no file system changes.
+Runs against the live PostgreSQL test database.
 """
 
-import pytest
-
-from database.components import SQLiteConnector
-from database.connection import reset_connection
 from database.repository import (
     count_fares,
     get_fare_by_offer_id,
@@ -14,29 +10,23 @@ from database.repository import (
     get_fares_by_route,
     insert_fares,
 )
-from database.schema import init_schema
 from models.fare import Fare
 from tests.unit.test_fare_model import _valid_source  # noqa: F401, noqa: T001
-
-
-@pytest.fixture
-def in_memory_db():
-    """Provide a fresh in-memory SQLite connection and schema."""
-    conn = reset_connection(path=":memory:")
-    connector = SQLiteConnector(path=":memory:")
-    conn = connector.connect()
-    init_schema(conn)
-    yield conn
-    conn.close()
 
 
 # --- schema ---
 
 
-def test_schema_creates_fares_table(in_memory_db):
+def test_schema_creates_fares_table(db):
     """The schema creates the fares table with expected columns."""
-    cur = in_memory_db.execute("PRAGMA table_info(fares)")
-    columns = {row["name"] for row in cur.fetchall()}
+    cur = db.execute(
+        """
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_name = 'fares'
+        """
+    )
+    columns = {row["column_name"] for row in cur.fetchall()}
     assert "id" in columns
     assert "route_origin" in columns
     assert "route_destination" in columns
@@ -49,10 +39,10 @@ def test_schema_creates_fares_table(in_memory_db):
     assert "source_url" in columns
 
 
-def test_schema_creates_indexes(in_memory_db):
+def test_schema_creates_indexes(db):
     """The schema creates useful indexes for queries."""
-    cur = in_memory_db.execute("SELECT name FROM sqlite_master WHERE type='index'")
-    indexes = {row["name"] for row in cur.fetchall()}
+    cur = db.execute("SELECT indexname FROM pg_indexes WHERE tablename = 'fares'")
+    indexes = {row["indexname"] for row in cur.fetchall()}
     assert "idx_fares_route_origin" in indexes
     assert "idx_fares_route_destination" in indexes
     assert "idx_fares_scraped_at" in indexes
@@ -61,28 +51,28 @@ def test_schema_creates_indexes(in_memory_db):
 # --- insert ---
 
 
-def test_insert_fares_returns_count(in_memory_db):
+def test_insert_fares_returns_count(db):
     """Inserting fares returns the count inserted."""
     from tests.unit.test_fare_model import _valid_fare
 
     fare = _valid_fare()
-    count = insert_fares(in_memory_db, [fare])
+    count = insert_fares(db, [fare])
     assert count == 1
 
 
-def test_insert_fares_persists_to_db(in_memory_db):
+def test_insert_fares_persists_to_db(db):
     """Inserted fares are retrievable from the DB."""
     from tests.unit.test_fare_model import _valid_fare
 
     fare = _valid_fare()
-    insert_fares(in_memory_db, [fare])
-    assert count_fares(in_memory_db) == 1
+    insert_fares(db, [fare])
+    assert count_fares(db) == 1
 
 
 # --- query ---
 
 
-def test_get_fares_by_route_returns_matching_rows(in_memory_db):
+def test_get_fares_by_route_returns_matching_rows(db):
     """Query by route returns all matching rows."""
     from datetime import datetime, timezone
 
@@ -122,15 +112,15 @@ def test_get_fares_by_route_returns_matching_rows(in_memory_db):
         trip_type=TripType.ONE_WAY,
         source=s3,
     )
-    insert_fares(in_memory_db, [f1, f2, other])
+    insert_fares(db, [f1, f2, other])
 
-    rows = get_fares_by_route(in_memory_db, "DEL", "BOM")
+    rows = get_fares_by_route(db, "DEL", "BOM")
     assert len(rows) == 2
     assert rows[0]["price_inr"] == 5000.0
     assert rows[1]["price_inr"] == 6000.0
 
 
-def test_get_fares_by_route_ordered_by_scraped_at(in_memory_db):
+def test_get_fares_by_route_ordered_by_scraped_at(db):
     """Results are ordered by scraped_at ascending."""
     from datetime import datetime, timezone
 
@@ -165,14 +155,14 @@ def test_get_fares_by_route_ordered_by_scraped_at(in_memory_db):
         source=s,
     )
 
-    insert_fares(in_memory_db, [later, earlier])
+    insert_fares(db, [later, earlier])
 
-    rows = get_fares_by_route(in_memory_db, "DEL", "BOM")
+    rows = get_fares_by_route(db, "DEL", "BOM")
     assert rows[0]["scraped_at"] == "2026-08-27T10:00:00+00:00"
     assert rows[1]["scraped_at"] == "2026-08-28T12:00:00+00:00"
 
 
-def test_get_fare_by_offer_id_returns_row(in_memory_db):
+def test_get_fare_by_offer_id_returns_row(db):
     """Lookup by raw_offer_id returns the matching row."""
     from pipeline.normalizer import normalize
 
@@ -195,14 +185,14 @@ def test_get_fare_by_offer_id_returns_row(in_memory_db):
         },
     }
     fare = normalize(raw_record)
-    insert_fares(in_memory_db, [fare])
+    insert_fares(db, [fare])
 
-    row = get_fare_by_offer_id(in_memory_db, "TEST-ID-123")
+    row = get_fare_by_offer_id(db, "TEST-ID-123")
     assert row is not None
     assert row["price_inr"] == 5000.0
 
 
-def test_get_fares_skips_rows_with_null_provenance_fields(in_memory_db):
+def test_get_fares_skips_rows_with_null_provenance_fields(db):
     """Legacy rows with NULL provenance are ignored while complete rows still load."""
     from datetime import datetime, timezone
 
@@ -219,9 +209,9 @@ def test_get_fares_skips_rows_with_null_provenance_fields(in_memory_db):
         trip_type=TripType.ONE_WAY,
         source=_valid_source(),
     )
-    insert_fares(in_memory_db, [valid])
+    insert_fares(db, [valid])
 
-    in_memory_db.execute(
+    db.execute(
         """
         INSERT INTO fares (
             route_origin, route_destination, route_distance_km,
@@ -249,9 +239,8 @@ def test_get_fares_skips_rows_with_null_provenance_fields(in_memory_db):
             "bad-offer",
         ),
     )
-    in_memory_db.commit()
 
-    fares = get_fares(in_memory_db)
+    fares = get_fares(db)
 
     assert len(fares) == 1
     assert fares[0].price_inr == 5000.0
