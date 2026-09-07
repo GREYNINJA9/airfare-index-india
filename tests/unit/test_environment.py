@@ -9,9 +9,9 @@ def test_python_version() -> None:
 def test_module_imports() -> None:
     """Ensure foundation dependencies can be imported cleanly."""
     import fastapi
-    import playwright
+    import patchright
     import pydantic
 
     assert fastapi.__version__ is not None
     assert pydantic.__version__ is not None
-    assert playwright is not None
+    assert patchright is not None
