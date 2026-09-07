@@ -1,15 +1,13 @@
 """Unit test for SQLite to PostgreSQL migration script logic."""
 
-import os
 import sqlite3
-import pytest
 from datetime import datetime, timezone
 
 from database.schema import init_sqlite_schema
 from models.fare import CabinClass, Fare, RawFareSource, SourceType, TripType
 from models.route import Route
 from database.repository import insert_fare
-from scripts.migrate_sqlite_to_pg import migrate_fares, migrate_index_results
+from scripts.migrate_sqlite_to_pg import migrate_fares
 
 
 class MockPgCursor:
