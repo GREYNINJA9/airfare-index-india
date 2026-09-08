@@ -99,7 +99,10 @@ def init_postgres_schema(conn) -> None:
 
 
 def truncate_tables(conn) -> None:
-    """Safely truncate all data tables, resetting primary key sequences. Used for test isolation."""
+    """Safely truncate all data tables, resetting primary key sequences.
+
+    Used for test isolation.
+    """
     actual_conn = getattr(conn, "pg_conn", conn)
     cur = actual_conn.cursor()
     cur.execute("TRUNCATE TABLE fares, index_results RESTART IDENTITY CASCADE;")

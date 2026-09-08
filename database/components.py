@@ -7,7 +7,11 @@ from __future__ import annotations
 
 from typing import Protocol, runtime_checkable
 
-from database.postgres import DEFAULT_PG_DSN, PostgresConnectionWrapper, PostgresConnector
+from database.postgres import (
+    DEFAULT_PG_DSN,
+    PostgresConnectionWrapper,
+    PostgresConnector,
+)
 
 
 @runtime_checkable

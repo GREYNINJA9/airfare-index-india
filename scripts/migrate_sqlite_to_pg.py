@@ -13,12 +13,10 @@ Features:
 from __future__ import annotations
 
 import argparse
-import json
 import logging
 import os
 import sqlite3
 import sys
-from typing import Any, Dict, List
 
 import psycopg2
 from psycopg2.extras import execute_batch
@@ -44,7 +42,9 @@ def get_pg_conn(dsn: str):
     return conn
 
 
-def migrate_fares(sqlite_conn: sqlite3.Connection, pg_conn, batch_size: int = 1000) -> int:
+def migrate_fares(
+    sqlite_conn: sqlite3.Connection, pg_conn, batch_size: int = 1000
+) -> int:
     logger.info("Migrating 'fares' table...")
 
     # Check if fares table exists in sqlite
@@ -71,8 +71,9 @@ def migrate_fares(sqlite_conn: sqlite3.Connection, pg_conn, batch_size: int = 10
         raw_cabin_label, source_url, raw_offer_id
     ) VALUES (
         %(route_origin)s, %(route_destination)s, %(route_distance_km)s,
-        %(airline_code)s, %(price_inr)s, %(cabin_class)s, %(departure_at)s, %(scraped_at)s,
-        %(trip_type)s, %(source_name)s, %(source_type)s, %(raw_price)s, %(raw_currency)s,
+        %(airline_code)s, %(price_inr)s, %(cabin_class)s,
+        %(departure_at)s, %(scraped_at)s, %(trip_type)s, %(source_name)s,
+        %(source_type)s, %(raw_price)s, %(raw_currency)s,
         %(raw_cabin_label)s, %(source_url)s, %(raw_offer_id)s
     )
     ON CONFLICT (raw_offer_id) DO NOTHING;
@@ -96,7 +97,9 @@ def migrate_fares(sqlite_conn: sqlite3.Connection, pg_conn, batch_size: int = 10
     return total_source_fares
 
 
-def migrate_index_results(sqlite_conn: sqlite3.Connection, pg_conn, batch_size: int = 500) -> int:
+def migrate_index_results(
+    sqlite_conn: sqlite3.Connection, pg_conn, batch_size: int = 500
+) -> int:
     logger.info("Migrating 'index_results' table...")
 
     cur = sqlite_conn.execute(
@@ -161,7 +164,10 @@ def main():
     )
     args = parser.parse_args()
 
-    logger.info("Starting database migration from '%s' to PostgreSQL...", args.sqlite_path)
+    logger.info(
+        "Starting database migration from '%s' to PostgreSQL...",
+        args.sqlite_path,
+    )
 
     if not os.path.exists(args.sqlite_path):
         logger.warning(

@@ -13,7 +13,6 @@ from database.repository import (
 from models.fare import Fare
 from tests.unit.test_fare_model import _valid_source  # noqa: F401, noqa: T001
 
-
 # --- schema ---
 
 

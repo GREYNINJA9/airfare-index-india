@@ -3,10 +3,10 @@
 import sqlite3
 from datetime import datetime, timezone
 
+from database.repository import insert_fare
 from database.schema import init_sqlite_schema
 from models.fare import CabinClass, Fare, RawFareSource, SourceType, TripType
 from models.route import Route
-from database.repository import insert_fare
 from scripts.migrate_sqlite_to_pg import migrate_fares
 
 
