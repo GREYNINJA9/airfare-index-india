@@ -74,64 +74,91 @@ With over 90% of domestic air tickets in India now sold online through airline w
 
 ```
 airfare-index-india/
-├── README.md                     # Documentation & Challenge Specification
-├── compose.yaml                  # Root Docker Compose orchestrator
-├── config -> backend/config      # Compatibility symlink for root test runners
-├── backend/
-│   ├── pyproject.toml            # Dependencies, pytest config (pythonpath=[".", ".."])
-│   ├── Dockerfile                # Production container specification
-│   ├── config/                   # Configuration center
-│   │   ├── routes.yaml           # High-density representative city-pairs
-│   │   ├── sources.yaml          # 10 airline & OTA scraper configurations
-│   │   ├── settings.yaml         # Advance windows (T+1..T+45) & thresholds
-│   │   └── loader.py             # Config loading & validation
-│   ├── database/                 # Persistence & storage
-│   │   ├── schema.py             # PostgreSQL table DDL & migrations
-│   │   ├── connection.py         # Thread-safe database connector singleton
-│   │   ├── postgres.py           # Psycopg2 adapter wrapper
-│   │   ├── repository.py         # Clean CRUD operations for fares & indices
-│   │   └── seed_data.py          # 35+ days realistic data seeder
-│   ├── models/                   # Pydantic v2 data models
-│   │   ├── route.py              # Route model (IATA codes, distance_km)
-│   │   ├── fare.py               # Fare, RawFareSource, Enums
-│   │   ├── index.py              # IndexResult, ItemIndex, ItemKey
-│   │   ├── elasticity.py         # Lead-time elasticity & dynamic pricing models
-│   │   └── dgca.py               # DGCA benchmark & backtest contracts
-│   ├── index_engine/             # Econometric calculation module
-│   │   ├── aggregation.py        # Daily median prices & price relative calculation
-│   │   ├── weights.py            # PSD Passenger Traffic & Uniform weighting
-│   │   ├── api_index.py          # Laspeyres & weighted Jevons computation
-│   │   ├── elasticity.py         # Lead-time elasticity & curve fitting
-│   │   └── backtesting.py        # 30-day DGCA benchmark validation engine
-│   ├── scraper/                  # Multi-source web scraping engine
-│   │   ├── base.py               # Scraper protocol & safe failure handling
-│   │   ├── airlines/             # IndiGo, Air India, AI Express, Akasa, SpiceJet
-│   │   └── otas/                 # MakeMyTrip, ClearTrip, EaseMyTrip, Ixigo, Yatra
-│   ├── pipeline/                 # Data cleaning & normalization
-│   │   ├── validator.py          # Batch validation & sanity checks
-│   │   ├── cleaner.py            # Outlier sanitization & missing value handling
-│   │   ├── normalizer.py         # Format mapping & currency standardization
-│   │   └── deduplicator.py       # Exact & business key deduplication
-│   ├── data/                     # Datasets & benchmarks
-│   │   ├── sample/               # Synthetic sample fares for unit tests
-│   │   └── dgca/                 # Official DGCA monthly tariff benchmark statistics
-│   ├── api/                      # FastAPI endpoints & dashboard
-│   │   ├── main.py               # Application factory, CORS, lifespans
-│   │   ├── routes.py             # Core /fares and /index endpoints
-│   │   ├── fares.py              # Fares search, summary & sector metrics
-│   │   ├── analytics.py          # Heatmaps, elasticity, airline comparison, RBI/NSO feed
-│   │   └── dashboard/            # Interactive Web Dashboard UI
-│   │       ├── app.py            # Web view controller & endpoints
-│   │       ├── charts.py         # Chart.js / ApexCharts serialization
-│   │       ├── components.py     # Executive KPI scorecards
-│   │       └── heatmap.py        # Sector matrix formatting
-│   ├── docs/                     # Comprehensive technical documentation
-│   │   ├── architecture.md       # Full architectural flow
-│   │   ├── methodology.md        # Mathematical index formulations & PSD weights
-│   │   ├── compliance.md         # Ethical scraping & legal positioning (IT Act / DPDP)
-│   │   ├── data-dictionary.md    # Field reference and schemas
-│   │   └── development.md        # Developer quickstart & setup guide
-│   └── tests/                    # 298 automated tests (100% passing)
+│
+├── README.md
+├── requirements.txt
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+│
+├── config/
+│   ├── routes.yaml
+│   ├── sources.yaml
+│   └── settings.yaml
+│
+├── scraper/
+│   ├── __init__.py
+│   ├── base.py
+│   │
+│   ├── airlines/
+│   │   ├── __init__.py
+│   │   ├── indigo.py
+│   │   ├── air_india.py
+│   │   ├── air_india_express.py
+│   │   ├── akasa.py
+│   │   └── spicejet.py
+│   │
+│   └── otas/
+│       ├── __init__.py
+│       ├── mmt.py
+│       ├── yatra.py
+│       ├── easemytrip.py
+│       ├── cleartrip.py
+│       └── ixigo.py
+│
+├── models/
+│   ├── fare.py
+│   ├── route.py
+│   └── index.py
+│
+├── pipeline/
+│   ├── cleaner.py
+│   ├── validator.py
+│   ├── deduplicator.py
+│   └── normalizer.py
+│
+├── database/
+│   ├── connection.py
+│   ├── schema.py
+│   └── repository.py
+│
+├── index_engine/
+│   ├── weights.py
+│   ├── aggregation.py
+│   ├── api_index.py
+│   └── elasticity.py
+│
+├── api/
+│   ├── main.py
+│   ├── routes.py
+│   ├── fares.py
+│   └── analytics.py
+│
+├── dashboard/
+│   ├── app.py
+│   ├── charts.py
+│   ├── heatmap.py
+│   └── components.py
+│
+├── scheduler/
+│   └── jobs.py
+│
+├── tests/
+│   ├── scraper/
+│   ├── pipeline/
+│   ├── index/
+│   └── api/
+│
+├── data/
+│   ├── raw/
+│   ├── cleaned/
+│   └── sample/
+│
+└── docs/
+    ├── architecture.md
+    ├── data-dictionary.md
+    ├── methodology.md
+    └── compliance.md
 ```
 
 ---
@@ -149,11 +176,12 @@ git clone https://github.com/GREYNINJA9/airfare-index-india.git
 cd airfare-index-india
 
 # Create virtual environment
-python3 -m venv backend/.venv
-source backend/.venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 
-# Install dependencies in editable mode
-pip install -e ./backend[dev]
+# Install dependencies
+pip install -r requirements.txt
+pip install -e ".[dev]"
 
 # Install Chromium browser binaries for Patchright
 patchright install chromium
@@ -169,18 +197,18 @@ podman run -d --name airfare-postgres -p 5432:5432 \
   postgres:16-alpine
 
 # Populate database with 35+ days of verified flight observations & APIx index
-PYTHONPATH=. python backend/database/seed_data.py
+python database/seed_data.py
 ```
 
 ### 4. Run Automated Test Suite
 ```bash
 # Run all 298 unit, integration, scraper, and smoke tests
-PYTHONPATH=. pytest backend/tests
+pytest tests
 ```
 
 ### 5. Launch Interactive Dashboard & API
 ```bash
-uvicorn backend.api.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 - **Interactive Dashboard:** [http://localhost:8000/dashboard](http://localhost:8000/dashboard) or [http://localhost:8000/](http://localhost:8000/)
