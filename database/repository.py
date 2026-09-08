@@ -1,7 +1,7 @@
 """Repository: persistence and query helpers for fare observations.
 
 The repository is the only layer that writes/reads ``Fare`` rows to/from
-SQLite for the prototype.
+the PostgreSQL database.
 
 This module is intentionally deterministic: all functions operate on
 validated domain models and return fully reconstructed, validated models
@@ -14,7 +14,6 @@ backwards compatibility.
 from __future__ import annotations
 
 import json
-import sqlite3
 from datetime import date, datetime
 from typing import List, Optional
 
@@ -29,7 +28,7 @@ def _iso(dt: datetime) -> str:
     return dt.isoformat()
 
 
-def insert_fare(conn: sqlite3.Connection, fare: Fare) -> int:
+def insert_fare(conn, fare: Fare) -> int:
     """Insert a single ``Fare`` and return its row id, or 0 on conflict."""
     sql = """
     INSERT OR IGNORE INTO fares (
@@ -62,13 +61,13 @@ def insert_fare(conn: sqlite3.Connection, fare: Fare) -> int:
     return int(cur.lastrowid) if cur.rowcount > 0 else 0
 
 
-def insert_fares(conn: sqlite3.Connection, fares: List[Fare]) -> int:
+def insert_fares(conn, fares: List[Fare]) -> int:
     """Insert many ``Fare`` rows, returning the count inserted."""
     return sum(1 for fare in fares if insert_fare(conn, fare) > 0)
 
 
 def get_fares_by_route(
-    conn: sqlite3.Connection, origin: str, destination: str
+    conn, origin: str, destination: str
 ) -> List[dict]:
     """Return all stored fares for a route as plain dicts."""
     cur = conn.execute(
@@ -97,7 +96,7 @@ def count_fares(conn) -> int:
     return int(cur.fetchone()["n"])
 
 
-def get_fares(conn: sqlite3.Connection) -> List[Fare]:
+def get_fares(conn) -> List[Fare]:
     """Return all stored fares as validated :class:`models.fare.Fare`.
 
     Ordering is deterministic to support repeatable computations and tests:
@@ -173,7 +172,7 @@ def get_fares(conn: sqlite3.Connection) -> List[Fare]:
     return fares
 
 
-def insert_index_result(conn: sqlite3.Connection, result: IndexResult) -> int:
+def insert_index_result(conn, result: IndexResult) -> int:
     """Persist a computed :class:`models.index.IndexResult`, or 0 on conflict."""
 
     sql = """
@@ -202,7 +201,7 @@ def insert_index_result(conn: sqlite3.Connection, result: IndexResult) -> int:
 
 
 def get_index_results(
-    conn: sqlite3.Connection,
+    conn,
     *,
     base_period: date | None = None,
     current_period: date | None = None,
@@ -251,7 +250,7 @@ def get_index_results(
 
 
 def get_index_result(
-    conn: sqlite3.Connection, *, base_period: date, current_period: date
+    conn, *, base_period: date, current_period: date
 ) -> Optional[IndexResult]:
     """Return the first persisted IndexResult for a period pair."""
 

@@ -93,7 +93,7 @@ def run_collection_cycle(
         ↓
     pipeline validation/cleaning/normalization/deduplication
         ↓
-    SQLite fare persistence
+    PostgreSQL fare persistence
         ↓
     index aggregation
         ↓

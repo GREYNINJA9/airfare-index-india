@@ -7,18 +7,9 @@ from pathlib import Path
 import pytest
 
 from config.loader import load_route_objects
-from database.connection import close_connection, reset_connection
 from database.repository import get_fares, get_index_results
-from database.schema import init_schema
+from database.schema import truncate_tables
 from scheduler.jobs import run_collection_cycle
-
-
-@pytest.fixture()
-def conn():
-    connection = reset_connection(path=":memory:")
-    init_schema(connection)
-    yield connection
-    close_connection()
 
 
 def _assert_both_sources_contributed(fares):
@@ -26,8 +17,8 @@ def _assert_both_sources_contributed(fares):
     assert source_names == {"MakeMyTrip", "ClearTrip"}
 
 
-def test_successful_collection_cycle_both_sources_and_multiple_routes(conn):
-    summary = run_collection_cycle(conn=conn)
+def test_successful_collection_cycle_both_sources_and_multiple_routes(db):
+    summary = run_collection_cycle(conn=db)
 
     assert summary["sources_attempted"] == 2
     assert summary["sources_successful"] == 2
@@ -55,18 +46,18 @@ def test_successful_collection_cycle_both_sources_and_multiple_routes(conn):
     assert summary["overall_jevons_index"] == pytest.approx(100.0)
 
     persisted = get_index_results(
-        conn,
+        db,
         base_period=date.fromisoformat(summary["base_period"]),
         current_period=date.fromisoformat(summary["current_period"]),
     )
     assert len(persisted) == 1
 
-    fares = get_fares(conn)
+    fares = get_fares(db)
     assert len(fares) == len(routes) * 2
     _assert_both_sources_contributed(fares)
 
 
-def test_one_source_failure_does_not_block_other_sources(conn, tmp_path: Path):
+def test_one_source_failure_does_not_block_other_sources(db, tmp_path: Path):
     # ClearTrip module import will fail; MakeMyTrip should still run.
     sources_yaml = textwrap.dedent(
         """
@@ -87,7 +78,7 @@ def test_one_source_failure_does_not_block_other_sources(conn, tmp_path: Path):
     sources_path = tmp_path / "sources.yaml"
     sources_path.write_text(sources_yaml, encoding="utf-8")
 
-    summary = run_collection_cycle(conn=conn, sources_path=str(sources_path))
+    summary = run_collection_cycle(conn=db, sources_path=str(sources_path))
 
     assert summary["sources_attempted"] == 2
     assert summary["sources_successful"] == 1
@@ -98,14 +89,14 @@ def test_one_source_failure_does_not_block_other_sources(conn, tmp_path: Path):
     assert summary["normalized_fares"] == len(routes)
     assert summary["fares_inserted"] == len(routes)
 
-    fares = get_fares(conn)
+    fares = get_fares(db)
     assert {f.source.source_name for f in fares} == {"MakeMyTrip"}
 
     assert summary["index_generated"] is True
     assert summary["current_period"] == "2026-08-27"
 
 
-def test_zero_extracted_fares_skips_index_and_persistence(conn, tmp_path: Path):
+def test_zero_extracted_fares_skips_index_and_persistence(db, tmp_path: Path):
     # Create a deterministic dummy scraper that returns [] for all routes.
     empty_scraper_py = textwrap.dedent(
         """
@@ -160,7 +151,7 @@ def test_zero_extracted_fares_skips_index_and_persistence(conn, tmp_path: Path):
         sources_path = tmp_path / "sources.yaml"
         sources_path.write_text(sources_yaml, encoding="utf-8")
 
-        summary = run_collection_cycle(conn=conn, sources_path=str(sources_path))
+        summary = run_collection_cycle(conn=db, sources_path=str(sources_path))
 
         assert summary["raw_records_extracted"] == 0
         assert summary["normalized_fares"] == 0
@@ -169,8 +160,8 @@ def test_zero_extracted_fares_skips_index_and_persistence(conn, tmp_path: Path):
         assert summary["index_generated"] is False
         assert summary["index_skipped_reason"] == "no_normalized_fares"
 
-        assert get_index_results(conn) == []
-        assert get_index_results(conn, base_period=None, current_period=None) == []
+        assert get_index_results(db) == []
+        assert get_index_results(db, base_period=None, current_period=None) == []
 
     finally:
         # Best-effort cleanup of sys.path.
@@ -178,15 +169,15 @@ def test_zero_extracted_fares_skips_index_and_persistence(conn, tmp_path: Path):
             sys.path.remove(str(tmp_path))
 
 
-def test_duplicate_collection_cycle_is_idempotent(conn):
-    summary1 = run_collection_cycle(conn=conn)
-    fares_after_first = len(get_fares(conn))
+def test_duplicate_collection_cycle_is_idempotent(db):
+    summary1 = run_collection_cycle(conn=db)
+    fares_after_first = len(get_fares(db))
     assert summary1["fares_inserted"] == fares_after_first
     assert summary1["duplicate_fares_skipped"] == 0
     assert summary1["index_generated"] is True
 
-    summary2 = run_collection_cycle(conn=conn)
-    fares_after_second = len(get_fares(conn))
+    summary2 = run_collection_cycle(conn=db)
+    fares_after_second = len(get_fares(db))
     assert fares_after_second == fares_after_first
 
     assert summary2["normalized_fares"] == fares_after_first
@@ -195,14 +186,14 @@ def test_duplicate_collection_cycle_is_idempotent(conn):
     assert summary2["index_generated"] is False
 
     persisted = get_index_results(
-        conn,
+        db,
         base_period=date.fromisoformat(summary1["base_period"]),
         current_period=date.fromisoformat(summary1["current_period"]),
     )
     assert len(persisted) == 1
 
 
-def test_disabled_source_is_not_executed(conn, tmp_path: Path):
+def test_disabled_source_is_not_executed(db, tmp_path: Path):
     sources_yaml = textwrap.dedent(
         """
         sources:
@@ -222,7 +213,7 @@ def test_disabled_source_is_not_executed(conn, tmp_path: Path):
     sources_path = tmp_path / "sources.yaml"
     sources_path.write_text(sources_yaml, encoding="utf-8")
 
-    summary = run_collection_cycle(conn=conn, sources_path=str(sources_path))
+    summary = run_collection_cycle(conn=db, sources_path=str(sources_path))
 
     assert summary["sources_attempted"] == 1
     assert summary["sources_successful"] == 1
@@ -231,32 +222,25 @@ def test_disabled_source_is_not_executed(conn, tmp_path: Path):
     routes = load_route_objects()
     assert summary["normalized_fares"] == len(routes)
 
-    fares = get_fares(conn)
+    fares = get_fares(db)
     assert {f.source.source_name for f in fares} == {"MakeMyTrip"}
 
 
-def test_deterministic_run_on_fresh_db(conn):
-    summary1 = run_collection_cycle(conn=conn)
+def test_deterministic_run_on_fresh_db(db):
+    summary1 = run_collection_cycle(conn=db)
 
-    # Fresh DB with same configuration should produce identical summary fields.
-    conn2 = reset_connection(path=":memory:")
-    try:
-        init_schema(conn2)
-        summary2 = run_collection_cycle(conn=conn2)
+    # A fresh (truncated) DB with same configuration should produce identical
+    # summary fields.
+    truncate_tables(db)
+    summary2 = run_collection_cycle(conn=db)
 
-        assert summary2["raw_records_extracted"] == summary1["raw_records_extracted"]
-        assert summary2["normalized_fares"] == summary1["normalized_fares"]
-        assert summary2["fares_inserted"] == summary1["fares_inserted"]
-        assert (
-            summary2["duplicate_fares_skipped"] == summary1["duplicate_fares_skipped"]
-        )
+    assert summary2["raw_records_extracted"] == summary1["raw_records_extracted"]
+    assert summary2["normalized_fares"] == summary1["normalized_fares"]
+    assert summary2["fares_inserted"] == summary1["fares_inserted"]
+    assert summary2["duplicate_fares_skipped"] == summary1["duplicate_fares_skipped"]
 
-        assert summary2["index_generated"] is True
-        assert summary2["base_period"] == summary1["base_period"]
-        assert summary2["current_period"] == summary1["current_period"]
-        assert (
-            summary2["overall_laspeyres_index"] == summary1["overall_laspeyres_index"]
-        )
-        assert summary2["overall_jevons_index"] == summary1["overall_jevons_index"]
-    finally:
-        close_connection()
+    assert summary2["index_generated"] is True
+    assert summary2["base_period"] == summary1["base_period"]
+    assert summary2["current_period"] == summary1["current_period"]
+    assert summary2["overall_laspeyres_index"] == summary1["overall_laspeyres_index"]
+    assert summary2["overall_jevons_index"] == summary1["overall_jevons_index"]

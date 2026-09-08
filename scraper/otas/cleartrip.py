@@ -54,7 +54,7 @@ class ClearTripScraper:
 
     Deterministic and network-free. Real site fetching with Playwright is
     out of scope for Day 4 — this slice only proves the vertical flow:
-    mock HTML → raw records → RawFareSource → pipeline → Fare → SQLite.
+    mock HTML → raw records → RawFareSource → pipeline → Fare → PostgreSQL.
     """
 
     #: Public access for tests to read mock templates.

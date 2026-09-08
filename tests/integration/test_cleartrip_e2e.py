@@ -1,30 +1,17 @@
 """End-to-end integration test: ClearTrip scraper → pipeline → database.
 
 Validates the ClearTrip vertical slice without requiring ClearTrip to be
-online: mock HTML → ClearTripScraper → pipeline → Fare → SQLite.
+online: mock HTML → ClearTripScraper → pipeline → Fare → PostgreSQL.
 """
 
-import pytest
-
-from database.connection import close_connection, reset_connection
 from database.repository import count_fares, get_fares_by_route, insert_fare
-from database.schema import init_schema
 from pipeline import process_raw_fares
 from scraper.otas.cleartrip import _MOCK_FLIGHT_CARD, ClearTripScraper
 from scraper.otas.mmt import MakeMyTripScraper
 
 
-@pytest.fixture()
-def conn():
-    """An isolated in-memory SQLite database with the fares schema."""
-    connection = reset_connection(path=":memory:")
-    init_schema(connection)
-    yield connection
-    close_connection()
-
-
-def test_cleartrip_e2e_scraper_pipeline_database(conn):
-    """Full flow: ClearTrip mock HTML → scraper → pipeline → Fare → SQLite."""
+def test_cleartrip_e2e_scraper_pipeline_database(db):
+    """Full flow: ClearTrip mock HTML → scraper → pipeline → Fare → PostgreSQL."""
     # 1. Extract from mock HTML
     scraper = ClearTripScraper()
     raw_fares = scraper.extract(_MOCK_FLIGHT_CARD)
@@ -36,13 +23,13 @@ def test_cleartrip_e2e_scraper_pipeline_database(conn):
     assert not bad, f"Unexpected bad records: {bad}"
     assert len(fares) == 1, "Pipeline should produce one valid Fare"
 
-    # 3. Persist to the isolated in-memory database
-    assert insert_fare(conn, fares[0]) > 0, "Failed to insert fare"
-    assert count_fares(conn) == 1, "Database should contain exactly one fare"
+    # 3. Persist to the test database
+    assert insert_fare(db, fares[0]) > 0, "Failed to insert fare"
+    assert count_fares(db) == 1, "Database should contain exactly one fare"
 
     # 4. Verify data integrity of the stored row
     fare = fares[0]
-    stored_rows = get_fares_by_route(conn, "DEL", "BOM")
+    stored_rows = get_fares_by_route(db, "DEL", "BOM")
     assert len(stored_rows) == 1
     stored = stored_rows[0]
     assert stored["price_inr"] == fare.price_inr
@@ -57,7 +44,7 @@ def test_cleartrip_e2e_scraper_pipeline_database(conn):
     assert stored["raw_offer_id"] == fare.source.raw_offer_id
 
 
-def test_cleartrip_e2e_scrape_runs_are_deterministic(conn):
+def test_cleartrip_e2e_scrape_runs_are_deterministic(db):
     """Two identical ClearTrip scrape runs collapse to one fare."""
     scraper = ClearTripScraper()
     html = _MOCK_FLIGHT_CARD
@@ -70,11 +57,11 @@ def test_cleartrip_e2e_scrape_runs_are_deterministic(conn):
     assert len(fares) == 1, "Deduplicator should collapse identical fares"
 
     for fare in fares:
-        insert_fare(conn, fare)
-    assert count_fares(conn) == 1
+        insert_fare(db, fare)
+    assert count_fares(db) == 1
 
 
-def test_cleartrip_e2e_bad_html_to_empty_database(conn):
+def test_cleartrip_e2e_bad_html_to_empty_database(db):
     """Malformed ClearTrip HTML yields no records — pipeline and DB stay empty."""
     scraper = ClearTripScraper()
     raw_fares = scraper.extract(
@@ -85,10 +72,10 @@ def test_cleartrip_e2e_bad_html_to_empty_database(conn):
     fares, bad, err = process_raw_fares([])
     assert err is not None
     assert fares == []
-    assert count_fares(conn) == 0
+    assert count_fares(db) == 0
 
 
-def test_cleartrip_and_mmt_coexist_without_false_dedup(conn):
+def test_cleartrip_and_mmt_coexist_without_false_dedup(db):
     """MMT and ClearTrip fares must coexist in the database.
 
     The two scrapers use different carriers (6E vs AI), prices, and scrape
@@ -117,11 +104,11 @@ def test_cleartrip_and_mmt_coexist_without_false_dedup(conn):
     assert fares[0].source.raw_offer_id != fares[1].source.raw_offer_id
 
     for fare in fares:
-        insert_fare(conn, fare)
-    assert count_fares(conn) == 2
+        insert_fare(db, fare)
+    assert count_fares(db) == 2
 
     # Both rows present on the shared route, distinguished by source/price
-    rows = get_fares_by_route(conn, "DEL", "BOM")
+    rows = get_fares_by_route(db, "DEL", "BOM")
     assert len(rows) == 2
     prices = {r["price_inr"] for r in rows}
     assert prices == {f.price_inr for f in fares}
