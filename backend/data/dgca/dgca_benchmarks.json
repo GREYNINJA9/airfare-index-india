@@ -1,0 +1,117 @@
+{
+  "_meta": {
+    "source": "Directorate General of Civil Aviation (DGCA) & MoSPI",
+    "description": "Monthly domestic airfare tariff monitoring benchmarks and passenger traffic weights",
+    "published_cycle": "Monthly Tariff & Traffic Bulletin",
+    "reference_year": 2026,
+    "base_period": "2026-08-01",
+    "currency": "INR"
+  },
+  "route_benchmarks": [
+    {
+      "origin": "DEL",
+      "destination": "BOM",
+      "monthly_avg_fare_inr": 5450.0,
+      "dgca_passenger_share": 0.224,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "BOM",
+      "destination": "DEL",
+      "monthly_avg_fare_inr": 5420.0,
+      "dgca_passenger_share": 0.220,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "DEL",
+      "destination": "BLR",
+      "monthly_avg_fare_inr": 6120.0,
+      "dgca_passenger_share": 0.158,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "BLR",
+      "destination": "DEL",
+      "monthly_avg_fare_inr": 6090.0,
+      "dgca_passenger_share": 0.155,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "BOM",
+      "destination": "BLR",
+      "monthly_avg_fare_inr": 4380.0,
+      "dgca_passenger_share": 0.126,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "BLR",
+      "destination": "BOM",
+      "monthly_avg_fare_inr": 4350.0,
+      "dgca_passenger_share": 0.124,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "DEL",
+      "destination": "CCU",
+      "monthly_avg_fare_inr": 5850.0,
+      "dgca_passenger_share": 0.105,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "CCU",
+      "destination": "DEL",
+      "monthly_avg_fare_inr": 5820.0,
+      "dgca_passenger_share": 0.102,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "BLR",
+      "destination": "HYD",
+      "monthly_avg_fare_inr": 3650.0,
+      "dgca_passenger_share": 0.087,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "HYD",
+      "destination": "BLR",
+      "monthly_avg_fare_inr": 3620.0,
+      "dgca_passenger_share": 0.085,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "MAA",
+      "destination": "DEL",
+      "monthly_avg_fare_inr": 6200.0,
+      "dgca_passenger_share": 0.084,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "DEL",
+      "destination": "MAA",
+      "monthly_avg_fare_inr": 6180.0,
+      "dgca_passenger_share": 0.083,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "DEL",
+      "destination": "HYD",
+      "monthly_avg_fare_inr": 4920.0,
+      "dgca_passenger_share": 0.082,
+      "reporting_month": "2026-08"
+    },
+    {
+      "origin": "HYD",
+      "destination": "DEL",
+      "monthly_avg_fare_inr": 4890.0,
+      "dgca_passenger_share": 0.080,
+      "reporting_month": "2026-08"
+    }
+  ],
+  "cpi_transport_subindex_monthly": {
+    "2026-05": 178.4,
+    "2026-06": 179.2,
+    "2026-07": 180.1,
+    "2026-08": 181.3,
+    "2026-09": 182.0
+  }
+}
