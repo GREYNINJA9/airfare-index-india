@@ -13,9 +13,15 @@ from database.connection import close_connection, reset_connection
 from database.schema import init_schema, truncate_tables
 
 
+LOCAL_TEST_PG_DSN = "postgresql://postgres:postgres@localhost:5432/airfare_index"
+
+
 def _fresh_postgres_connection():
     """Return a live PostgreSQL connection with the schema ready and tables empty."""
-    conn = reset_connection()
+    import os
+
+    test_dsn = os.environ.get("TEST_DATABASE_URL", LOCAL_TEST_PG_DSN)
+    conn = reset_connection(dsn=test_dsn)
     init_schema(conn)
     truncate_tables(conn)
     return conn

@@ -61,8 +61,55 @@ def insert_fare(conn, fare: Fare) -> int:
     return int(cur.lastrowid) if cur.rowcount > 0 else 0
 
 
+def _fare_to_tuple(fare: Fare) -> tuple:
+    return (
+        fare.route.origin,
+        fare.route.destination,
+        fare.route.distance_km if fare.route.distance_km is not None else 0.0,
+        fare.airline_code,
+        fare.price_inr,
+        fare.cabin_class.value,
+        _iso(fare.departure_at),
+        _iso(fare.scraped_at),
+        fare.trip_type.value,
+        fare.source.source_name,
+        fare.source.source_type.value,
+        fare.source.raw_price,
+        fare.source.raw_currency,
+        fare.source.raw_cabin_label,
+        str(fare.source.source_url) if fare.source.source_url else None,
+        fare.source.raw_offer_id,
+    )
+
+
 def insert_fares(conn, fares: List[Fare]) -> int:
     """Insert many ``Fare`` rows, returning the count inserted."""
+    if not fares:
+        return 0
+
+    if hasattr(conn, "pg_conn"):
+        try:
+            from psycopg2.extras import execute_values
+
+            cur = conn.pg_conn.cursor()
+            sql = """
+            INSERT INTO fares (
+                route_origin, route_destination, route_distance_km,
+                airline_code, price_inr, cabin_class,
+                departure_at, scraped_at, trip_type,
+                source_name, source_type, raw_price,
+                raw_currency, raw_cabin_label, source_url,
+                raw_offer_id
+            ) VALUES %s
+            ON CONFLICT (raw_offer_id) DO NOTHING
+            """
+            tuples = [_fare_to_tuple(f) for f in fares]
+            execute_values(cur, sql, tuples, page_size=1000)
+            conn.commit()
+            return len(fares)
+        except Exception:
+            pass
+
     return sum(1 for fare in fares if insert_fare(conn, fare) > 0)
 
 
