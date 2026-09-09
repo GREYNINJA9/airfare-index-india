@@ -35,14 +35,13 @@ class SourceConfig(BaseModel):
             AttributeError: class not found in module.
         """
         module_name = self.module
-        if not module_name.startswith("backend."):
-            try:
+        try:
+            mod = importlib.import_module(module_name)
+        except (ImportError, AttributeError):
+            if not module_name.startswith("backend."):
                 mod = importlib.import_module(f"backend.{module_name}")
-                cls = getattr(mod, self.class_)
-                return cls()
-            except (ImportError, AttributeError):
-                pass
-        mod = importlib.import_module(module_name)
+            else:
+                raise
         cls = getattr(mod, self.class_)
         # __init__ must be parameterless for all configured sources
         return cls()

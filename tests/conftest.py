@@ -20,10 +20,14 @@ def _fresh_postgres_connection():
     """Return a live PostgreSQL connection with the schema ready and tables empty."""
     import os
 
+    from database.repository import invalidate_fares_cache, invalidate_index_cache
+
     test_dsn = os.environ.get("TEST_DATABASE_URL", LOCAL_TEST_PG_DSN)
     conn = reset_connection(dsn=test_dsn)
     init_schema(conn)
     truncate_tables(conn)
+    invalidate_fares_cache()
+    invalidate_index_cache()
     return conn
 
 

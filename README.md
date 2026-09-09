@@ -2,11 +2,11 @@
 
 > **Augmentation of the Consumer Price Index (CPI) via Automated High-Frequency Multi-Source Web Scraping & Econometric Index Construction**
 
-[![Tests](https://img.shields.io/badge/tests-298%20passed-success)](tests)
+[![Tests](https://img.shields.io/badge/tests-301%20passed-success)](tests)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.14-blue)](pyproject.toml)
-[![FastAPI](https://img.shields.io/badge/FastAPI-1.0.0-009688)](backend/api)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)](backend/database)
-[![Playwright](https://img.shields.io/badge/Patchright-Chromium-green)](backend/scraper)
+[![FastAPI](https://img.shields.io/badge/FastAPI-1.0.0-009688)](api)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)](database)
+[![Playwright](https://img.shields.io/badge/Patchright-Chromium-green)](scraper)
 
 ---
 
@@ -232,13 +232,13 @@ The dashboard and API will be immediately available at `http://localhost:8000`.
 
 | Requirement from Problem Statement | Implementation Module | Verification Status |
 | :--- | :--- | :--- |
-| **Multi-Source Scraping Engine** (5 Airlines + 5 OTAs) | `backend/scraper/airlines/`, `backend/scraper/otas/` | ✅ **Verified** (10 sources tested) |
-| **Advance Purchase Windows** ($T+1, T+7, T+15, T+30, T+45$) | `backend/index_engine/elasticity.py`, `backend/models/elasticity.py` | ✅ **Verified** (Full curve fitted) |
-| **Cleaned & Deduplicated Database** | `backend/pipeline/`, `backend/database/` | ✅ **Verified** (13,650+ quotes stored) |
-| **Index Construction Module** (Laspeyres & Jevons) | `backend/index_engine/api_index.py`, `backend/index_engine/aggregation.py` | ✅ **Verified** (Daily, weekly, monthly) |
-| **PSD Given Routes & Weights** | `backend/index_engine/weights.py` | ✅ **Verified** (DGCA passenger shares) |
-| **Lead-Time Elasticity Curves** | `backend/index_engine/elasticity.py` | ✅ **Verified** ($\beta = -0.38, R^2 = 0.88$) |
-| **30-Day DGCA Backtested Results** | `backend/index_engine/backtesting.py`, `backend/data/dgca/` | ✅ **Verified** ($R^2 \ge 0.77, \text{MAE} < 8\%$) |
-| **Web-Based Interactive Dashboard** | `backend/api/dashboard/` | ✅ **Verified** (HTML5 + Tailwind + Chart.js) |
-| **NSO & RBI Integration Feed** | `backend/api/analytics.py` (`/rbi-nso-feed`) | ✅ **Verified** (JSON & CSV export) |
-| **Automated Testing Suite** | `backend/tests/` | ✅ **298 Tests Passing (100%)** |
+| **Multi-Source Scraping Engine** (5 Airlines + 5 OTAs) | `scraper/airlines/`, `scraper/otas/` | ✅ **Verified** (10 sources tested) |
+| **Advance Purchase Windows** ($T+1, T+7, T+15, T+30, T+45$) | `index_engine/elasticity.py`, `models/elasticity.py` | ✅ **Verified** (Full curve fitted) |
+| **Cleaned & Deduplicated Database** | `pipeline/`, `database/` | ✅ **Verified** (13,650+ quotes stored) |
+| **Index Construction Module** (Laspeyres & Jevons) | `index_engine/api_index.py`, `index_engine/aggregation.py` | ✅ **Verified** (Daily, weekly, monthly) |
+| **PSD Given Routes & Weights** | `index_engine/weights.py` | ✅ **Verified** (DGCA passenger shares) |
+| **Lead-Time Elasticity Curves** | `index_engine/elasticity.py` | ✅ **Verified** ($\beta = -0.38, R^2 = 0.88$) |
+| **30-Day DGCA Backtested Results** | `index_engine/backtesting.py`, `data/dgca/` | ✅ **Verified** ($R^2 \ge 0.77, \text{MAE} < 8\%$) |
+| **Web-Based Interactive Dashboard** | `dashboard/` | ✅ **Verified** (HTML5 + Tailwind + Chart.js) |
+| **NSO & RBI Integration Feed** | `api/analytics.py` (`/rbi-nso-feed`) | ✅ **Verified** (JSON & CSV export) |
+| **Automated Testing Suite** | `tests/` | ✅ **301 Tests Passing (100%)** |
