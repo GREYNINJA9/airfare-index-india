@@ -45,6 +45,32 @@ async def lifespan(app: FastAPI):
             seed_database(conn=conn, force=False)
         except Exception as e:
             logger.warning("Auto-seed on startup skipped or failed: %s", e)
+
+    # Pre-warm repository and dashboard caches on startup so first user request is instant
+    logger.info("Pre-warming repository and dashboard caches on startup...")
+    try:
+        from database.repository import get_fares, get_index_results
+        from dashboard.components import get_dashboard_kpis
+        from dashboard.charts import (
+            get_trend_chart_data,
+            get_elasticity_chart_data,
+            get_carrier_chart_data,
+            get_backtest_chart_data,
+        )
+        from dashboard.heatmap import get_heatmap_matrix
+
+        get_fares(conn)
+        get_index_results(conn)
+        get_dashboard_kpis()
+        get_trend_chart_data()
+        get_elasticity_chart_data()
+        get_carrier_chart_data()
+        get_backtest_chart_data()
+        get_heatmap_matrix()
+        logger.info("All caches successfully pre-warmed on startup.")
+    except Exception as e:
+        logger.warning("Cache pre-warming on startup skipped: %s", e)
+
     yield
 
 

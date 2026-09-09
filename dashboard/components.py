@@ -13,7 +13,14 @@ from database.repository import count_fares, get_fares, get_index_results
 
 _KPI_CACHE: Dict[str, Any] | None = None
 _KPI_CACHE_TIME: float = 0.0
-_KPI_CACHE_TTL: float = 30.0  # seconds
+_KPI_CACHE_TTL: float = 300.0  # seconds (5 minutes)
+
+
+def invalidate_kpi_cache() -> None:
+    """Invalidate in-memory KPI scorecards cache."""
+    global _KPI_CACHE, _KPI_CACHE_TIME
+    _KPI_CACHE = None
+    _KPI_CACHE_TIME = 0.0
 
 
 def get_dashboard_kpis() -> Dict[str, Any]:

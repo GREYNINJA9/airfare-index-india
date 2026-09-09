@@ -24,16 +24,19 @@ import time
 
 _CHARTS_CACHE = None
 _CHARTS_CACHE_TIME = 0.0
-_CHARTS_CACHE_TTL = 30.0
+_CHARTS_CACHE_TTL = 300.0
 
 _HEATMAP_CACHE = None
 _HEATMAP_CACHE_TIME = 0.0
-_HEATMAP_CACHE_TTL = 30.0
+_HEATMAP_CACHE_TTL = 300.0
 
 
 @router.get("/dashboard/api/kpis")
-def dashboard_kpis():
+def dashboard_kpis(refresh: bool = False):
     """Return live KPI scorecards for dashboard dynamic refresh."""
+    if refresh:
+        from dashboard.components import invalidate_kpi_cache
+        invalidate_kpi_cache()
     return get_dashboard_kpis()
 
 
@@ -80,6 +83,12 @@ def serve_dashboard():
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APIx | Real-time Airfare Price Index for India (MoSPI / RBI)</title>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -822,7 +831,8 @@ def serve_dashboard():
 
         async function loadKPIs(force = false) {
             try {
-                const res = await fetch('/dashboard/api/kpis');
+                const url = force ? '/dashboard/api/kpis?refresh=true' : '/dashboard/api/kpis';
+                const res = await fetch(url);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const kpi = await res.json();
                 renderKPIs(kpi);
@@ -874,6 +884,30 @@ def serve_dashboard():
 
         async function initDashboard() {
             updateTimestamp();
+            try {
+                const kpiEl = document.getElementById('initial-kpis');
+                const chartEl = document.getElementById('initial-charts');
+                const heatEl = document.getElementById('initial-heatmap');
+                if (kpiEl && chartEl && heatEl && kpiEl.textContent.trim()) {
+                    const kpi = JSON.parse(kpiEl.textContent);
+                    const charts = JSON.parse(chartEl.textContent);
+                    const heat = JSON.parse(heatEl.textContent);
+                    renderKPIs(kpi);
+                    renderTrendChart(charts.trend);
+                    renderElasticityChart(charts.elasticity);
+                    renderBacktestChart(charts.backtest);
+                    renderCarrierChart(charts.carrier);
+                    renderHeatmapGrid(heat);
+                    renderHeatmap(heat.cells);
+                    updateTimestamp();
+                    requestAnimationFrame(() => {
+                        if (trendChartInst) trendChartInst.resize();
+                    });
+                    return;
+                }
+            } catch (err) {
+                console.warn("Initial state hydration failed, falling back to network fetch:", err);
+            }
             await Promise.allSettled([loadKPIs(), loadCharts(), loadHeatmap()]);
             updateTimestamp();
             requestAnimationFrame(() => {
@@ -897,7 +931,21 @@ def serve_dashboard():
 
         window.addEventListener('DOMContentLoaded', initDashboard);
     </script>
+    <script id="initial-kpis" type="application/json"><!-- INITIAL_KPIS --></script>
+    <script id="initial-charts" type="application/json"><!-- INITIAL_CHARTS --></script>
+    <script id="initial-heatmap" type="application/json"><!-- INITIAL_HEATMAP --></script>
 </body>
 </html>
 """
-    return HTMLResponse(content=html_content)
+    import json
+    kpis_json = json.dumps(dashboard_kpis())
+    charts_json = json.dumps(dashboard_charts(refresh=False))
+    heatmap_json = json.dumps(dashboard_heatmap(refresh=False))
+
+    rendered = (
+        html_content
+        .replace("<!-- INITIAL_KPIS -->", kpis_json)
+        .replace("<!-- INITIAL_CHARTS -->", charts_json)
+        .replace("<!-- INITIAL_HEATMAP -->", heatmap_json)
+    )
+    return HTMLResponse(content=rendered)

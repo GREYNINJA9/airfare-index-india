@@ -1,0 +1,27 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    # Runs every 12 minutes to prevent Render free instance from spinning down (sleeps after 15m)
+    - cron: '*/12 * * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    name: Ping Render Healthz
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Service
+        env:
+          RENDER_APP_URL: ${{ secrets.RENDER_APP_URL }}
+        run: |
+          if [ -z "$RENDER_APP_URL" ]; then
+            echo "ℹ️ RENDER_APP_URL secret is not set. To keep your Render instance awake:"
+            echo "Go to GitHub Repo -> Settings -> Secrets and variables -> Actions -> Add 'RENDER_APP_URL' with your Render URL (e.g. https://your-app.onrender.com)."
+            exit 0
+          fi
+          # Strip trailing slash if present
+          URL="${RENDER_APP_URL%/}"
+          echo "Pinging $URL/healthz to prevent spin-down..."
+          STATUS=$(curl -s -L -o /dev/null -w "%{http_code}" "$URL/healthz" || true)
+          echo "Status received: $STATUS"

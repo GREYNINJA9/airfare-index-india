@@ -24,12 +24,12 @@ from models.index import IndexResult
 
 _FARES_CACHE: List[Fare] | None = None
 _FARES_CACHE_TIME: float = 0.0
-_FARES_CACHE_TTL: float = 60.0  # seconds
+_FARES_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
 _FARES_LOCK = threading.Lock()
 
 _INDEX_CACHE: List[IndexResult] | None = None
 _INDEX_CACHE_TIME: float = 0.0
-_INDEX_CACHE_TTL: float = 60.0  # seconds
+_INDEX_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
 _INDEX_LOCK = threading.Lock()
 
 
