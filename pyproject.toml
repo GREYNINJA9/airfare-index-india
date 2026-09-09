@@ -40,6 +40,12 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"config/loader.py" = ["E402"]
+"dashboard/app.py" = ["E402"]
+"database/seed_data.py" = ["E402"]
 
 [tool.setuptools.packages.find]
 include = ["api*", "config*", "dashboard*", "database*", "index_engine*", "models*", "pipeline*", "scheduler*", "scraper*"]

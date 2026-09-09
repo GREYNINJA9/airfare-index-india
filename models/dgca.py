@@ -7,7 +7,8 @@ monthly average airfare data over at least 30 days.
 from __future__ import annotations
 
 from datetime import date
-from typing import Any, Dict, List
+from typing import List
+
 from pydantic import BaseModel, ConfigDict, Field
 
 

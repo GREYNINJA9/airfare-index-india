@@ -6,10 +6,9 @@ and advance booking window analysis.
 
 from __future__ import annotations
 
-from datetime import date, timezone
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Query
 from pydantic import BaseModel
 
 from database.connection import get_connection

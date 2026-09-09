@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from datetime import date
 
-import pytest
-
 from index_engine.backtesting import generate_backtest_report, load_dgca_benchmarks
 
 

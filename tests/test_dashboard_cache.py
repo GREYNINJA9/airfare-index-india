@@ -1,11 +1,13 @@
 """Unit tests for repository caching and dashboard speed optimizations."""
 
 from unittest.mock import MagicMock
+
 from database.repository import (
+    get_fares,
     invalidate_fares_cache,
     invalidate_index_cache,
-    get_fares,
 )
+
 
 def test_invalidate_fares_cache():
     invalidate_fares_cache()

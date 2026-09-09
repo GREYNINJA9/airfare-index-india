@@ -19,9 +19,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
 from api.analytics import router as analytics_router
-from dashboard.app import router as dashboard_router
 from api.fares import router as fares_router
 from api.routes import router as api_router
+from dashboard.app import router as dashboard_router
 from database.connection import get_connection
 from database.schema import init_schema
 
@@ -49,15 +49,15 @@ async def lifespan(app: FastAPI):
     # Pre-warm repository and dashboard caches on startup so first user request is instant
     logger.info("Pre-warming repository and dashboard caches on startup...")
     try:
-        from database.repository import get_fares, get_index_results
-        from dashboard.components import get_dashboard_kpis
         from dashboard.charts import (
-            get_trend_chart_data,
-            get_elasticity_chart_data,
-            get_carrier_chart_data,
             get_backtest_chart_data,
+            get_carrier_chart_data,
+            get_elasticity_chart_data,
+            get_trend_chart_data,
         )
+        from dashboard.components import get_dashboard_kpis
         from dashboard.heatmap import get_heatmap_matrix
+        from database.repository import get_fares, get_index_results
 
         get_fares(conn)
         get_index_results(conn)

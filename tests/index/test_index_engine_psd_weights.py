@@ -5,7 +5,6 @@ from __future__ import annotations
 import pytest
 
 from index_engine.weights import (
-    DEFAULT_PSD_ROUTE_WEIGHTS,
     compute_psd_base_basket_weights,
 )
 from models.fare import CabinClass, TripType
