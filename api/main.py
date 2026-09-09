@@ -10,6 +10,7 @@ Mounts:
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from typing import Any, Dict
 
@@ -34,6 +35,15 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing database schema on startup...")
     conn = get_connection()
     init_schema(conn)
+
+    auto_seed = os.environ.get("AUTO_SEED", "").strip().lower() in ("true", "1", "yes")
+    if auto_seed:
+        try:
+            from database.seed_data import seed_database
+            logger.info("Auto-seeding database as requested by AUTO_SEED=true...")
+            seed_database(conn=conn, force=False)
+        except Exception as e:
+            logger.warning("Auto-seed on startup skipped or failed: %s", e)
     yield
 
 

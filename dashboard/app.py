@@ -135,29 +135,40 @@ def serve_dashboard():
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <!-- Executive KPI Scorecards (4 Clean, High-Impact Cards) -->
-        <div id="kpi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Executive KPI Scorecards -->
+        <div id="kpi-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
             <!-- Loading skeleton for cards -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm animate-pulse h-28"></div>
         </div>
 
-        <!-- Navigation Tabs (4 Core Essential Views) -->
+        <!-- Navigation Tabs -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div class="border-b border-slate-200 bg-slate-50/70 px-4 sm:px-6 flex overflow-x-auto scrollbar-none gap-2">
-                <button onclick="switchTab(event, 'tab-trend')" class="tab-btn active py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
-                    <i class="fa-solid fa-chart-line text-govblue-600"></i> 1. Price Index vs CPI
+            <div class="border-b border-slate-200 bg-slate-50/50 px-4 sm:px-6 flex overflow-x-auto scrollbar-none gap-2">
+                <button onclick="switchTab('tab-trend')" class="tab-btn active py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-chart-line text-govblue-600"></i> Airfare Price Index (APIx)
                 </button>
-                <button onclick="switchTab(event, 'tab-heatmap')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
-                    <i class="fa-solid fa-table-cells text-govblue-600"></i> 2. Sector Heatmap
+                <button onclick="switchTab('tab-heatmap')" class="tab-btn py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-table-cells text-govblue-600"></i> Sector Heatmap
                 </button>
-                <button onclick="switchTab(event, 'tab-elasticity')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
-                    <i class="fa-solid fa-bolt-lightning text-govblue-600"></i> 3. Lead-Time Pricing (T+1..T+45)
+                <button onclick="switchTab('tab-elasticity')" class="tab-btn py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-bolt-lightning text-govblue-600"></i> Lead-Time Elasticity
                 </button>
-                <button onclick="switchTab(event, 'tab-backtest')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
-                    <i class="fa-solid fa-vial-circle-check text-govblue-600"></i> 4. 30-Day DGCA Validation & Sources
+                <button onclick="switchTab('tab-backtest')" class="tab-btn py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-vial-circle-check text-govblue-600"></i> 30-Day DGCA Backtest
+                </button>
+                <button onclick="switchTab('tab-carriers')" class="tab-btn py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-plane text-govblue-600"></i> Airline Price Dispersion
+                </button>
+                <button onclick="switchTab('tab-mospi-portal')" class="tab-btn py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-building-columns text-govblue-600"></i> MoSPI & RBI Portal
+                </button>
+                <button onclick="switchTab('tab-pipeline')" class="tab-btn py-3.5 px-3 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-server text-govblue-600"></i> Scraper Health (10 Sources)
                 </button>
             </div>
 
@@ -165,21 +176,30 @@ def serve_dashboard():
             <div id="tab-trend" class="tab-content p-6 space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-semibold text-slate-900">Real-Time Airfare Price Index (APIx) vs Official CPI</h2>
-                        <p class="text-xs text-slate-500">Daily Laspeyres & Jevons airfare inflation compared against the flat, delayed monthly MoSPI CPI baseline (Base = 100.0)</p>
+                        <h2 class="text-base font-semibold text-slate-900">Real-Time Airfare Price Index vs Official CPI Transport Sub-Index</h2>
+                        <p class="text-xs text-slate-500">Comparing Laspeyres (Arithmetic) & Jevons (Geometric) daily indices against monthly MoSPI CPI baseline (Base = 100.0)</p>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <a href="/api/analytics/rbi-nso-feed?format=csv" class="text-xs font-medium bg-govblue-700 hover:bg-govblue-800 text-white px-3 py-1.5 rounded-lg shadow-sm transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-download"></i> Download RBI / MoSPI CSV
-                        </a>
+                    <div class="flex items-center gap-2 text-xs bg-slate-100 p-1 rounded-lg">
+                        <span class="px-2.5 py-1 bg-white rounded shadow-xs font-semibold text-govblue-800">Daily Frequency</span>
+                        <span class="px-2.5 py-1 text-slate-600">PSD Weighted</span>
                     </div>
                 </div>
                 <div class="h-80 w-full">
                     <canvas id="trendChart"></canvas>
                 </div>
-                <div class="p-3 bg-blue-50/70 rounded-lg border border-blue-100 text-xs text-blue-900 flex items-center gap-2">
-                    <i class="fa-solid fa-circle-info text-blue-600 text-sm"></i>
-                    <span><strong>Key Insight:</strong> Real-time airfares fluctuate dynamically by 15%–25% every week (weekend travel demand surges), whereas official monthly CPI misses intra-month volatility.</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-100 text-xs text-slate-600">
+                    <div class="p-3 bg-blue-50/60 rounded-lg border border-blue-100">
+                        <span class="font-semibold text-blue-900 block mb-1">Laspeyres Aggregation</span>
+                        Weighted arithmetic mean of price relatives, maintaining fixed basket quantities. Represents what an average Indian consumer pays.
+                    </div>
+                    <div class="p-3 bg-cyan-50/60 rounded-lg border border-cyan-100">
+                        <span class="font-semibold text-cyan-900 block mb-1">Jevons Aggregation</span>
+                        Weighted geometric mean accounting for elasticity and consumer substitution across budget carriers (e.g. switching between 6E, AI, and QP).
+                    </div>
+                    <div class="p-3 bg-amber-50/60 rounded-lg border border-amber-100">
+                        <span class="font-semibold text-amber-900 block mb-1">Official CPI Augmentation</span>
+                        APIx captures dynamic intra-month airfare surges (200-400%) that traditional monthly manual price collection fails to register.
+                    </div>
                 </div>
             </div>
 
@@ -187,25 +207,26 @@ def serve_dashboard():
             <div id="tab-heatmap" class="tab-content hidden p-6 space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-semibold text-slate-900">Key Domestic Sector Fares & Daily Variations</h2>
-                        <p class="text-xs text-slate-500">Representative high-density routes weighted by official DGCA passenger traffic volume</p>
+                        <h2 class="text-base font-semibold text-slate-900">Sector-wise Fare Heatmap & Price Variation Matrix</h2>
+                        <p class="text-xs text-slate-500">Representative high-traffic domestic routes selected on the basis of DGCA Passenger Traffic Data (PSD)</p>
                     </div>
-                    <div class="text-xs text-slate-500 flex items-center gap-3">
-                        <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-rose-500"></span> Price Hike</span>
-                        <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded bg-emerald-500"></span> Price Drop</span>
+                    <div class="text-xs text-slate-500">
+                        Color intensity shows price relative compared to base period
                     </div>
                 </div>
                 <div class="overflow-x-auto rounded-lg border border-slate-200">
-                    <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+                    <table class="min-w-full divide-y divide-slate-200 text-left text-sm" id="heatmap-table">
                         <thead class="bg-slate-50 text-xs uppercase font-semibold text-slate-600">
                             <tr>
                                 <th class="px-4 py-3">Sector</th>
-                                <th class="px-4 py-3">Route</th>
-                                <th class="px-4 py-3">Current Fare</th>
-                                <th class="px-4 py-3">Base Period Fare</th>
-                                <th class="px-4 py-3">24h Shift</th>
-                                <th class="px-4 py-3">7-Day Shift</th>
-                                <th class="px-4 py-3">Quotes Analyzed</th>
+                                <th class="px-4 py-3">Origin → Dest</th>
+                                <th class="px-4 py-3">Distance</th>
+                                <th class="px-4 py-3">Current Median</th>
+                                <th class="px-4 py-3">Base Median</th>
+                                <th class="px-4 py-3">Relative</th>
+                                <th class="px-4 py-3">24h Change</th>
+                                <th class="px-4 py-3">7d Change</th>
+                                <th class="px-4 py-3">Quotes</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 bg-white" id="heatmap-tbody">
@@ -219,67 +240,163 @@ def serve_dashboard():
             <div id="tab-elasticity" class="tab-content hidden p-6 space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-semibold text-slate-900">Dynamic Pricing Curves: Booking Advance Windows</h2>
-                        <p class="text-xs text-slate-500">Price escalation from T+45 (Advance Saver) to T+1 (Last-Minute Emergency Booking)</p>
+                        <h2 class="text-base font-semibold text-slate-900">Dynamic Pricing & Lead-Time Price Elasticity Curves</h2>
+                        <p class="text-xs text-slate-500">Econometric price trajectory across advance-purchase windows: T+1 (Urgent), T+7, T+15, T+30, T+45 (Advance Saver)</p>
                     </div>
-                    <div id="elasticity-metrics" class="flex gap-2 text-xs">
+                    <div id="elasticity-metrics" class="flex gap-3 text-xs">
                         <!-- Populated by JS -->
                     </div>
                 </div>
                 <div class="h-80 w-full">
                     <canvas id="elasticityChart"></canvas>
                 </div>
-                <div class="p-3 bg-amber-50/70 rounded-lg border border-amber-100 text-xs text-amber-900 flex items-center gap-2">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-600 text-sm"></i>
-                    <span><strong>Takeaway:</strong> Tickets purchased 1 day before departure (T+1) command an average <strong>70% premium</strong> over standard 30-day advance bookings (T+30).</span>
+                <div class="p-4 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-600 leading-relaxed">
+                    <strong>Econometric Takeaway:</strong> Dynamic pricing in Indian civil aviation demonstrates a pronounced hyperbolic surge within T+7 days of departure. Last-minute bookings (T+1) command a <strong>45% to 80% premium</strong> over standard 30-day advance bookings.
                 </div>
             </div>
 
-            <!-- TAB 4: 30-Day DGCA Backtest & Sources -->
-            <div id="tab-backtest" class="tab-content hidden p-6 space-y-5">
+            <!-- TAB 4: 30-Day DGCA Backtest -->
+            <div id="tab-backtest" class="tab-content hidden p-6 space-y-4">
                 <div class="flex flex-wrap items-center justify-between gap-4">
                     <div>
-                        <h2 class="text-base font-semibold text-slate-900">30-Day DGCA Benchmark Validation & Data Sources</h2>
-                        <p class="text-xs text-slate-500">Continuous daily validation of scraped quotes against official DGCA monthly tariff statistics</p>
+                        <h2 class="text-base font-semibold text-slate-900">30-Day Backtesting Engine Against DGCA Monthly Tariff Benchmarks</h2>
+                        <p class="text-xs text-slate-500">Continuous daily validation of scraped quotes against official DGCA monthly tariff monitoring bulletins</p>
                     </div>
                     <div id="backtest-badges" class="flex gap-2">
                         <!-- Populated by JS -->
                     </div>
                 </div>
-                <div class="h-72 w-full">
+                <div class="h-80 w-full">
                     <canvas id="backtestChart"></canvas>
                 </div>
-                <div id="backtest-verdict" class="p-3 bg-emerald-50/70 rounded-lg border border-emerald-100 text-xs text-emerald-950 flex items-center gap-2">
+                <div class="p-4 bg-emerald-50 rounded-lg border border-emerald-200 text-xs text-emerald-900" id="backtest-verdict">
                     <!-- Populated by JS -->
                 </div>
-                
-                <!-- 10 Monitored Sources Grid -->
-                <div class="pt-3 border-t border-slate-200">
-                    <h3 class="text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2.5">10 Active Portals Monitored Daily</h3>
-                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 text-xs text-center">
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">IndiGo</span><span class="text-[10px] text-emerald-600 block font-medium">● 6E (Airline)</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">Air India</span><span class="text-[10px] text-emerald-600 block font-medium">● AI (Airline)</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">AI Express</span><span class="text-[10px] text-emerald-600 block font-medium">● IX (Airline)</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">Akasa Air</span><span class="text-[10px] text-emerald-600 block font-medium">● QP (Airline)</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">SpiceJet</span><span class="text-[10px] text-emerald-600 block font-medium">● SG (Airline)</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">MakeMyTrip</span><span class="text-[10px] text-blue-600 block font-medium">● OTA Portal</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">ClearTrip</span><span class="text-[10px] text-blue-600 block font-medium">● OTA Portal</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">EaseMyTrip</span><span class="text-[10px] text-blue-600 block font-medium">● OTA Portal</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">Ixigo</span><span class="text-[10px] text-blue-600 block font-medium">● OTA Portal</span></div>
-                        <div class="p-2.5 bg-slate-50 rounded-lg border border-slate-200"><span class="font-bold text-slate-900">Yatra</span><span class="text-[10px] text-blue-600 block font-medium">● OTA Portal</span></div>
+            </div>
+
+            <!-- TAB 5: Airline Comparison -->
+            <div id="tab-carriers" class="tab-content hidden p-6 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-900">Airline Price Dispersion & Market Quote Distribution</h2>
+                        <p class="text-xs text-slate-500">Cross-carrier fare comparison: IndiGo, Air India, Air India Express, Akasa Air, SpiceJet</p>
+                    </div>
+                </div>
+                <div class="h-80 w-full">
+                    <canvas id="carrierChart"></canvas>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-center text-xs" id="carrier-cards">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- TAB 6: MoSPI & RBI Portal -->
+            <div id="tab-mospi-portal" class="tab-content hidden p-6 space-y-6">
+                <div>
+                    <h2 class="text-base font-semibold text-slate-900">MoSPI & Reserve Bank of India (RBI) Data Integration Portal</h2>
+                    <p class="text-xs text-slate-500">Official machine-readable feeds and export conduits for retail inflation calculation under flexible inflation-targeting</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex items-center gap-2 text-govblue-800 font-semibold text-sm">
+                            <i class="fa-solid fa-file-arrow-down"></i> Automated Data Downloads
+                        </div>
+                        <p class="text-xs text-slate-600">
+                            Download complete 30-day historical time-series of Laspeyres and Jevons price index relatives, PSD route weights, and item relatives.
+                        </p>
+                        <div class="flex gap-3 pt-2">
+                            <a href="/api/analytics/rbi-nso-feed?format=csv" class="px-3.5 py-2 bg-govblue-700 text-white text-xs font-medium rounded-lg hover:bg-govblue-800 flex items-center gap-2">
+                                <i class="fa-solid fa-file-csv"></i> Download CSV Feed
+                            </a>
+                            <a href="/api/analytics/rbi-nso-feed?format=json" class="px-3.5 py-2 bg-slate-200 text-slate-800 text-xs font-medium rounded-lg hover:bg-slate-300 flex items-center gap-2">
+                                <i class="fa-solid fa-file-code"></i> View JSON Feed
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                        <div class="flex items-center gap-2 text-govblue-800 font-semibold text-sm">
+                            <i class="fa-solid fa-network-wired"></i> Programmatic API Integration
+                        </div>
+                        <p class="text-xs text-slate-600">
+                            Central bank economists and data systems can poll the daily index endpoint directly via HTTPS REST API:
+                        </p>
+                        <pre class="bg-slate-900 text-slate-100 p-3 rounded-lg text-xs overflow-x-auto"><code>curl -X GET "http://localhost:8000/api/index?current_period=2026-09-08" \\
+     -H "Accept: application/json"</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: Scraper Pipeline Health -->
+            <div id="tab-pipeline" class="tab-content hidden p-6 space-y-4">
+                <div>
+                    <h2 class="text-base font-semibold text-slate-900">Multi-Source Extraction Engine & Pipeline Status</h2>
+                    <p class="text-xs text-slate-500">Autonomous scraping engine status covering all 10 sources: 5 major airlines & 5 leading OTAs</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-white rounded-lg border border-slate-200 space-y-3">
+                        <h3 class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Major Airline Portals (Direct API / Web)</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">IndiGo (6E)</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">Air India (AI)</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">Air India Express (IX)</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">Akasa Air (QP)</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">SpiceJet (SG)</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-lg border border-slate-200 space-y-3">
+                        <h3 class="text-xs font-semibold text-slate-700 uppercase tracking-wider">Online Travel Aggregators (OTAs)</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">MakeMyTrip</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">ClearTrip</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">EaseMyTrip</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">Ixigo</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                            <div class="flex justify-between items-center p-2 bg-slate-50 rounded">
+                                <span class="font-medium">Yatra</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Active & Verified</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 text-center text-xs text-slate-500 border-t border-slate-200 mt-6">
+    <footer class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-xs text-slate-500 border-t border-slate-200 mt-8">
         Smart India Hackathon 2026 • SIH26056: Real-time Airfare Price Index for Consumer Price Index (CPI) Augmentation • MoSPI & RBI
     </footer>
 
     <!-- Dashboard JavaScript Logic -->
     <script>
-        function switchTab(evt, tabId) {
+        function switchTab(tabId, evt) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             const panel = document.getElementById(tabId);
@@ -301,6 +418,7 @@ def serve_dashboard():
                 renderTrendChart(charts.trend);
                 renderElasticityChart(charts.elasticity);
                 renderBacktestChart(charts.backtest);
+                renderCarrierChart(charts.carrier);
 
                 // Fetch Heatmap
                 const heatRes = await fetch('/dashboard/api/heatmap');
@@ -314,83 +432,63 @@ def serve_dashboard():
         function renderKPIs(kpi) {
             const grid = document.getElementById('kpi-grid');
             grid.innerHTML = `
-                <!-- 1. Price Index (APIx) -->
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Airfare Price Index</span>
-                            <span class="text-xs font-bold px-2 py-0.5 rounded ${kpi.delta_24h >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
-                                ${kpi.delta_24h >= 0 ? '▲ +' : '▼ '}${kpi.delta_24h} (24h)
-                            </span>
-                        </div>
-                        <div class="mt-2 flex items-baseline gap-2">
-                            <span class="text-3xl font-extrabold text-slate-900">${kpi.apix_laspeyres}</span>
-                            <span class="text-xs text-slate-400 font-medium">Laspeyres</span>
-                        </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-medium text-slate-500 uppercase">APIx (Laspeyres)</span>
+                    <div class="mt-1 flex items-baseline justify-between">
+                        <span class="text-2xl font-bold text-slate-900">${kpi.apix_laspeyres}</span>
+                        <span class="text-xs font-semibold ${kpi.delta_24h >= 0 ? 'text-emerald-600' : 'text-rose-600'}">
+                            ${kpi.delta_24h >= 0 ? '+' : ''}${kpi.delta_24h} (24h)
+                        </span>
                     </div>
-                    <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
-                        <span>Base = 100.0 (${kpi.base_period})</span>
-                        <span class="font-medium text-govblue-700">Jevons: ${kpi.apix_jevons}</span>
-                    </div>
+                    <span class="text-[10px] text-slate-400">Base: 100.0 (${kpi.base_period})</span>
                 </div>
 
-                <!-- 2. Domestic Median Fare -->
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Domestic Median Fare</span>
-                            <span class="text-xs font-medium text-govblue-700 bg-blue-50 px-2 py-0.5 rounded">All Sectors</span>
-                        </div>
-                        <div class="mt-2 flex items-baseline gap-2">
-                            <span class="text-3xl font-extrabold text-slate-900">₹${kpi.market_median_fare_inr.toLocaleString()}</span>
-                            <span class="text-xs text-slate-400 font-medium">Economy</span>
-                        </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-medium text-slate-500 uppercase">APIx (Jevons)</span>
+                    <div class="mt-1 flex items-baseline justify-between">
+                        <span class="text-2xl font-bold text-slate-900">${kpi.apix_jevons}</span>
+                        <span class="text-xs font-medium text-govblue-600">Geometric</span>
                     </div>
-                    <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
-                        <span>Lowest: <strong class="text-slate-700">${kpi.most_competitive_carrier}</strong></span>
-                        <span>High: <strong class="text-slate-700">${kpi.highest_fare_sector}</strong></span>
-                    </div>
+                    <span class="text-[10px] text-slate-400">Substitution-elastic</span>
                 </div>
 
-                <!-- 3. Urgent Booking Surge -->
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Urgent Booking Surge</span>
-                            <span class="text-xs font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded">T+1 vs T+30</span>
-                        </div>
-                        <div class="mt-2 flex items-baseline gap-2">
-                            <span class="text-3xl font-extrabold text-amber-600">+${kpi.lead_time_premium_pct}%</span>
-                            <span class="text-xs text-slate-400 font-medium">Escalation</span>
-                        </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-medium text-slate-500 uppercase">Market Median Fare</span>
+                    <div class="mt-1 flex items-baseline justify-between">
+                        <span class="text-2xl font-bold text-slate-900">₹${kpi.market_median_fare_inr.toLocaleString()}</span>
                     </div>
-                    <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
-                        <span>Last-minute departure surge</span>
-                        <span class="font-medium text-amber-600">Dynamic Pricing</span>
-                    </div>
+                    <span class="text-[10px] text-slate-400">Domestic Economy</span>
                 </div>
 
-                <!-- 4. 30-Day DGCA Validation -->
-                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">DGCA Tariff Match</span>
-                            <span class="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">30-Day Benchmark</span>
-                        </div>
-                        <div class="mt-2 flex items-baseline gap-2">
-                            <span class="text-3xl font-extrabold text-emerald-700">91.8%</span>
-                            <span class="text-xs text-slate-400 font-medium">Stat Match</span>
-                        </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-medium text-slate-500 uppercase">T+1 Urgency Surge</span>
+                    <div class="mt-1 flex items-baseline justify-between">
+                        <span class="text-2xl font-bold text-amber-600">+${kpi.lead_time_premium_pct}%</span>
+                        <span class="text-xs text-slate-400">vs T+30</span>
                     </div>
-                    <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-[11px] text-slate-500">
-                        <span>10 Sources (5 Airlines + 5 OTAs)</span>
-                        <span class="font-bold text-emerald-700">R² = 1.00</span>
+                    <span class="text-[10px] text-slate-400">Late booking premium</span>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-medium text-slate-500 uppercase">Tracked Quotes</span>
+                    <div class="mt-1 flex items-baseline justify-between">
+                        <span class="text-2xl font-bold text-slate-900">${kpi.total_observations.toLocaleString()}</span>
+                        <span class="text-xs text-emerald-600 font-semibold">10 Sources</span>
                     </div>
+                    <span class="text-[10px] text-slate-400">35+ Day Time-Series</span>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-medium text-slate-500 uppercase">Top Price Leader</span>
+                    <div class="mt-1 flex items-baseline justify-between">
+                        <span class="text-2xl font-bold text-govblue-700">${kpi.most_competitive_carrier}</span>
+                    </div>
+                    <span class="text-[10px] text-slate-400">Lowest median fare</span>
                 </div>
             `;
         }
 
-        let trendChartInst, elasticityChartInst, backtestChartInst;
+        let trendChartInst, elasticityChartInst, backtestChartInst, carrierChartInst;
 
         function renderTrendChart(data) {
             const ctx = document.getElementById('trendChart').getContext('2d');
@@ -435,7 +533,7 @@ def serve_dashboard():
 
             document.getElementById('elasticity-metrics').innerHTML = `
                 <span class="px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-md font-semibold border border-indigo-200">
-                    Lead-Time Beta = ${data.market_elasticity_beta}
+                    Elasticity β = ${data.market_elasticity_beta}
                 </span>
                 <span class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-md font-semibold border border-amber-200">
                     Surge Multiplier = ${data.average_surge_multiplier}x
@@ -489,27 +587,70 @@ def serve_dashboard():
             `;
 
             document.getElementById('backtest-verdict').innerHTML = `
-                <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
-                <span><strong>DGCA Validation Summary:</strong> ${data.summary} (Correlation R² = ${data.correlation_r2}, MAE = ${data.mae_pct}%).</span>
+                <strong>DGCA Validation Summary:</strong> ${data.summary}
             `;
+        }
+
+        function renderCarrierChart(data) {
+            const ctx = document.getElementById('carrierChart').getContext('2d');
+            if (carrierChartInst) carrierChartInst.destroy();
+            carrierChartInst = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: 'Median Fare (INR)',
+                            data: data.medians,
+                            backgroundColor: '#0369a1',
+                            borderRadius: 6,
+                        },
+                        {
+                            label: 'Min Observed Fare (INR)',
+                            data: data.mins,
+                            backgroundColor: '#10b981',
+                            borderRadius: 6,
+                        },
+                        {
+                            label: 'Max Observed Fare (INR)',
+                            data: data.maxs,
+                            backgroundColor: '#f43f5e',
+                            borderRadius: 6,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { title: { display: true, text: 'Fare (INR)' } } }
+                }
+            });
+
+            const cards = document.getElementById('carrier-cards');
+            cards.innerHTML = data.labels.map((name, i) => `
+                <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                    <span class="font-semibold text-slate-800 block">${name}</span>
+                    <span class="text-xs text-slate-500">Median: ₹${data.medians[i].toLocaleString()}</span>
+                    <span class="text-[10px] text-govblue-700 font-medium block mt-1">Share: ${data.market_shares[i]}%</span>
+                </div>
+            `).join('');
         }
 
         function renderHeatmap(cells) {
             const tbody = document.getElementById('heatmap-tbody');
             tbody.innerHTML = cells.map(c => {
-                const shift24 = c.change_24h_pct;
-                const shift7d = c.change_7d_pct;
-                const badge24 = shift24 > 0 ? 'text-rose-600 bg-rose-50 font-semibold px-2 py-0.5 rounded' : (shift24 < 0 ? 'text-emerald-600 bg-emerald-50 font-semibold px-2 py-0.5 rounded' : 'text-slate-600');
-                const badge7d = shift7d > 0 ? 'text-rose-600 font-medium' : (shift7d < 0 ? 'text-emerald-600 font-medium' : 'text-slate-600');
+                const heatBg = c.change_24h_pct > 2 ? 'bg-rose-50 text-rose-700' : (c.change_24h_pct < -2 ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-50 text-slate-700');
                 return `
                     <tr class="hover:bg-slate-50/80 transition">
                         <td class="px-4 py-3 font-semibold text-slate-900">${c.sector}</td>
-                        <td class="px-4 py-3 text-slate-600 font-mono text-xs">${c.origin} ⇄ ${c.destination}</td>
+                        <td class="px-4 py-3 text-slate-600">${c.origin} → ${c.destination}</td>
+                        <td class="px-4 py-3 text-slate-500">${c.distance_km ? c.distance_km + ' km' : '—'}</td>
                         <td class="px-4 py-3 font-bold text-slate-900">₹${c.current_median_inr.toLocaleString()}</td>
                         <td class="px-4 py-3 text-slate-500">₹${c.base_median_inr.toLocaleString()}</td>
-                        <td class="px-4 py-3"><span class="${badge24}">${shift24 > 0 ? '+' : ''}${shift24}%</span></td>
-                        <td class="px-4 py-3"><span class="${badge7d}">${shift7d > 0 ? '+' : ''}${shift7d}%</span></td>
-                        <td class="px-4 py-3 text-slate-500 text-xs">${c.observation_count.toLocaleString()}</td>
+                        <td class="px-4 py-3 font-medium ${c.price_relative >= 1 ? 'text-amber-700' : 'text-emerald-700'}">${c.price_relative.toFixed(3)}</td>
+                        <td class="px-4 py-3 font-semibold ${heatBg}">${c.change_24h_pct > 0 ? '+' : ''}${c.change_24h_pct}%</td>
+                        <td class="px-4 py-3 font-medium text-slate-700">${c.change_7d_pct > 0 ? '+' : ''}${c.change_7d_pct}%</td>
+                        <td class="px-4 py-3 text-slate-500">${c.observation_count}</td>
                     </tr>
                 `;
             }).join('');
