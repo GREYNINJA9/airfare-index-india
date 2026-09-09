@@ -44,6 +44,12 @@ jobs:
         run: |
           patchright install chromium
 
+      - name: Initialize Database Schema
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/airfare_index
+        run: |
+          python -c "from database.connection import get_connection; from database.schema import init_schema; init_schema(get_connection())"
+
       - name: Run Pytest (Unit, Integration & Smoke)
         env:
           PYTHONPATH: ${{ github.workspace }}
