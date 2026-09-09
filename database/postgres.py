@@ -123,7 +123,10 @@ class PostgresConnector:
     """PostgreSQL-backed connector implementing the DBConnector protocol."""
 
     def __init__(self, dsn: str | None = None) -> None:
-        self._dsn = dsn or os.environ.get("DATABASE_URL", DEFAULT_PG_DSN)
+        raw_dsn = dsn or os.environ.get("DATABASE_URL") or DEFAULT_PG_DSN
+        if raw_dsn.startswith("postgres://"):
+            raw_dsn = raw_dsn.replace("postgres://", "postgresql://", 1)
+        self._dsn = raw_dsn
         self._conn: PostgresConnectionWrapper | None = None
 
     @property

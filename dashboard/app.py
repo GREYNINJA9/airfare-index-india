@@ -147,16 +147,16 @@ def serve_dashboard():
         <!-- Navigation Tabs (4 Core Essential Views) -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="border-b border-slate-200 bg-slate-50/70 px-4 sm:px-6 flex overflow-x-auto scrollbar-none gap-2">
-                <button onclick="switchTab('tab-trend')" class="tab-btn active py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab(event, 'tab-trend')" class="tab-btn active py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
                     <i class="fa-solid fa-chart-line text-govblue-600"></i> 1. Price Index vs CPI
                 </button>
-                <button onclick="switchTab('tab-heatmap')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab(event, 'tab-heatmap')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
                     <i class="fa-solid fa-table-cells text-govblue-600"></i> 2. Sector Heatmap
                 </button>
-                <button onclick="switchTab('tab-elasticity')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab(event, 'tab-elasticity')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
                     <i class="fa-solid fa-bolt-lightning text-govblue-600"></i> 3. Lead-Time Pricing (T+1..T+45)
                 </button>
-                <button onclick="switchTab('tab-backtest')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
+                <button onclick="switchTab(event, 'tab-backtest')" class="tab-btn py-3 px-4 text-sm font-medium text-slate-700 whitespace-nowrap flex items-center gap-2">
                     <i class="fa-solid fa-vial-circle-check text-govblue-600"></i> 4. 30-Day DGCA Validation & Sources
                 </button>
             </div>
@@ -279,11 +279,13 @@ def serve_dashboard():
 
     <!-- Dashboard JavaScript Logic -->
     <script>
-        function switchTab(tabId) {
+        function switchTab(evt, tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.remove('hidden');
-            event.currentTarget.classList.add('active');
+            const panel = document.getElementById(tabId);
+            if (panel) panel.classList.remove('hidden');
+            const target = (evt && evt.currentTarget) || (window.event && window.event.currentTarget) || document.querySelector(`[onclick*="${tabId}"]`);
+            if (target) target.classList.add('active');
         }
 
         async function initDashboard() {
