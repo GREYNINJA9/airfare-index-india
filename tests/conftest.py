@@ -12,7 +12,6 @@ import pytest
 from database.connection import close_connection, reset_connection
 from database.schema import init_schema, truncate_tables
 
-
 LOCAL_TEST_PG_DSN = "postgresql://postgres:postgres@localhost:5432/airfare_index"
 
 

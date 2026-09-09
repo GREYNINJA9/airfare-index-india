@@ -13,15 +13,14 @@ from __future__ import annotations
 
 import csv
 import io
-from datetime import date, timedelta
+from datetime import date
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, Query, Response
+from fastapi import APIRouter, Query, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from database.connection import get_connection
 from database.repository import get_fares, get_index_results
-from database.schema import init_schema
 from index_engine.backtesting import generate_backtest_report
 from index_engine.elasticity import compute_lead_time_elasticity
 from models.dgca import DGCABacktestReport

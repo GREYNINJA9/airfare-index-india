@@ -10,12 +10,12 @@ import math
 from datetime import date, timezone
 from typing import Dict, Iterable, List, Optional, Tuple
 
-from models.fare import Fare
 from models.elasticity import (
     ElasticityAnalysisResult,
     LeadTimeWindowStat,
     RouteElasticityCurve,
 )
+from models.fare import Fare
 
 STANDARD_WINDOWS = [
     ("T+1", 1, 0, 3),        # Window 1: 0-3 days (last minute)

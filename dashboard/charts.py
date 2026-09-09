@@ -5,7 +5,7 @@ Prepares structured data payloads for Chart.js / ApexCharts.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from api.analytics import (
     airline_comparison,

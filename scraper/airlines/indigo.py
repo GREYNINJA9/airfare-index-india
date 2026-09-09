@@ -7,7 +7,7 @@ Scrapes direct quotes from goindigo.in with support for advance-purchase windows
 from __future__ import annotations
 
 import re
-from typing import List, Optional
+from typing import List
 
 from models.fare import SourceType
 from models.route import Route
