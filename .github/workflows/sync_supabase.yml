@@ -1,0 +1,40 @@
+name: Sync Supabase Database
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  sync-database:
+    name: Auto Sync Data to Supabase
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e .
+
+      - name: Run Database Seeder
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "⚠️ DATABASE_URL secret is not configured in GitHub repository secrets. Skipping automatic Supabase sync."
+            echo "To enable: Go to Repository Settings -> Secrets and variables -> Actions -> Add secret 'DATABASE_URL'."
+            exit 0
+          fi
+          echo "🚀 Connected to Supabase. Seeding observations and computing APIx indices..."
+          python database/seed_data.py
+          echo "✅ Supabase database synchronized successfully!"

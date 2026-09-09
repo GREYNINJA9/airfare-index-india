@@ -81,3 +81,10 @@ async def health_check() -> Dict[str, Any]:
         "problem_statement_id": "26056",
         "organization": "MoSPI / DIID",
     }
+
+
+@app.get("/api/health", response_model=Dict[str, Any])
+@app.get("/healthz", response_model=Dict[str, Any])
+async def health_ok() -> Dict[str, Any]:
+    """Health check endpoint returning status ok every time."""
+    return {"status": "ok"}
