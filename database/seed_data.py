@@ -25,8 +25,10 @@ from database.repository import (
     get_fares,
     insert_fares,
     insert_index_result,
+    invalidate_fares_cache,
+    invalidate_index_cache,
 )
-from database.schema import init_schema
+from database.schema import init_schema, truncate_tables
 from index_engine.aggregation import aggregate_item_price_relatives
 from index_engine.api_index import compute_overall_airfare_index
 from index_engine.weights import compute_psd_base_basket_weights
@@ -153,14 +155,31 @@ def generate_seed_fares(
     return fares
 
 
-def seed_database(conn=None, force: bool = False) -> int:
-    """Populate database with fares and compute daily APIx index time-series."""
+def seed_database(conn=None, force: bool = False, reset: bool = False) -> int:
+    """Populate database with fares and compute daily APIx index time-series.
+
+    Parameters
+    ----------
+    conn : connection, optional
+        Database connection. If None, acquires one via get_connection().
+    force : bool, default False
+        Proceed with generation even if existing records are found.
+    reset : bool, default False
+        Truncate fares and index_results tables before seeding to guarantee
+        that updated prices, sectors, or formulas replace previous data.
+    """
     if conn is None:
         conn = get_connection()
     init_schema(conn)
 
+    if reset:
+        print("Resetting database: truncating fares and index_results tables...")
+        truncate_tables(conn)
+        invalidate_fares_cache()
+        invalidate_index_cache()
+
     existing = count_fares(conn)
-    if existing > 0 and not force:
+    if existing > 0 and not force and not reset:
         print(f"Database already contains {existing} fare observations. Skipping seeding.")
         return existing
 
@@ -187,8 +206,27 @@ def seed_database(conn=None, force: bool = False) -> int:
             print(f"Warning: could not index period {d}: {e}")
 
     print(f"Computed and persisted {indices_created} daily index results.")
+    invalidate_fares_cache()
+    invalidate_index_cache()
     return inserted
 
 
 if __name__ == "__main__":
-    seed_database(force=True)
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Seed database with airfare observations and compute APIx index time-series."
+    )
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Truncate fares and index_results tables prior to seeding to refresh all data.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        default=True,
+        help="Proceed with seeding even if existing records exist (default: True).",
+    )
+    args = parser.parse_args()
+    seed_database(force=args.force, reset=args.reset)
