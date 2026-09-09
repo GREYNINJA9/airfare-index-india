@@ -45,5 +45,7 @@ jobs:
           patchright install chromium
 
       - name: Run Pytest (Unit, Integration & Smoke)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
           pytest -v
