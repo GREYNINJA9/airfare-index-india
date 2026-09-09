@@ -154,11 +154,14 @@ airfare-index-india/
 │   ├── cleaned/
 │   └── sample/
 │
-└── docs/
+└── doc/
     ├── architecture.md
+    ├── compliance.md
     ├── data-dictionary.md
+    ├── development.md
     ├── methodology.md
-    └── compliance.md
+    ├── RUN_LOCALLY.md
+    └── SUPABASE_FREE_HOSTING_GUIDE.md
 ```
 
 ---
@@ -202,8 +205,8 @@ python database/seed_data.py
 
 ### 4. Run Automated Test Suite
 ```bash
-# Run all 298 unit, integration, scraper, and smoke tests
-pytest tests
+# Run all 301 unit, integration, scraper, and smoke tests
+pytest
 ```
 
 ### 5. Launch Interactive Dashboard & API
@@ -215,6 +218,20 @@ uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 - **Swagger / OpenAPI Documentation:** [http://localhost:8000/docs](http://localhost:8000/docs)
 - **Health Check Endpoint:** [http://localhost:8000/health](http://localhost:8000/health)
 - **MoSPI & RBI CSV Feed:** [http://localhost:8000/api/analytics/rbi-nso-feed?format=csv](http://localhost:8000/api/analytics/rbi-nso-feed?format=csv)
+
+---
+
+## 📚 Technical Documentation & Guides
+
+All technical documentation and guides are organized inside the [**`doc/`**](file:///home/saurabh/documents/airfare-index-india/doc) directory:
+
+- [**System Architecture & Pipeline**](file:///home/saurabh/documents/airfare-index-india/doc/architecture.md): Data flow contracts and pipeline stages.
+- [**Econometric Methodology**](file:///home/saurabh/documents/airfare-index-india/doc/methodology.md): Laspeyres & Weighted Jevons formulations and DGCA PSD weights.
+- [**Data Dictionary**](file:///home/saurabh/documents/airfare-index-india/doc/data-dictionary.md): Field-by-field reference for all Pydantic models.
+- [**Development Guide**](file:///home/saurabh/documents/airfare-index-india/doc/development.md): Development environment setup, directory structure, and commands.
+- [**Ethical Scraping Compliance Charter**](file:///home/saurabh/documents/airfare-index-india/doc/compliance.md): Anti-bot policies, DPDP Act 2023, and IT Act compliance.
+- [**Local Run Guide**](file:///home/saurabh/documents/airfare-index-india/doc/RUN_LOCALLY.md): Quick steps to run the complete stack locally.
+- [**100% Free Cloud Hosting Guide**](file:///home/saurabh/documents/airfare-index-india/doc/SUPABASE_FREE_HOSTING_GUIDE.md): Deploying on Supabase + Render with zero monthly cost.
 
 ---
 

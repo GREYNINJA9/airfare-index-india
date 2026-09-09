@@ -22,7 +22,7 @@ scraper ──▶ (RawFareSource) ──▶ validation/cleaning/normalization
 
 Scrapers produce raw provenance; the pipeline validates, cleans, normalizes,
 and deduplicates; the index engine reads only the normalized `Fare`. See
-`docs/data-dictionary.md` for the full field reference.
+`doc/data-dictionary.md` for the full field reference.
 
 ### Pipeline Stages
 

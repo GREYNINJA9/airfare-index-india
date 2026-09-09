@@ -43,4 +43,4 @@ select = ["E", "F", "I"]
 
 [tool.setuptools.packages.find]
 include = ["api*", "config*", "dashboard*", "database*", "index_engine*", "models*", "pipeline*", "scheduler*", "scraper*"]
-exclude = ["data*", "docs*", "tests*"]
+exclude = ["data*", "doc*", "docs*", "tests*"]

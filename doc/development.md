@@ -60,7 +60,7 @@ airfare-index-india/
 │   ├── charts.py                 # Chart.js serialization
 │   ├── components.py             # Executive KPI scorecards
 │   └── heatmap.py                # Sector matrix formatting
-├── docs/                         # Technical documentation
+├── doc/                          # Technical documentation
 └── tests/                        # 301 automated tests (100% passing)
 ```
 
