@@ -31,9 +31,7 @@ router = APIRouter(prefix="/api/analytics", tags=["Analytics & MoSPI / RBI Feeds
 
 
 def _db():
-    conn = get_connection()
-    init_schema(conn)
-    return conn
+    return get_connection()
 
 
 class SectorHeatmapCell(BaseModel):

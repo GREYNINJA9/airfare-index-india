@@ -14,11 +14,39 @@ backwards compatibility.
 from __future__ import annotations
 
 import json
+import threading
+import time
 from datetime import date, datetime
 from typing import List, Optional
 
 from models.fare import Fare
 from models.index import IndexResult
+
+_FARES_CACHE: List[Fare] | None = None
+_FARES_CACHE_TIME: float = 0.0
+_FARES_CACHE_TTL: float = 60.0  # seconds
+_FARES_LOCK = threading.Lock()
+
+_INDEX_CACHE: List[IndexResult] | None = None
+_INDEX_CACHE_TIME: float = 0.0
+_INDEX_CACHE_TTL: float = 60.0  # seconds
+_INDEX_LOCK = threading.Lock()
+
+
+def invalidate_fares_cache() -> None:
+    """Invalidate in-memory fares cache."""
+    global _FARES_CACHE, _FARES_CACHE_TIME
+    with _FARES_LOCK:
+        _FARES_CACHE = None
+        _FARES_CACHE_TIME = 0.0
+
+
+def invalidate_index_cache() -> None:
+    """Invalidate in-memory index results cache."""
+    global _INDEX_CACHE, _INDEX_CACHE_TIME
+    with _INDEX_LOCK:
+        _INDEX_CACHE = None
+        _INDEX_CACHE_TIME = 0.0
 
 
 def _iso(dt: datetime) -> str:
@@ -30,6 +58,7 @@ def _iso(dt: datetime) -> str:
 
 def insert_fare(conn, fare: Fare) -> int:
     """Insert a single ``Fare`` and return its row id, or 0 on conflict."""
+    invalidate_fares_cache()
     sql = """
     INSERT OR IGNORE INTO fares (
         route_origin, route_destination, route_distance_km,
@@ -86,6 +115,8 @@ def insert_fares(conn, fares: List[Fare]) -> int:
     """Insert many ``Fare`` rows, returning the count inserted."""
     if not fares:
         return 0
+
+    invalidate_fares_cache()
 
     if hasattr(conn, "pg_conn"):
         try:
@@ -149,6 +180,11 @@ def get_fares(conn) -> List[Fare]:
     Ordering is deterministic to support repeatable computations and tests:
     primarily by ``scraped_at`` ascending, then by autoincrement ``id``.
     """
+    global _FARES_CACHE, _FARES_CACHE_TIME
+    now = time.time()
+    with _FARES_LOCK:
+        if _FARES_CACHE is not None and (now - _FARES_CACHE_TIME) < _FARES_CACHE_TTL:
+            return list(_FARES_CACHE)
 
     cur = conn.execute(
         """
@@ -216,11 +252,16 @@ def get_fares(conn) -> List[Fare]:
             )
         )
 
-    return fares
+    with _FARES_LOCK:
+        _FARES_CACHE = fares
+        _FARES_CACHE_TIME = time.time()
+
+    return list(fares)
 
 
 def insert_index_result(conn, result: IndexResult) -> int:
     """Persist a computed :class:`models.index.IndexResult`, or 0 on conflict."""
+    invalidate_index_cache()
 
     sql = """
     INSERT OR IGNORE INTO index_results (
@@ -254,6 +295,14 @@ def get_index_results(
     current_period: date | None = None,
 ) -> List[IndexResult]:
     """Return persisted index results as validated :class:`models.index.IndexResult`."""
+    global _INDEX_CACHE, _INDEX_CACHE_TIME
+    now = time.time()
+    is_full_fetch = base_period is None and current_period is None
+
+    if is_full_fetch:
+        with _INDEX_LOCK:
+            if _INDEX_CACHE is not None and (now - _INDEX_CACHE_TIME) < _INDEX_CACHE_TTL:
+                return list(_INDEX_CACHE)
 
     where_clauses: List[str] = []
     params: List[str] = []
@@ -293,7 +342,12 @@ def get_index_results(
             )
         )
 
-    return out
+    if is_full_fetch:
+        with _INDEX_LOCK:
+            _INDEX_CACHE = out
+            _INDEX_CACHE_TIME = time.time()
+
+    return list(out)
 
 
 def get_index_result(

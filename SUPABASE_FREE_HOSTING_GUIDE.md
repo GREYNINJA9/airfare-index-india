@@ -127,10 +127,24 @@ Visit your live URL:
 
 ---
 
-## 🛠️ Alternative Free App Hosts (If Render Has Cold Starts)
+## ⚡ Eliminating Render Cold Starts (Keep-Alive Setup)
+
+Render's free tier automatically suspends web services after **15 minutes of inactivity**, causing a **50–90 second delay** when the next person visits the dashboard.
+
+To keep your service **awake 24/7 with zero spin-down lag**:
+1. Go to **[cron-job.org](https://cron-job.org)** or **[UptimeRobot](https://uptimerobot.com)** (both 100% free).
+2. Create a new HTTP monitor / cron job:
+   - **URL:** `https://<your-subdomain>.onrender.com/health`
+   - **Interval:** Every **10 minutes** (Render's inactivity timer is 15 min)
+   - **HTTP Method:** `GET`
+3. Save the job. Your container will remain permanently warm and respond in **under 50 milliseconds**!
+
+---
+
+## 🛠️ Alternative Free App Hosts (If Render Has Resource Limits)
 
 1. **[Koyeb](https://www.koyeb.com)** (Free Eco container tier):
-   - Fast SSD, no cold starts, deploys directly from GitHub Dockerfile.
+   - Fast SSD, zero cold starts, deploys directly from GitHub Dockerfile.
    - Set `DATABASE_URL` under Environment Variables.
 
 2. **[Hugging Face Spaces](https://huggingface.co/spaces)** (Free Docker Space - **16 GB RAM**):

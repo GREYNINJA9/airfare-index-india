@@ -5,17 +5,25 @@ Computes executive summary cards and monitoring indicators for the web dashboard
 
 from __future__ import annotations
 
+import time
 from typing import Any, Dict, List
 
 from database.connection import get_connection
 from database.repository import count_fares, get_fares, get_index_results
-from database.schema import init_schema
+
+_KPI_CACHE: Dict[str, Any] | None = None
+_KPI_CACHE_TIME: float = 0.0
+_KPI_CACHE_TTL: float = 30.0  # seconds
 
 
 def get_dashboard_kpis() -> Dict[str, Any]:
     """Compute high-level executive KPIs for the dashboard scorecards."""
+    global _KPI_CACHE, _KPI_CACHE_TIME
+    now = time.time()
+    if _KPI_CACHE is not None and (now - _KPI_CACHE_TIME) < _KPI_CACHE_TTL:
+        return dict(_KPI_CACHE)
+
     conn = get_connection()
-    init_schema(conn)
 
     total_quotes = count_fares(conn)
     index_history = get_index_results(conn)
@@ -66,7 +74,7 @@ def get_dashboard_kpis() -> Dict[str, Any]:
         most_competitive_carrier = "IX (AI Express)"
         highest_fare_sector = "MAA-DEL"
 
-    return {
+    res = {
         "apix_laspeyres": apix_laspeyres,
         "apix_jevons": apix_jevons,
         "delta_24h": delta_24h,
@@ -81,3 +89,6 @@ def get_dashboard_kpis() -> Dict[str, Any]:
         "active_sources_count": 10,
         "pipeline_health": "OPTIMAL (99.8% Clean Rate)",
     }
+    _KPI_CACHE = res
+    _KPI_CACHE_TIME = time.time()
+    return res

@@ -7,7 +7,7 @@ on:
 
 jobs:
   sync-database:
-    name: Auto Sync Data to Supabase
+    name: Auto Sync Data to neon
     runs-on: ubuntu-latest
 
     steps:
@@ -37,4 +37,4 @@ jobs:
           fi
           echo "🚀 Connected to Supabase. Seeding observations and computing APIx indices..."
           python database/seed_data.py
-          echo "✅ Supabase database synchronized successfully!"
+          echo "✅ database synchronized successfully!"

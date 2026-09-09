@@ -153,9 +153,10 @@ def generate_seed_fares(
     return fares
 
 
-def seed_database(force: bool = False) -> int:
+def seed_database(conn=None, force: bool = False) -> int:
     """Populate database with fares and compute daily APIx index time-series."""
-    conn = get_connection()
+    if conn is None:
+        conn = get_connection()
     init_schema(conn)
 
     existing = count_fares(conn)
