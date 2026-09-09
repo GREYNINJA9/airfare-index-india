@@ -1,7 +1,7 @@
 """Deterministic unit tests for pipeline.deduplicator."""
 
 from pipeline.deduplicator import dedup
-from tests.unit.test_fare_model import _valid_fare
+from tests.pipeline.test_fare_model import _valid_fare
 
 
 def test_dedup_keeps_unique_fares():

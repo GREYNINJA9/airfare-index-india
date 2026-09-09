@@ -32,7 +32,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
 asyncio_mode = "auto"
-pythonpath = ["."]
+pythonpath = [".", ".."]
 
 [tool.ruff]
 line-length = 88
@@ -41,7 +41,6 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "I"]
 
-[dependency-groups]
-dev = [
-    "pytest>=9.1.1",
-]
+[tool.setuptools.packages.find]
+include = ["api*", "config*", "dashboard*", "database*", "index_engine*", "models*", "pipeline*", "scheduler*", "scraper*"]
+exclude = ["data*", "doc*", "docs*", "tests*"]

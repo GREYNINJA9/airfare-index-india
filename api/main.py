@@ -1,9 +1,26 @@
+"""Main FastAPI application entry point.
+
+Mounts:
+- Core index routes (/fares, /index, /index/history)
+- Analytics routes (/api/analytics/...)
+- Fares search routes (/api/fares/...)
+- Interactive web dashboard (/, /dashboard)
+"""
+
+from __future__ import annotations
+
 import logging
+import os
 from contextlib import asynccontextmanager
 from typing import Any, Dict
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
+from api.analytics import router as analytics_router
+from dashboard.app import router as dashboard_router
+from api.fares import router as fares_router
 from api.routes import router as api_router
 from database.connection import get_connection
 from database.schema import init_schema
@@ -19,23 +36,85 @@ async def lifespan(app: FastAPI):
     logger.info("Initializing database schema on startup...")
     conn = get_connection()
     init_schema(conn)
+
+    auto_seed = os.environ.get("AUTO_SEED", "").strip().lower() in ("true", "1", "yes")
+    if auto_seed:
+        try:
+            from database.seed_data import seed_database
+            logger.info("Auto-seeding database as requested by AUTO_SEED=true...")
+            seed_database(conn=conn, force=False)
+        except Exception as e:
+            logger.warning("Auto-seed on startup skipped or failed: %s", e)
+
+    # Pre-warm repository and dashboard caches on startup so first user request is instant
+    logger.info("Pre-warming repository and dashboard caches on startup...")
+    try:
+        from database.repository import get_fares, get_index_results
+        from dashboard.components import get_dashboard_kpis
+        from dashboard.charts import (
+            get_trend_chart_data,
+            get_elasticity_chart_data,
+            get_carrier_chart_data,
+            get_backtest_chart_data,
+        )
+        from dashboard.heatmap import get_heatmap_matrix
+
+        get_fares(conn)
+        get_index_results(conn)
+        get_dashboard_kpis()
+        get_trend_chart_data()
+        get_elasticity_chart_data()
+        get_carrier_chart_data()
+        get_backtest_chart_data()
+        get_heatmap_matrix()
+        logger.info("All caches successfully pre-warmed on startup.")
+    except Exception as e:
+        logger.warning("Cache pre-warming on startup skipped: %s", e)
+
     yield
-    # Could close connection pool here if applicable
 
 
 app = FastAPI(
     title="Real-time Airfare Price Index API",
-    description="API foundation for India Consumer Price Index (CPI) Augmentation",
-    version="0.1.0",
+    description="Automated Airfare Price Index & CPI Augmentation Platform for MoSPI and RBI (SIH 2026 - Problem 26056)",
+    version="1.0.0",
     lifespan=lifespan,
 )
 
+# Enable CORS for external research/institutional dashboards
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# Compress responses over 1KB to reduce network transfer time
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+# Mount domain routers
+app.include_router(dashboard_router)
 app.include_router(api_router)
+app.include_router(fares_router)
+app.include_router(analytics_router)
 
 
 @app.get("/health", response_model=Dict[str, Any])
 async def health_check() -> Dict[str, Any]:
-    """Health check endpoint to prove application container is alive."""
+    """Health check endpoint proving application container is alive."""
     logger.info("Health check endpoint pinged")
-    return {"status": "healthy", "service": "airfare-index-india", "version": "0.1.0"}
+    return {
+        "status": "healthy",
+        "service": "airfare-index-india",
+        "version": "1.0.0",
+        "problem_statement_id": "26056",
+        "organization": "MoSPI / DIID",
+    }
+
+
+@app.get("/api/health", response_model=Dict[str, Any])
+@app.get("/healthz", response_model=Dict[str, Any])
+async def health_ok() -> Dict[str, Any]:
+    """Health check endpoint returning status ok every time."""
+    return {"status": "ok"}

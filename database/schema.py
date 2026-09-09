@@ -76,7 +76,9 @@ def init_postgres_schema(conn) -> None:
     );
     CREATE INDEX IF NOT EXISTS idx_fares_route_origin ON fares(route_origin);
     CREATE INDEX IF NOT EXISTS idx_fares_route_destination ON fares(route_destination);
+    CREATE INDEX IF NOT EXISTS idx_fares_route ON fares(route_origin, route_destination);
     CREATE INDEX IF NOT EXISTS idx_fares_scraped_at ON fares(scraped_at);
+    CREATE INDEX IF NOT EXISTS idx_fares_scraped_at_id ON fares(scraped_at, id);
 
     CREATE TABLE IF NOT EXISTS index_results (
         id                        SERIAL PRIMARY KEY,

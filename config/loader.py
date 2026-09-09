@@ -34,7 +34,14 @@ class SourceConfig(BaseModel):
             ImportError: module cannot be imported.
             AttributeError: class not found in module.
         """
-        mod = importlib.import_module(self.module)
+        module_name = self.module
+        try:
+            mod = importlib.import_module(module_name)
+        except (ImportError, AttributeError):
+            if not module_name.startswith("backend."):
+                mod = importlib.import_module(f"backend.{module_name}")
+            else:
+                raise
         cls = getattr(mod, self.class_)
         # __init__ must be parameterless for all configured sources
         return cls()
@@ -78,6 +85,24 @@ class RouteConfig(BaseModel):
         return self
 
 
+from pathlib import Path
+
+_CONFIG_DIR = Path(__file__).resolve().parent
+_ROOT_CONFIG_DIR = _CONFIG_DIR.parent.parent / "config"
+
+
+def _resolve_config_path(path: str | Path, default_rel_path: str, filename: str) -> str | Path:
+    p = Path(path)
+    if p.is_file():
+        return p
+    if str(path) in (default_rel_path, filename, f"backend/{default_rel_path}"):
+        if (_ROOT_CONFIG_DIR / filename).is_file():
+            return _ROOT_CONFIG_DIR / filename
+        if (_CONFIG_DIR / filename).is_file():
+            return _CONFIG_DIR / filename
+    return path
+
+
 def load_sources(path: str = "config/sources.yaml") -> List[SourceConfig]:
     """Load and validate all source configurations from a YAML file.
 
@@ -88,8 +113,9 @@ def load_sources(path: str = "config/sources.yaml") -> List[SourceConfig]:
     """
     import yaml
 
+    resolved_path = _resolve_config_path(path, "config/sources.yaml", "sources.yaml")
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(resolved_path, "r", encoding="utf-8") as f:
             raw = yaml.safe_load(f)
     except yaml.YAMLError as e:
         raise ValueError(f"Invalid YAML in {path}: {e}") from e
@@ -118,8 +144,9 @@ def load_routes(path: str = "config/routes.yaml") -> List[RouteConfig]:
     """
     import yaml
 
+    resolved_path = _resolve_config_path(path, "config/routes.yaml", "routes.yaml")
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(resolved_path, "r", encoding="utf-8") as f:
             raw = yaml.safe_load(f)
     except yaml.YAMLError as e:
         raise ValueError(f"Invalid YAML in {path}: {e}") from e

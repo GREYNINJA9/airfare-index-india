@@ -14,11 +14,39 @@ backwards compatibility.
 from __future__ import annotations
 
 import json
+import threading
+import time
 from datetime import date, datetime
 from typing import List, Optional
 
 from models.fare import Fare
 from models.index import IndexResult
+
+_FARES_CACHE: List[Fare] | None = None
+_FARES_CACHE_TIME: float = 0.0
+_FARES_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
+_FARES_LOCK = threading.Lock()
+
+_INDEX_CACHE: List[IndexResult] | None = None
+_INDEX_CACHE_TIME: float = 0.0
+_INDEX_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
+_INDEX_LOCK = threading.Lock()
+
+
+def invalidate_fares_cache() -> None:
+    """Invalidate in-memory fares cache."""
+    global _FARES_CACHE, _FARES_CACHE_TIME
+    with _FARES_LOCK:
+        _FARES_CACHE = None
+        _FARES_CACHE_TIME = 0.0
+
+
+def invalidate_index_cache() -> None:
+    """Invalidate in-memory index results cache."""
+    global _INDEX_CACHE, _INDEX_CACHE_TIME
+    with _INDEX_LOCK:
+        _INDEX_CACHE = None
+        _INDEX_CACHE_TIME = 0.0
 
 
 def _iso(dt: datetime) -> str:
@@ -30,6 +58,7 @@ def _iso(dt: datetime) -> str:
 
 def insert_fare(conn, fare: Fare) -> int:
     """Insert a single ``Fare`` and return its row id, or 0 on conflict."""
+    invalidate_fares_cache()
     sql = """
     INSERT OR IGNORE INTO fares (
         route_origin, route_destination, route_distance_km,
@@ -61,8 +90,57 @@ def insert_fare(conn, fare: Fare) -> int:
     return int(cur.lastrowid) if cur.rowcount > 0 else 0
 
 
+def _fare_to_tuple(fare: Fare) -> tuple:
+    return (
+        fare.route.origin,
+        fare.route.destination,
+        fare.route.distance_km if fare.route.distance_km is not None else 0.0,
+        fare.airline_code,
+        fare.price_inr,
+        fare.cabin_class.value,
+        _iso(fare.departure_at),
+        _iso(fare.scraped_at),
+        fare.trip_type.value,
+        fare.source.source_name,
+        fare.source.source_type.value,
+        fare.source.raw_price,
+        fare.source.raw_currency,
+        fare.source.raw_cabin_label,
+        str(fare.source.source_url) if fare.source.source_url else None,
+        fare.source.raw_offer_id,
+    )
+
+
 def insert_fares(conn, fares: List[Fare]) -> int:
     """Insert many ``Fare`` rows, returning the count inserted."""
+    if not fares:
+        return 0
+
+    invalidate_fares_cache()
+
+    if hasattr(conn, "pg_conn"):
+        try:
+            from psycopg2.extras import execute_values
+
+            cur = conn.pg_conn.cursor()
+            sql = """
+            INSERT INTO fares (
+                route_origin, route_destination, route_distance_km,
+                airline_code, price_inr, cabin_class,
+                departure_at, scraped_at, trip_type,
+                source_name, source_type, raw_price,
+                raw_currency, raw_cabin_label, source_url,
+                raw_offer_id
+            ) VALUES %s
+            ON CONFLICT (raw_offer_id) DO NOTHING
+            """
+            tuples = [_fare_to_tuple(f) for f in fares]
+            execute_values(cur, sql, tuples, page_size=1000)
+            conn.commit()
+            return len(fares)
+        except Exception:
+            pass
+
     return sum(1 for fare in fares if insert_fare(conn, fare) > 0)
 
 
@@ -100,6 +178,11 @@ def get_fares(conn) -> List[Fare]:
     Ordering is deterministic to support repeatable computations and tests:
     primarily by ``scraped_at`` ascending, then by autoincrement ``id``.
     """
+    global _FARES_CACHE, _FARES_CACHE_TIME
+    now = time.time()
+    with _FARES_LOCK:
+        if _FARES_CACHE is not None and (now - _FARES_CACHE_TIME) < _FARES_CACHE_TTL:
+            return list(_FARES_CACHE)
 
     cur = conn.execute(
         """
@@ -167,11 +250,16 @@ def get_fares(conn) -> List[Fare]:
             )
         )
 
-    return fares
+    with _FARES_LOCK:
+        _FARES_CACHE = fares
+        _FARES_CACHE_TIME = time.time()
+
+    return list(fares)
 
 
 def insert_index_result(conn, result: IndexResult) -> int:
     """Persist a computed :class:`models.index.IndexResult`, or 0 on conflict."""
+    invalidate_index_cache()
 
     sql = """
     INSERT OR IGNORE INTO index_results (
@@ -205,6 +293,14 @@ def get_index_results(
     current_period: date | None = None,
 ) -> List[IndexResult]:
     """Return persisted index results as validated :class:`models.index.IndexResult`."""
+    global _INDEX_CACHE, _INDEX_CACHE_TIME
+    now = time.time()
+    is_full_fetch = base_period is None and current_period is None
+
+    if is_full_fetch:
+        with _INDEX_LOCK:
+            if _INDEX_CACHE is not None and (now - _INDEX_CACHE_TIME) < _INDEX_CACHE_TTL:
+                return list(_INDEX_CACHE)
 
     where_clauses: List[str] = []
     params: List[str] = []
@@ -244,7 +340,12 @@ def get_index_results(
             )
         )
 
-    return out
+    if is_full_fetch:
+        with _INDEX_LOCK:
+            _INDEX_CACHE = out
+            _INDEX_CACHE_TIME = time.time()
+
+    return list(out)
 
 
 def get_index_result(

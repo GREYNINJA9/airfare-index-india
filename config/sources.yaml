@@ -9,3 +9,43 @@ sources:
     enabled: true
     module: scraper.otas.cleartrip
     class: ClearTripScraper
+  - name: EaseMyTrip
+    source_type: OTA
+    enabled: false
+    module: scraper.otas.easemytrip
+    class: EaseMyTripScraper
+  - name: Ixigo
+    source_type: OTA
+    enabled: false
+    module: scraper.otas.ixigo
+    class: IxigoScraper
+  - name: Yatra
+    source_type: OTA
+    enabled: false
+    module: scraper.otas.yatra
+    class: YatraScraper
+  - name: IndiGo
+    source_type: AIRLINE
+    enabled: false
+    module: scraper.airlines.indigo
+    class: IndiGoScraper
+  - name: Air India
+    source_type: AIRLINE
+    enabled: false
+    module: scraper.airlines.air_india
+    class: AirIndiaScraper
+  - name: Air India Express
+    source_type: AIRLINE
+    enabled: false
+    module: scraper.airlines.air_india_express
+    class: AirIndiaExpressScraper
+  - name: Akasa Air
+    source_type: AIRLINE
+    enabled: false
+    module: scraper.airlines.akasa
+    class: AkasaScraper
+  - name: SpiceJet
+    source_type: AIRLINE
+    enabled: false
+    module: scraper.airlines.spicejet
+    class: SpiceJetScraper

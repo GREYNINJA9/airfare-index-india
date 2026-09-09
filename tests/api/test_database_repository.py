@@ -11,7 +11,7 @@ from database.repository import (
     insert_fares,
 )
 from models.fare import Fare
-from tests.unit.test_fare_model import _valid_source  # noqa: F401, noqa: T001
+from tests.pipeline.test_fare_model import _valid_source  # noqa: F401, noqa: T001
 
 # --- schema ---
 
@@ -52,7 +52,7 @@ def test_schema_creates_indexes(db):
 
 def test_insert_fares_returns_count(db):
     """Inserting fares returns the count inserted."""
-    from tests.unit.test_fare_model import _valid_fare
+    from tests.pipeline.test_fare_model import _valid_fare
 
     fare = _valid_fare()
     count = insert_fares(db, [fare])
@@ -61,7 +61,7 @@ def test_insert_fares_returns_count(db):
 
 def test_insert_fares_persists_to_db(db):
     """Inserted fares are retrievable from the DB."""
-    from tests.unit.test_fare_model import _valid_fare
+    from tests.pipeline.test_fare_model import _valid_fare
 
     fare = _valid_fare()
     insert_fares(db, [fare])

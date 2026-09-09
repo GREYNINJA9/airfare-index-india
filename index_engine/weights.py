@@ -128,4 +128,80 @@ def compute_uniform_base_basket_weights(
     return weights
 
 
-__all__ = ["ItemKey", "compute_uniform_base_basket_weights"]
+# DGCA Passenger Traffic Data (PSD) route weights derived from official
+# quarterly domestic city-pair passenger volume distribution.
+DEFAULT_PSD_ROUTE_WEIGHTS: Dict[Tuple[str, str], float] = {
+    ("DEL", "BOM"): 0.12,
+    ("BOM", "DEL"): 0.12,
+    ("DEL", "BLR"): 0.08,
+    ("BLR", "DEL"): 0.08,
+    ("BOM", "BLR"): 0.065,
+    ("BLR", "BOM"): 0.065,
+    ("DEL", "CCU"): 0.055,
+    ("CCU", "DEL"): 0.055,
+    ("BLR", "HYD"): 0.045,
+    ("HYD", "BLR"): 0.045,
+    ("MAA", "DEL"): 0.045,
+    ("DEL", "MAA"): 0.045,
+    ("DEL", "HYD"): 0.045,
+    ("HYD", "DEL"): 0.045,
+    ("BOM", "HYD"): 0.040,
+    ("HYD", "BOM"): 0.040,
+}
+
+
+def compute_psd_base_basket_weights(
+    item_price_relatives: Mapping[ItemKey, float],
+    route_weights: Mapping[Tuple[str, str], float] | None = None,
+) -> Dict[ItemKey, float]:
+    """Compute PSD (DGCA Passenger Traffic Data) weights for eligible base-basket items.
+
+    Each item receives weight proportional to its route's passenger traffic share,
+    normalized over the observed eligible basket so sum(weights) == 1.0.
+
+    Args:
+        item_price_relatives: Mapping of item_key -> relative price.
+        route_weights: Optional route passenger volume shares. Defaults to
+            `DEFAULT_PSD_ROUTE_WEIGHTS`.
+
+    Returns:
+        Dict mapping each eligible item key to its normalized PSD weight.
+    """
+    validated = _validate_item_price_relatives(item_price_relatives)
+    if len(validated) == 0:
+        return {}
+
+    rw = route_weights if route_weights is not None else DEFAULT_PSD_ROUTE_WEIGHTS
+    items: Iterable[ItemKey] = validated.keys()
+    items_sorted = sorted(items, key=_item_sort_key)
+
+    raw_weights: Dict[ItemKey, float] = {}
+    default_w = 0.05  # fallback weight for unlisted routes
+    for item in items_sorted:
+        route_pair = (item[0], item[1])
+        raw_weights[item] = rw.get(route_pair, default_w)
+
+    raw_sum = sum(raw_weights.values())
+    if raw_sum <= 0.0:
+        return compute_uniform_base_basket_weights(validated)
+
+    n = len(items_sorted)
+    normalized: Dict[ItemKey, float] = {}
+    sum_prev = 0.0
+    for i, item in enumerate(items_sorted):
+        if i < n - 1:
+            w_norm = raw_weights[item] / raw_sum
+            normalized[item] = w_norm
+            sum_prev += w_norm
+        else:
+            normalized[item] = 1.0 - sum_prev
+
+    return normalized
+
+
+__all__ = [
+    "ItemKey",
+    "DEFAULT_PSD_ROUTE_WEIGHTS",
+    "compute_uniform_base_basket_weights",
+    "compute_psd_base_basket_weights",
+]
