@@ -16,6 +16,9 @@ docker compose down -v --remove-orphans 2>/dev/null || true
 # If you used standalone Podman / Docker containers:
 podman stop airfare-postgres airfare-api 2>/dev/null || docker stop airfare-postgres airfare-api 2>/dev/null || true
 podman rm airfare-postgres airfare-api 2>/dev/null || docker rm airfare-postgres airfare-api 2>/dev/null || true
+
+# For Podman users (Linux/Fedora): Ensure the rootless podman socket is active:
+systemctl --user enable --now podman.socket 2>/dev/null || true
 ```
 
 ---
