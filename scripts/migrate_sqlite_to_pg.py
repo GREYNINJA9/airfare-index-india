@@ -158,7 +158,8 @@ def main():
     parser.add_argument(
         "--pg-dsn",
         default=os.environ.get(
-            "DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/airfare_index"
+            "DATABASE_URL",
+            "postgresql://postgres:postgres@localhost:5432/airfare_index",
         ),
         help="PostgreSQL connection string (DSN)",
     )

@@ -30,7 +30,9 @@ from database.schema import init_schema
 from index_engine.aggregation import aggregate_item_price_relatives
 from index_engine.api_index import compute_overall_airfare_index
 from index_engine.weights import compute_uniform_base_basket_weights
+from models.route import Route
 from pipeline import process_raw_fares
+from scheduler.search import SearchJob
 
 
 def _utc_day(dt: datetime) -> date:
@@ -262,3 +264,232 @@ def run_collection_cycle(
         "overall_laspeyres_index": overall_laspeyres_index,
         "overall_jevons_index": overall_jevons_index,
     }
+
+
+def generate_search_jobs(
+    routes: List[Route] | None = None,
+    dates: List[str] | None = None,
+    source: str = "cleartrip",
+    adults: int = 1,
+    children: int = 0,
+    infants: int = 0,
+    cabin: str = "ECONOMY",
+    trip_type: str = "ONE_WAY",
+    routes_path: str = "config/routes.yaml",
+) -> List[SearchJob]:
+    """Generate SearchJob instances from route basket and date configuration."""
+    if routes is None:
+        routes = load_route_objects(routes_path)
+    if dates is None:
+        dates = [datetime.now(timezone.utc).strftime("%Y-%m-%d")]
+
+    jobs: List[SearchJob] = []
+    for route in routes:
+        for d in dates:
+            jobs.append(
+                SearchJob(
+                    source=source,
+                    origin=route.origin,
+                    destination=route.destination,
+                    departure_date=str(d),
+                    adults=adults,
+                    children=children,
+                    infants=infants,
+                    cabin=cabin,
+                    trip_type=trip_type,
+                )
+            )
+    return jobs
+
+
+def run_search_jobs(
+    jobs: List[SearchJob],
+    *,
+    conn: Any | None = None,
+    scraper: Any | None = None,
+    save_raw: bool = False,
+    compute_index: bool = True,
+) -> Dict[str, Any]:
+    """Execute a batch of SearchJob acquisition requests through the full pipeline.
+
+    Orchestration contract:
+    SearchJob
+        ↓
+    Scraper acquisition adapter (e.g. ClearTripLiveScraper)
+        ↓
+    Pipeline (process_raw_fares: validate → clean → normalize → dedup)
+        ↓
+    Fare domain model persistence (PostgreSQL)
+        ↓
+    Index Engine (compute_overall_airfare_index)
+        ↓
+    Persist IndexResult
+        ↓
+    Run summary
+    """
+    if conn is None:
+        conn = get_connection()
+    init_schema(conn)
+
+    raw_records: List[dict] = []
+    jobs_attempted = len(jobs)
+    jobs_successful = 0
+    jobs_failed = 0
+    job_errors: Dict[str, str] = {}
+
+    scrapers_cache: Dict[str, Any] = {}
+    if scraper is not None:
+        scrapers_cache["__default__"] = scraper
+
+    for job in jobs:
+        job_key = f"{job.source}:{job.origin}->{job.destination}:{job.iso_date}"
+        try:
+            active_scraper = scrapers_cache.get("__default__")
+            if active_scraper is None:
+                src_key = job.source.lower()
+                if src_key not in scrapers_cache:
+                    if src_key in ("cleartrip", "cleartrip_live"):
+                        from scraper.otas.cleartrip_live import ClearTripLiveScraper
+
+                        scrapers_cache[src_key] = ClearTripLiveScraper()
+                    elif src_key in ("makemytrip", "mmt"):
+                        from scraper.otas.mmt import MakeMyTripScraper
+
+                        scrapers_cache[src_key] = MakeMyTripScraper()
+                    else:
+                        raise ValueError(f"Unknown acquisition source: {job.source}")
+                active_scraper = scrapers_cache[src_key]
+
+            if hasattr(active_scraper, "search"):
+                extracted = active_scraper.search(job, save_raw=save_raw)
+            else:
+                template = _select_del_bom_template(active_scraper)
+                html = _render_mock_html_for_route(
+                    template=template,
+                    route_origin=job.origin,
+                    route_destination=job.destination,
+                )
+                extracted = active_scraper.extract(html, route=job.to_route())
+
+            if not isinstance(extracted, list):
+                raise TypeError(
+                    f"Scraper returned {type(extracted).__name__}, expected list"
+                )
+
+            raw_records.extend(extracted)
+            jobs_successful += 1
+        except Exception as exc:
+            jobs_failed += 1
+            job_errors[job_key] = str(exc)
+
+    # Pipeline validation/cleaning/normalization/dedup
+    normalized_fares: List[Any] = []
+    pipeline_error: str | None = None
+
+    if raw_records:
+        fares, bad, batch_err = process_raw_fares(raw_records)
+        if batch_err is not None:
+            pipeline_error = str(batch_err)
+        normalized_fares = fares
+
+    # Persist fares with idempotency
+    fares_inserted = 0
+    duplicate_fares_skipped = 0
+
+    for fare in normalized_fares:
+        raw_offer_id = fare.source.raw_offer_id
+        if not raw_offer_id:
+            if insert_fare(conn, fare) > 0:
+                fares_inserted += 1
+            continue
+
+        existing = get_fare_by_offer_id(conn, raw_offer_id)
+        if existing is not None:
+            duplicate_fares_skipped += 1
+            continue
+
+        inserted_id = insert_fare(conn, fare)
+        if inserted_id > 0:
+            fares_inserted += 1
+        else:
+            duplicate_fares_skipped += 1
+
+    # Index derivation and computation
+    index_generated = False
+    index_skipped_reason: str | None = None
+    current_period: date | None = None
+    base_period: date | None = None
+    overall_laspeyres_index: float | None = None
+    overall_jevons_index: float | None = None
+
+    normalized_count = len(normalized_fares)
+    if not compute_index:
+        index_skipped_reason = "compute_index_disabled"
+    elif normalized_count == 0:
+        index_skipped_reason = "no_normalized_fares"
+    else:
+        try:
+            current_period = max(_utc_day(f.scraped_at) for f in normalized_fares)
+            fares_for_index = get_fares(conn)
+
+            relatives = aggregate_item_price_relatives(
+                fares_for_index,
+                current_period=current_period,
+            )
+            weights = compute_uniform_base_basket_weights(
+                relatives.item_price_relatives,
+            )
+            computed = compute_overall_airfare_index(relatives, weights)
+
+            base_period = computed.base_period
+            overall_laspeyres_index = float(computed.overall_laspeyres_index)
+            overall_jevons_index = float(computed.overall_jevons_index)
+
+            existing_index = get_index_result(
+                conn,
+                base_period=computed.base_period,
+                current_period=computed.current_period,
+            )
+            if existing_index is not None:
+                index_generated = False
+            else:
+                inserted_index_id = insert_index_result(conn, computed)
+                index_generated = inserted_index_id > 0
+        except Exception as e:
+            index_skipped_reason = f"index_computation_failed: {e}"
+
+    return {
+        "jobs_attempted": jobs_attempted,
+        "jobs_successful": jobs_successful,
+        "jobs_failed": jobs_failed,
+        "job_errors": job_errors,
+        "raw_records_extracted": len(raw_records),
+        "normalized_fares": normalized_count,
+        "fares_inserted": fares_inserted,
+        "duplicate_fares_skipped": duplicate_fares_skipped,
+        "pipeline_error": pipeline_error,
+        "index_generated": index_generated,
+        "index_skipped_reason": index_skipped_reason,
+        "current_period": current_period.isoformat() if current_period else None,
+        "base_period": base_period.isoformat() if base_period else None,
+        "overall_laspeyres_index": overall_laspeyres_index,
+        "overall_jevons_index": overall_jevons_index,
+    }
+
+
+def run_search_job(
+    job: SearchJob,
+    *,
+    conn: Any | None = None,
+    scraper: Any | None = None,
+    save_raw: bool = False,
+    compute_index: bool = True,
+) -> Dict[str, Any]:
+    """Execute a single SearchJob acquisition request."""
+    return run_search_jobs(
+        [job],
+        conn=conn,
+        scraper=scraper,
+        save_raw=save_raw,
+        compute_index=compute_index,
+    )
