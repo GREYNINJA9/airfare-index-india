@@ -66,9 +66,7 @@ def insert_fares(conn, fares: List[Fare]) -> int:
     return sum(1 for fare in fares if insert_fare(conn, fare) > 0)
 
 
-def get_fares_by_route(
-    conn, origin: str, destination: str
-) -> List[dict]:
+def get_fares_by_route(conn, origin: str, destination: str) -> List[dict]:
     """Return all stored fares for a route as plain dicts."""
     cur = conn.execute(
         """
