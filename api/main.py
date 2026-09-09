@@ -16,6 +16,7 @@ from typing import Any, Dict
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
 from api.analytics import router as analytics_router
 from dashboard.app import router as dashboard_router
@@ -62,6 +63,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Compress responses over 1KB to reduce network transfer time
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # Mount domain routers
 app.include_router(dashboard_router)

@@ -23,7 +23,6 @@ from database.repository import (
     get_index_results,
     insert_index_result,
 )
-from database.schema import init_schema
 from index_engine.aggregation import aggregate_item_price_relatives
 from index_engine.api_index import compute_overall_airfare_index
 from index_engine.weights import compute_uniform_base_basket_weights
@@ -34,9 +33,7 @@ router = APIRouter()
 
 
 def _db_conn():
-    conn = get_connection()
-    init_schema(conn)
-    return conn
+    return get_connection()
 
 
 @router.get("/fares", response_model=List[Fare])

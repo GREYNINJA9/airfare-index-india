@@ -14,16 +14,13 @@ from pydantic import BaseModel
 
 from database.connection import get_connection
 from database.repository import get_fares
-from database.schema import init_schema
 from models.fare import Fare
 
 router = APIRouter(prefix="/api/fares", tags=["Fares"])
 
 
 def _db():
-    conn = get_connection()
-    init_schema(conn)
-    return conn
+    return get_connection()
 
 
 class FareSummary(BaseModel):
