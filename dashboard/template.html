@@ -578,8 +578,16 @@
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-                                    <button class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px]">Daily</button>
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D Moving Avg</button>
+                                    <button id="btn-overview-weight-psd" onclick="setOverviewWeighting('psd')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">
+                                        <i class="fa-solid fa-scale-balanced mr-1 text-[10px]"></i>PSD Weighted
+                                    </button>
+                                    <button id="btn-overview-weight-uni" onclick="setOverviewWeighting('uniform')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">
+                                        Uniform Weighted
+                                    </button>
+                                </div>
+                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+                                    <button id="btn-overview-freq-daily" onclick="setOverviewFrequency('daily')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">Daily</button>
+                                    <button id="btn-overview-freq-weekly" onclick="setOverviewFrequency('weekly')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">7D Moving Avg</button>
                                 </div>
                                 <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
                                     <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D</button>
@@ -2538,13 +2546,116 @@
             switchTab("tab-routes");
         }
 
+        let overviewWeighting = 'psd';
+        let overviewFrequency = 'daily';
+
+        function setOverviewWeighting(mode) {
+            overviewWeighting = mode;
+            updateOverviewControls();
+            updateOverviewApixChart();
+        }
+
+        function setOverviewFrequency(freq) {
+            overviewFrequency = freq;
+            updateOverviewControls();
+            updateOverviewApixChart();
+        }
+
+        function updateOverviewControls() {
+            const btnPsd = document.getElementById("btn-overview-weight-psd");
+            const btnUni = document.getElementById("btn-overview-weight-uni");
+            const btnDaily = document.getElementById("btn-overview-freq-daily");
+            const btnWeekly = document.getElementById("btn-overview-freq-weekly");
+
+            const activeCls = "px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer";
+            const inactiveCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
+
+            if (btnPsd && btnUni) {
+                if (overviewWeighting === 'psd') {
+                    btnPsd.className = activeCls;
+                    btnUni.className = inactiveCls;
+                } else {
+                    btnUni.className = activeCls;
+                    btnPsd.className = inactiveCls;
+                }
+            }
+
+            if (btnDaily && btnWeekly) {
+                if (overviewFrequency === 'daily') {
+                    btnDaily.className = activeCls;
+                    btnWeekly.className = inactiveCls;
+                } else {
+                    btnWeekly.className = activeCls;
+                    btnDaily.className = inactiveCls;
+                }
+            }
+        }
+
+        function updateOverviewApixChart() {
+            const chart = window.__CHARTS__["overview-apix"];
+            if (!chart) return;
+            const chartData = window.__INITIAL_CHARTS__ || {};
+            const trend = chartData.trend || {};
+            const isPsd = overviewWeighting === 'psd';
+
+            const lasp = isPsd 
+                ? (trend.laspeyres_psd || [])
+                : (trend.laspeyres_uniform || []);
+            const jev = isPsd
+                ? (trend.jevons_psd || [])
+                : (trend.jevons_uniform || []);
+            const mvg = trend.moving_avg || [];
+
+            const datasets = [
+                {
+                    label: isPsd ? "Laspeyres APIx (PSD Traffic Weighted)" : "Laspeyres APIx (Uniform Weighted)",
+                    data: lasp,
+                    borderColor: "#205493",
+                    backgroundColor: "rgba(32, 84, 147, 0.08)",
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: isPsd ? "Geometric Jevons APIx (PSD Weighted)" : "Geometric Jevons APIx (Uniform Weighted)",
+                    data: jev,
+                    borderColor: "#dd6b20",
+                    borderDash: [4, 4],
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.3,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                }
+            ];
+
+            if (overviewFrequency === 'weekly' && mvg.length > 0) {
+                datasets.push({
+                    label: "7D Rolling Moving Average",
+                    data: mvg,
+                    borderColor: "#9333ea",
+                    borderDash: [2, 2],
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 1,
+                    pointHoverRadius: 4
+                });
+            }
+
+            chart.data.datasets = datasets;
+            chart.update('active');
+        }
+
         function initOverviewCharts() {
             const chartData = window.__INITIAL_CHARTS__ || {};
             const trend = chartData.trend || {};
             const dates = trend.labels || [];
             const trendDatasets = trend.datasets || [];
-            const lasp = trendDatasets.find(d => d.label.includes("Laspeyres"))?.data || [];
-            const jev = trendDatasets.find(d => d.label.includes("Jevons"))?.data || [];
+            const lasp = trend.laspeyres_psd || trendDatasets.find(d => d.label.includes("Laspeyres"))?.data || [];
+            const jev = trend.jevons_psd || trendDatasets.find(d => d.label.includes("Jevons"))?.data || [];
             const fares = trendDatasets.find(d => d.label.includes("Average Fare"))?.data || [];
 
             const ctx1 = document.getElementById("overview-apix-chart");

@@ -181,8 +181,16 @@
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
                                 <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-                                    <button class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px]">Daily</button>
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D Moving Avg</button>
+                                    <button id="btn-overview-weight-psd" onclick="setOverviewWeighting('psd')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">
+                                        <i class="fa-solid fa-scale-balanced mr-1 text-[10px]"></i>PSD Weighted
+                                    </button>
+                                    <button id="btn-overview-weight-uni" onclick="setOverviewWeighting('uniform')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">
+                                        Uniform Weighted
+                                    </button>
+                                </div>
+                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+                                    <button id="btn-overview-freq-daily" onclick="setOverviewFrequency('daily')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">Daily</button>
+                                    <button id="btn-overview-freq-weekly" onclick="setOverviewFrequency('weekly')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">7D Moving Avg</button>
                                 </div>
                                 <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
                                     <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D</button>

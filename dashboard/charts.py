@@ -19,16 +19,25 @@ def get_trend_chart_data() -> Dict[str, Any]:
     """Return time-series chart data for APIx Laspeyres vs Jevons vs CPI."""
     points = cpi_comparison()
     labels = [p.date.strftime("%d %b") for p in points]
-    laspeyres = [p.apix_laspeyres_daily for p in points]
-    jevons = [p.apix_jevons_daily for p in points]
+    laspeyres_psd = [p.apix_laspeyres_psd if p.apix_laspeyres_psd is not None else p.apix_laspeyres_daily for p in points]
+    laspeyres_uniform = [p.apix_laspeyres_uniform if p.apix_laspeyres_uniform is not None else p.apix_laspeyres_daily for p in points]
+    jevons_psd = [p.apix_jevons_psd if p.apix_jevons_psd is not None else p.apix_jevons_daily for p in points]
+    jevons_uniform = [p.apix_jevons_uniform if p.apix_jevons_uniform is not None else p.apix_jevons_daily for p in points]
+    moving_avg = [p.apix_weekly_moving_avg for p in points]
     cpi = [p.official_cpi_transport for p in points]
 
     return {
         "labels": labels,
+        "laspeyres_psd": laspeyres_psd,
+        "laspeyres_uniform": laspeyres_uniform,
+        "jevons_psd": jevons_psd,
+        "jevons_uniform": jevons_uniform,
+        "moving_avg": moving_avg,
+        "cpi": cpi,
         "datasets": [
             {
-                "label": "APIx (Laspeyres - Real-time)",
-                "data": laspeyres,
+                "label": "APIx (Laspeyres - PSD Weighted)",
+                "data": laspeyres_psd,
                 "borderColor": "#1e40af",  # Indigo-800
                 "backgroundColor": "rgba(30, 64, 175, 0.1)",
                 "borderWidth": 2.5,
@@ -36,8 +45,8 @@ def get_trend_chart_data() -> Dict[str, Any]:
                 "fill": True,
             },
             {
-                "label": "APIx (Jevons - Geometric)",
-                "data": jevons,
+                "label": "APIx (Jevons - PSD Geometric)",
+                "data": jevons_psd,
                 "borderColor": "#0891b2",  # Cyan-600
                 "backgroundColor": "transparent",
                 "borderWidth": 2,
@@ -45,7 +54,7 @@ def get_trend_chart_data() -> Dict[str, Any]:
                 "tension": 0.3,
             },
             {
-                "label": "Official MoSPI CPI (Airfare 07.3.3)",
+                "label": "Official MoSPI CPI (Airfare)",
                 "data": cpi,
                 "borderColor": "#d97706",  # Amber-600
                 "backgroundColor": "transparent",

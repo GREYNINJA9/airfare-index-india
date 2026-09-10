@@ -26,12 +26,15 @@ services:
     container_name: airfare-api
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     environment:
-      - ENVIRONMENT=development
-      - LOG_LEVEL=INFO
-      - AUTO_SEED=false
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - AUTO_SEED=${AUTO_SEED:-false}
       - USE_MOCK_DATA=false
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-airfare_index}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-airfare_index}}
+      - MOSPI_CPI_API_URL=${MOSPI_CPI_API_URL:-https://api.mospi.gov.in/api/cpi/getCPIData?base_year=2024&year=2026&group_code=24&class_code=58&item_code=07.3.3&limit=100}
     depends_on:
       postgres:
         condition: service_healthy

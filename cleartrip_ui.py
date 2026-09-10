@@ -28,8 +28,12 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlencode
 
-from patchright.sync_api import TimeoutError as PlaywrightTimeoutError
-from patchright.sync_api import sync_playwright
+try:
+    from patchright.sync_api import TimeoutError as PlaywrightTimeoutError
+    from patchright.sync_api import sync_playwright
+except ImportError:
+    PlaywrightTimeoutError = Exception  # type: ignore
+    sync_playwright = None  # type: ignore
 
 BASE_URL = "https://www.cleartrip.com"
 RESULTS_URL = BASE_URL + "/flights/results"

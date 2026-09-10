@@ -13,12 +13,14 @@ from __future__ import annotations
 
 import csv
 import io
+import math
 from datetime import date
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Query, Response
 from pydantic import BaseModel, ConfigDict, Field
 
+from api.mospi_client import fetch_official_mospi_cpi
 from database.connection import get_connection
 from database.repository import get_fares, get_index_results
 from index_engine.backtesting import generate_backtest_report
@@ -67,6 +69,10 @@ class CPIComparisonSeriesPoint(BaseModel):
     date: date
     apix_laspeyres_daily: float
     apix_jevons_daily: float
+    apix_laspeyres_psd: Optional[float] = None
+    apix_laspeyres_uniform: Optional[float] = None
+    apix_jevons_psd: Optional[float] = None
+    apix_jevons_uniform: Optional[float] = None
     apix_weekly_moving_avg: float
     official_cpi_transport: float
     inflation_tracking_gap: float
@@ -229,12 +235,16 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
     conn = _db()
     index_results = get_index_results(conn)
 
-    from index_engine.cpi_client import get_official_monthly_cpi_series
-    official_series = get_official_monthly_cpi_series()
-    base_val = official_series.get("2026-08", 126.10)
+    # Fetch official MoSPI CPI figures from live government API
+    official_cpi_map = fetch_official_mospi_cpi()
+    base_cpi_val = 125.46
+    if official_cpi_map:
+        base_candidates = [v["index"] for k, v in official_cpi_map.items() if "2026" in k]
+        if base_candidates:
+            base_cpi_val = float(base_candidates[0])
 
     if not index_results:
-        # Generate baseline 30-day series if not yet indexed
+        # Fallback to backtest series if database index not precalculated
         fares = get_fares(conn)
         rep = generate_backtest_report(fares)
         return [
@@ -242,39 +252,63 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
                 date=d.date,
                 apix_laspeyres_daily=d.apix_laspeyres,
                 apix_jevons_daily=d.apix_jevons,
+                apix_laspeyres_psd=d.apix_laspeyres,
+                apix_laspeyres_uniform=d.apix_laspeyres,
+                apix_jevons_psd=d.apix_jevons,
+                apix_jevons_uniform=d.apix_jevons,
                 apix_weekly_moving_avg=d.apix_laspeyres,
-                official_cpi_transport=round((official_series.get(d.date.strftime("%Y-%m"), base_val) / base_val) * 100.0, 2),
-                inflation_tracking_gap=round(
-                    d.apix_laspeyres - round((official_series.get(d.date.strftime("%Y-%m"), base_val) / base_val) * 100.0, 2),
-                    2,
-                ),
+                official_cpi_transport=base_cpi_val,
+                inflation_tracking_gap=round(d.apix_laspeyres - 100.0, 2),
             )
             for d in rep.daily_series
         ]
 
-    # Calculate 7-day rolling average for smooth CPI trend tracking
-    points: List[CPIComparisonSeriesPoint] = []
     sorted_results = sorted(index_results, key=lambda x: x.current_period)
+    base_month_key = sorted_results[0].base_period.strftime("%Y-%m")
+    base_cpi_val = float(official_cpi_map.get(base_month_key, {}).get("index", 126.30))
 
+    points: List[CPIComparisonSeriesPoint] = []
     lasp_vals: List[float] = []
     for res in sorted_results:
         lasp_vals.append(res.overall_laspeyres_index)
         window = lasp_vals[-7:]
         rolling_7d = sum(window) / len(window)
 
-        # Official MoSPI CPI reference normalized to 100 on base period (2026-08)
+        # Official MoSPI baseline reference normalized to 100 on base period
         month_key = res.current_period.strftime("%Y-%m")
-        official_current = official_series.get(month_key, base_val)
-        cpi_normalized = round((official_current / base_val) * 100.0, 2)
+        if month_key in official_cpi_map:
+            cpi_raw = float(official_cpi_map[month_key]["index"])
+        elif official_cpi_map:
+            latest_k = sorted(official_cpi_map.keys())[-1]
+            cpi_raw = float(official_cpi_map[latest_k]["index"])
+        else:
+            cpi_raw = base_cpi_val
+
+        cpi_normalized = round((cpi_raw / base_cpi_val) * 100.0, 2)
+
+        lasp_psd = round(res.overall_laspeyres_index, 2)
+        jev_psd = round(res.overall_jevons_index, 2)
+
+        if res.item_indices:
+            n_items = len(res.item_indices)
+            lasp_uni = round(100.0 * (sum(it.index_relative for it in res.item_indices) / n_items), 2)
+            jev_uni = round(100.0 * math.exp(sum(math.log(it.index_relative) for it in res.item_indices) / n_items), 2)
+        else:
+            lasp_uni = lasp_psd
+            jev_uni = jev_psd
 
         points.append(
             CPIComparisonSeriesPoint(
                 date=res.current_period,
-                apix_laspeyres_daily=round(res.overall_laspeyres_index, 2),
-                apix_jevons_daily=round(res.overall_jevons_index, 2),
+                apix_laspeyres_daily=lasp_psd,
+                apix_jevons_daily=jev_psd,
+                apix_laspeyres_psd=lasp_psd,
+                apix_laspeyres_uniform=lasp_uni,
+                apix_jevons_psd=jev_psd,
+                apix_jevons_uniform=jev_uni,
                 apix_weekly_moving_avg=round(rolling_7d, 2),
                 official_cpi_transport=cpi_normalized,
-                inflation_tracking_gap=round(res.overall_laspeyres_index - cpi_normalized, 2),
+                inflation_tracking_gap=round(lasp_psd - cpi_normalized, 2),
             )
         )
 
@@ -291,18 +325,39 @@ def rbi_nso_data_feed(
     conn = _db()
     index_results = get_index_results(conn, base_period=None, current_period=None)
 
+    # Fetch live official MoSPI Airfare CPI values
+    official_cpi_map = fetch_official_mospi_cpi()
+    base_month_key = index_results[0].base_period.strftime("%Y-%m") if index_results else "2026-08"
+    base_cpi_val = float(official_cpi_map.get(base_month_key, {}).get("index", 126.30))
+
+    s_date = start_date if isinstance(start_date, date) else None
+    e_date = end_date if isinstance(end_date, date) else None
+
     rows = []
     for res in index_results:
-        if start_date and res.current_period < start_date:
+        if s_date and res.current_period < s_date:
             continue
-        if end_date and res.current_period > end_date:
+        if e_date and res.current_period > e_date:
             continue
+
+        month_key = res.current_period.strftime("%Y-%m")
+        if month_key in official_cpi_map:
+            cpi_raw = float(official_cpi_map[month_key]["index"])
+        elif official_cpi_map:
+            latest_k = sorted(official_cpi_map.keys())[-1]
+            cpi_raw = float(official_cpi_map[latest_k]["index"])
+        else:
+            cpi_raw = base_cpi_val
+        cpi_normalized = round((cpi_raw / base_cpi_val) * 100.0, 2)
+
         rows.append(
             {
                 "date": res.current_period.isoformat(),
                 "base_period": res.base_period.isoformat(),
                 "apix_laspeyres_index": res.overall_laspeyres_index,
                 "apix_jevons_index": res.overall_jevons_index,
+                "official_mospi_cpi": cpi_normalized,
+                "tracking_gap": round(res.overall_laspeyres_index - cpi_normalized, 2),
                 "items_included_count": len(res.item_indices),
                 "weight_method": res.methodology.weight_method,
                 "standard_scaling": "Base=100",

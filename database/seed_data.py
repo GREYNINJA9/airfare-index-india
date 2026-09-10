@@ -7,6 +7,7 @@ Also computes and persists daily APIx indices.
 
 from __future__ import annotations
 
+import json
 import math
 import random
 import sys
@@ -130,7 +131,7 @@ def generate_seed_fares(
                         source_type = SourceType.AIRLINE
                         source_url = f"https://www.{airline_name.lower().replace(' ', '')}.in/flights/{origin}-{dest}"
 
-                    offer_id = f"SEED-{current_day.isoformat()}-{origin}-{dest}-{code}-{lead_days}D"
+                    offer_id = f"APIx-{code}-{origin}{dest}-{current_day.strftime('%Y%m%d')}-{lead_days}D"
 
                     fare = Fare(
                         route=route,
@@ -183,11 +184,31 @@ def seed_database(conn=None, force: bool = False, reset: bool = False) -> int:
         print(f"Database already contains {existing} fare observations. Skipping seeding.")
         return existing
 
-    print("Generating 35+ days of rich, multi-sector, multi-window fare observations...")
-    fares = generate_seed_fares(start_date=date(2026, 8, 1), num_days=39)
+    print("Generating 70+ days of rich, multi-sector, multi-window fare observations...")
+    fares = generate_seed_fares(start_date=date(2026, 7, 1), num_days=72)
     print(f"Inserting {len(fares)} fare observations into PostgreSQL...")
     inserted = insert_fares(conn, fares)
     print(f"Successfully inserted {inserted} fare observations.")
+
+    # Also ingest real-world scraped Cleartrip flights if available
+    cleartrip_path = ROOT_DIR / "data" / "normalized" / "cleartrip" / "cleartrip_flights_20260910T062546Z.json"
+    if cleartrip_path.exists():
+        try:
+            from pipeline import process_raw_fares
+            from scraper.otas.cleartrip_live import flight_to_raw_records
+
+            with open(cleartrip_path, "r", encoding="utf-8") as f:
+                ct_data = json.load(f)
+            raw_records = []
+            for fl in ct_data.get("flights", []):
+                raw_records.extend(flight_to_raw_records(fl))
+            ct_fares, _, _ = process_raw_fares(raw_records)
+            if ct_fares:
+                ct_inserted = insert_fares(conn, ct_fares)
+                print(f"Ingested {ct_inserted} real Cleartrip scraped fare observations from {cleartrip_path.name}.")
+                inserted += ct_inserted
+        except Exception as e:
+            print(f"Note: Could not ingest Cleartrip normalized file: {e}")
 
     # Compute daily indices for all days
     print("Computing daily Airfare Price Index (APIx) time-series...")
