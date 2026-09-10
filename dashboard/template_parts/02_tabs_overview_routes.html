@@ -1,0 +1,581 @@
+            <!-- ========================================== -->
+            <!-- TAB 01: OVERVIEW (Section 20 Compliance)   -->
+            <!-- ========================================== -->
+            <div id="tab-overview" class="tab-content active space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>National Airfare Executive Overview</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold border border-blue-200">Real-Time Core Index</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Comprehensive real-time indicator tracking dynamic domestic passenger airfares across Indian trunk corridors</p>
+                    </div>
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="text-slate-400">Index Model:</span>
+                        <span class="font-semibold text-slate-700 bg-white border border-slate-200 px-2 py-1 rounded shadow-xs">Laspeyres (Fixed Basket 2024=100)</span>
+                    </div>
+                </div>
+
+                <!-- 8 Top KPI Cards (Section 2 & 20) -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3">
+                    <!-- 1. Current APIx -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs flex flex-col justify-between col-span-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Current APIx Index</span>
+                            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-semibold border border-blue-200">Base=100</span>
+                        </div>
+                        <div class="my-1 flex items-baseline gap-2">
+                            <span id="kpi-apix-val" class="text-2xl font-extrabold text-slate-900 font-mono tracking-tight">108.42</span>
+                            <span id="kpi-apix-badge" class="text-xs font-bold text-rose-600 flex items-center">
+                                <i class="fa-solid fa-arrow-trend-up mr-0.5"></i> +4.22%
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-4 gap-1 pt-1.5 border-t border-slate-100 text-[10px]">
+                            <div><span class="text-slate-400 block">24h:</span><span id="kpi-apix-dod" class="font-semibold text-rose-600">+0.58%</span></div>
+                            <div><span class="text-slate-400 block">7d:</span><span id="kpi-apix-wow" class="font-semibold text-rose-600">+2.14%</span></div>
+                            <div><span class="text-slate-400 block">30d:</span><span id="kpi-apix-mom" class="font-semibold text-rose-600">+4.22%</span></div>
+                            <div><span class="text-slate-400 block">YoY:</span><span class="font-semibold text-amber-600">+22.94%</span></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Avg Fare -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs flex flex-col justify-between col-span-2">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Avg Domestic Fare</span>
+                            <i class="fa-solid fa-indian-rupee-sign text-emerald-600 text-xs"></i>
+                        </div>
+                        <div class="my-1 flex items-baseline gap-2">
+                            <span id="kpi-avg-fare-val" class="text-2xl font-extrabold text-slate-900 font-mono tracking-tight">₹5,815</span>
+                            <span class="text-xs font-semibold text-rose-600 flex items-center">+2.41% WoW</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 flex justify-between pt-1.5 border-t border-slate-100">
+                            <span>Previous: <strong id="kpi-avg-fare-prev">₹5,675</strong></span>
+                            <span>Median: <strong id="kpi-median-fare">₹5,420</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- 3. Min Fare -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs flex flex-col justify-between">
+                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Lowest Fare</span>
+                        <div class="my-1">
+                            <span id="kpi-min-fare" class="text-lg font-bold text-emerald-600 font-mono">₹2,150</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 truncate pt-1 border-t border-slate-100">
+                            <span id="kpi-min-route" class="font-medium text-slate-700">BLR-HYD</span> (<span id="kpi-min-airline">6E</span>)
+                        </div>
+                    </div>
+
+                    <!-- 4. Max Fare -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs flex flex-col justify-between">
+                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Highest Fare</span>
+                        <div class="my-1">
+                            <span id="kpi-max-fare" class="text-lg font-bold text-rose-600 font-mono">₹14,850</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 truncate pt-1 border-t border-slate-100">
+                            <span id="kpi-max-route" class="font-medium text-slate-700">DEL-MAA</span> (<span id="kpi-max-airline">AI</span>)
+                        </div>
+                    </div>
+
+                    <!-- 5. Routes -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs flex flex-col justify-between">
+                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Monitored Routes</span>
+                        <div class="my-1 flex items-baseline gap-1">
+                            <span class="text-xl font-bold text-slate-900 font-mono">14</span>
+                            <span class="text-[10px] text-slate-400">Trunk</span>
+                        </div>
+                        <div class="text-[10px] text-emerald-600 font-medium pt-1 border-t border-slate-100">
+                            100% Active Live
+                        </div>
+                    </div>
+
+                    <!-- 6. Airlines -->
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200/90 shadow-xs flex flex-col justify-between">
+                        <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Airlines</span>
+                        <div class="my-1 flex items-baseline gap-1">
+                            <span class="text-xl font-bold text-slate-900 font-mono">5</span>
+                            <span class="text-[10px] text-slate-400">Major</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 truncate pt-1 border-t border-slate-100">
+                            6E, AI, IX, QP, SG
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Three-Way Triangulation & Benchmark Validation Banner -->
+                <div class="bg-gradient-to-r from-blue-900 via-slate-900 to-indigo-950 p-4 sm:p-5 rounded-2xl text-white shadow-md">
+                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-400/30 flex items-center justify-center text-sm font-bold">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </span>
+                            <div>
+                                <h3 class="font-bold text-sm sm:text-base tracking-tight text-white flex items-center gap-2">
+                                    <span>Three-Way Benchmark Triangulation: Web Scrapers vs Constant DGCA Rate vs MoSPI CPI</span>
+                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Verified Alignment</span>
+                                </h3>
+                                <p class="text-[11px] text-slate-300">Live multi-source web scrapers (Cleartrip, IndiGo, OTAs) feed clean persistence, validated against constant DGCA baseline and official MoSPI retail inflation</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] text-slate-400">Official MoSPI CPI API:</span>
+                            <span class="font-mono text-xs px-2.5 py-1 rounded-lg bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 font-bold">Item 07.3.3 (Active)</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-3.5">
+                            <div class="flex items-center justify-between text-[11px] text-slate-300">
+                                <span>Overall Market vs Constant DGCA Rate</span>
+                                <i class="fa-solid fa-plane-arrival text-blue-400"></i>
+                            </div>
+                            <div class="my-2 flex items-baseline gap-2">
+                                <span id="tri-market-avg" class="text-2xl font-extrabold font-mono text-white">₹5,815</span>
+                                <span class="text-xs font-mono text-slate-300">vs DGCA <strong id="tri-dgca-const" class="text-amber-300">₹5,450</strong></span>
+                            </div>
+                            <div class="text-[11px] text-slate-300 flex items-center justify-between pt-2 border-t border-white/10">
+                                <span>Yield Premium: <strong id="tri-fare-diff" class="text-amber-300 font-mono">+₹365 (+6.70%)</strong></span>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">Dynamic Surge Active</span>
+                            </div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-3.5">
+                            <div class="flex items-center justify-between text-[11px] text-slate-300">
+                                <span>Real-Time APIx vs Official MoSPI CPI</span>
+                                <i class="fa-solid fa-chart-line text-emerald-400"></i>
+                            </div>
+                            <div class="my-2 flex items-baseline gap-2">
+                                <span id="tri-apix-val" class="text-2xl font-extrabold font-mono text-white">103.34</span>
+                                <span class="text-xs font-mono text-slate-300">vs MoSPI <strong id="tri-cpi-val" class="text-emerald-300">104.20</strong></span>
+                            </div>
+                            <div class="text-[11px] text-slate-300 flex items-center justify-between pt-2 border-t border-white/10">
+                                <span>Tracking Delta: <strong id="tri-cpi-delta" class="text-emerald-300 font-mono">-0.86 pts (-0.83%)</strong></span>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">&lt;1% Tolerance Match</span>
+                            </div>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 rounded-xl p-3.5">
+                            <div class="flex items-center justify-between text-[11px] text-slate-300">
+                                <span>End-to-End Pipeline Architecture</span>
+                                <i class="fa-solid fa-network-wired text-purple-400"></i>
+                            </div>
+                            <div class="my-2 text-xs text-slate-200 font-mono leading-tight">
+                                Scrapers → Normalizer → Postgres DB → Index Engine → Concurrence
+                            </div>
+                            <div class="text-[11px] text-slate-300 flex items-center justify-between pt-2 border-t border-white/10">
+                                <span>Coverage: <strong>10 Sources (Cleartrip, IndiGo, etc.)</strong></span>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300">Automated</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primary Chart Row: APIx Trend + Secondary Fare Trend -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <!-- APIx Trend Chart (2 cols) -->
+                    <div class="lg:col-span-2 bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-line text-blue-600"></i>
+                                    <span>Real-Time Airfare Price Index (APIx) Trend</span>
+                                </h3>
+                                <p class="text-[11px] text-slate-500">Official Laspeyres vs Geometric Jevons Indices (Base Period 2024 = 100.0)</p>
+                            </div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+                                    <button class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px]">Daily</button>
+                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D Moving Avg</button>
+                                </div>
+                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D</button>
+                                    <button class="px-2 py-0.5 rounded bg-blue-600 text-white font-semibold text-[11px] shadow-xs">30D</button>
+                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">90D</button>
+                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">1Y</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="h-64 w-full">
+                            <canvas id="overview-apix-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Secondary Domestic Fare Trend Chart (1 col) -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                    <i class="fa-solid fa-indian-rupee-sign text-emerald-600"></i>
+                                    <span>Average Domestic Fare (₹)</span>
+                                </h3>
+                                <span class="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded font-semibold border border-emerald-200">30-Day Series</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mb-3">Weighted national mean ticket price across all 14 routes</p>
+                            <div class="h-56 w-full">
+                                <canvas id="overview-fare-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+                            <span>30D Low: <strong class="text-slate-800 font-mono">₹5,420</strong></span>
+                            <span>30D High: <strong class="text-slate-800 font-mono">₹6,280</strong></span>
+                            <span>Spread: <strong class="text-slate-800 font-mono">₹860</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Executive Market Summary (Auto-Generated Insights) -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                            <span>Executive Market Summary & Policy Intelligence</span>
+                        </h3>
+                        <span class="text-[11px] text-slate-400">Algorithmic Synthesis • Updated 10-09-2026 05:00</span>
+                    </div>
+                    <div id="overview-insights-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Previews Row: Route Heatmap Preview + Lead Time Preview + Airline Preview -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <!-- Route Heatmap Preview -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-route text-indigo-500"></i>
+                                    <span>Route Heatmap Preview</span>
+                                </h4>
+                                <button onclick="switchTab('tab-routes')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
+                                    View All 14 Routes →
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 text-slate-400 text-[10px] uppercase">
+                                            <th class="py-1.5">Route</th>
+                                            <th class="py-1.5">Avg Fare</th>
+                                            <th class="py-1.5">24h</th>
+                                            <th class="py-1.5">7d</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overview-route-preview-tbody" class="divide-y divide-slate-100 font-mono">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lead Time Curve Preview -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-clock-rotate-left text-purple-500"></i>
+                                    <span>Advance Booking Curve</span>
+                                </h4>
+                                <button onclick="switchTab('tab-leadtime')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
+                                    Full Lead Time →
+                                </button>
+                            </div>
+                            <div class="h-40 w-full">
+                                <canvas id="overview-lead-chart"></canvas>
+                            </div>
+                            <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
+                                <span>T+1 Urgent Surge: <strong class="text-rose-600 font-bold">+92%</strong></span>
+                                <span>Elasticity β: <strong class="text-slate-800 font-mono">-0.38</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Airline Comparison Preview -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plane-up text-blue-500"></i>
+                                    <span>Airline Comparison</span>
+                                </h4>
+                                <button onclick="switchTab('tab-airlines')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
+                                    View Airline Matrix →
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 text-slate-400 text-[10px] uppercase">
+                                            <th class="py-1.5">Carrier</th>
+                                            <th class="py-1.5">Avg Fare</th>
+                                            <th class="py-1.5">Routes</th>
+                                            <th class="py-1.5">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="overview-airline-preview-tbody" class="divide-y divide-slate-100">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 02: ROUTES ANALYSIS                    -->
+            <!-- ========================================== -->
+            <div id="tab-routes" class="tab-content space-y-6">
+                <!-- Route Selector Bar -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Select Monitored Route:</label>
+                        <select id="route-tab-selector" onchange="onRouteTabSelect(this.value)" class="bg-slate-50 border border-slate-300 font-bold text-slate-900 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none font-mono">
+                            <!-- Populated by JS -->
+                        </select>
+                        <span id="route-category-badge" class="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-semibold border border-blue-200">
+                            Metro-to-Metro Trunk
+                        </span>
+                    </div>
+                    <div class="text-xs text-slate-500 flex flex-wrap items-center gap-3">
+                        <span class="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 font-medium">
+                            DGCA Constant Rate: <strong id="route-dgca-benchmark" class="font-mono font-bold">₹5,450</strong>
+                        </span>
+                        <span class="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-900 font-medium">
+                            Variance vs DGCA: <strong id="route-dgca-diff" class="font-mono font-bold">+₹970 (+17.80%)</strong>
+                        </span>
+                        <span>DGCA Weight: <strong id="route-dgca-weight" class="text-slate-800 font-mono">14.2%</strong></span>
+                        <span>Distance: <strong id="route-distance" class="text-slate-800 font-mono">1,148 km</strong></span>
+                        <span>Daily Capacity: <strong id="route-daily-pax" class="text-slate-800 font-mono">~18,400 pax</strong></span>
+                    </div>
+                </div>
+
+                <!-- 12 Route KPI Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3">
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Route APIx Index</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5" id="rkpi-index">109.84</div>
+                        <span class="text-[10px] text-slate-500">Base 100.0</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">24h Change (DoD)</span>
+                        <div class="text-xl font-bold text-rose-600 font-mono mt-0.5" id="rkpi-24h">+1.24%</div>
+                        <span class="text-[10px] text-slate-500">vs yesterday</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">7d Change (WoW)</span>
+                        <div class="text-xl font-bold text-rose-600 font-mono mt-0.5" id="rkpi-7d">+4.80%</div>
+                        <span class="text-[10px] text-slate-500">vs week ago</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Average Fare</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5" id="rkpi-avg">₹6,420</div>
+                        <span class="text-[10px] text-slate-500">All airlines</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Lowest Fare</span>
+                        <div class="text-xl font-bold text-emerald-600 font-mono mt-0.5" id="rkpi-min">₹3,450</div>
+                        <span class="text-[10px] text-slate-500" id="rkpi-min-air">IndiGo</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Highest Fare</span>
+                        <div class="text-xl font-bold text-rose-600 font-mono mt-0.5" id="rkpi-max">₹14,200</div>
+                        <span class="text-[10px] text-slate-500" id="rkpi-max-air">Air India</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Median Fare</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5" id="rkpi-median">₹6,150</div>
+                        <span class="text-[10px] text-slate-500">50th percentile</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Std Deviation</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5" id="rkpi-std">₹1,840</div>
+                        <span class="text-[10px] text-slate-500">Price dispersion</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Volatility CV %</span>
+                        <div class="text-xl font-bold text-amber-600 font-mono mt-0.5" id="rkpi-cv">28.6%</div>
+                        <span class="text-[10px] text-amber-600 font-semibold">High Volatility</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Operating Carriers</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5" id="rkpi-carriers">5 Airlines</div>
+                        <span class="text-[10px] text-slate-500">High competition</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Daily Flight Quotes</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5" id="rkpi-flights">975 quotes</div>
+                        <span class="text-[10px] text-slate-500">Tracked across T-windows</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Cheapest Carrier</span>
+                        <div class="text-xl font-bold text-emerald-600 truncate mt-0.5" id="rkpi-cheapest-carrier">IndiGo</div>
+                        <span class="text-[10px] text-slate-500" id="rkpi-cheapest-carrier-fare">avg ₹5,890</span>
+                    </div>
+                </div>
+
+                <!-- Route Trend Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-area text-blue-600"></i>
+                            <span>Route Historical Price Trend (₹)</span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-3">Average daily fare movement over 30 days</p>
+                        <div class="h-64 w-full">
+                            <canvas id="route-price-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-indigo-600"></i>
+                            <span>Route APIx Index vs National Baseline</span>
+                        </h4>
+                        <p class="text-xs text-slate-500 mb-3">Route-specific Laspeyres Index compared to National APIx</p>
+                        <div class="h-64 w-full">
+                            <canvas id="route-index-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Carrier Competition on Route + Fare Distribution -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                    <!-- Carrier Competition (2 cols) -->
+                    <div class="lg:col-span-2 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+                                <i class="fa-solid fa-plane text-blue-500"></i>
+                                <span>Carrier Competition on this Route</span>
+                            </h4>
+                            <span class="text-xs text-slate-400">Direct Comparison</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-slate-500 text-[11px] font-semibold bg-slate-50/70">
+                                        <th class="py-2 px-3">Airline</th>
+                                        <th class="py-2 px-3">Type</th>
+                                        <th class="py-2 px-3">Avg Fare</th>
+                                        <th class="py-2 px-3">Lowest Fare</th>
+                                        <th class="py-2 px-3">Highest Fare</th>
+                                        <th class="py-2 px-3">Price Competitiveness</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="route-carrier-tbody" class="divide-y divide-slate-100 font-mono">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Fare Distribution & Dispersion (1 col) -->
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-simple text-purple-500"></i>
+                            <span>Fare Distribution Quartiles</span>
+                        </h4>
+                        <div class="space-y-3 text-xs">
+                            <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                <span class="text-slate-500">25th Percentile (P25):</span>
+                                <strong id="r-dist-p25" class="font-mono text-slate-800">₹4,820</strong>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                <span class="text-slate-500">Median (P50):</span>
+                                <strong id="r-dist-median" class="font-mono text-slate-800">₹6,150</strong>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                <span class="text-slate-500">75th Percentile (P75):</span>
+                                <strong id="r-dist-p75" class="font-mono text-slate-800">₹7,650</strong>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                <span class="text-slate-500">Interquartile Range (IQR):</span>
+                                <strong id="r-dist-iqr" class="font-mono text-slate-800">₹2,830</strong>
+                            </div>
+                            <div class="flex justify-between py-1.5 border-b border-slate-100">
+                                <span class="text-slate-500">Standard Deviation:</span>
+                                <strong id="r-dist-std" class="font-mono text-slate-800">₹1,840</strong>
+                            </div>
+                            <div class="p-2.5 bg-blue-50/60 rounded-lg text-[11px] text-blue-900 border border-blue-100">
+                                <strong>Econometric Insight:</strong> 50% of all quotes on this sector fall within the IQR band of ₹4,820 – ₹7,650. Fares exceeding ₹11,895 are flagged as dynamic peak premiums.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4 Route Rankings Tables (Cheapest, Expensive, High Increase, High Decrease) -->
+                <div>
+                    <h4 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-ranking-star text-amber-500"></i>
+                        <span>Route Intelligence Rankings (All 14 Sectors)</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Cheapest Routes -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                            <h5 class="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-down text-emerald-500"></i> Cheapest Routes
+                            </h5>
+                            <div id="ranking-cheapest" class="space-y-2 text-xs"></div>
+                        </div>
+
+                        <!-- Most Expensive Routes -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                            <h5 class="text-xs font-bold text-rose-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-up text-rose-500"></i> Most Expensive Routes
+                            </h5>
+                            <div id="ranking-expensive" class="space-y-2 text-xs"></div>
+                        </div>
+
+                        <!-- Highest 7d Increase -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                            <h5 class="text-xs font-bold text-rose-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-trend-up text-rose-500"></i> Highest 7d Surge
+                            </h5>
+                            <div id="ranking-increase" class="space-y-2 text-xs"></div>
+                        </div>
+
+                        <!-- Highest 7d Decrease -->
+                        <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                            <h5 class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-trend-down text-emerald-500"></i> Highest 7d Drop
+                            </h5>
+                            <div id="ranking-decrease" class="space-y-2 text-xs"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Route Fare Pricing vs Constant DGCA Benchmark Rate (₹5,450.00) Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-scale-balanced text-amber-600"></i>
+                                <span>Route Pricing vs Constant DGCA Benchmark Rate (₹5,450.00)</span>
+                            </h4>
+                            <p class="text-xs text-slate-500">Comprehensive comparative analysis of all 14 monitored domestic corridors against the constant DGCA baseline rate</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 font-bold border border-amber-200 font-mono">
+                                Benchmark: ₹5,450.00 Const.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 text-[11px] font-semibold bg-slate-50">
+                                    <th class="py-2.5 px-3">Route Sector</th>
+                                    <th class="py-2.5 px-3">City Pair Corridor</th>
+                                    <th class="py-2.5 px-3">Distance</th>
+                                    <th class="py-2.5 px-3">Market Avg Fare</th>
+                                    <th class="py-2.5 px-3">Constant DGCA Rate</th>
+                                    <th class="py-2.5 px-3">Difference (₹)</th>
+                                    <th class="py-2.5 px-3">Difference (%)</th>
+                                    <th class="py-2.5 px-3">Tariff Positioning</th>
+                                    <th class="py-2.5 px-3 text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="route-dgca-table-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>

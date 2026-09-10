@@ -1,0 +1,1 @@
+cpi https://api.mospi.gov.in/api/cpi/getCPIData?base_year=2024&year=2026&group_code=24&class_code=58&item_code=07.3.3&limit=100

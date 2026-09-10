@@ -45,7 +45,7 @@ def get_trend_chart_data() -> Dict[str, Any]:
                 "tension": 0.3,
             },
             {
-                "label": "Official CPI (Transport Sub-group)",
+                "label": "Official MoSPI CPI (Airfare 07.3.3)",
                 "data": cpi,
                 "borderColor": "#d97706",  # Amber-600
                 "backgroundColor": "transparent",

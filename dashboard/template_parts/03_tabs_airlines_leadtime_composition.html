@@ -1,0 +1,302 @@
+            <!-- ========================================== -->
+            <!-- TAB 03: AIRLINES ANALYSIS                  -->
+            <!-- ========================================== -->
+            <div id="tab-airlines" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Airline Competitive Pricing & Fleet Performance</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Comprehensive analysis across IndiGo, Air India, Air India Express, Akasa Air, and SpiceJet</p>
+                    </div>
+                </div>
+
+                <!-- 5 Carrier Cards -->
+                <div id="airlines-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Airline Price Index Chart -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line text-blue-600"></i>
+                                <span>Comparative Airline Price Index Movement</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Normalised carrier price indices over 30 days (Base 100 = 01 Aug 2026)</p>
+                        </div>
+                    </div>
+                    <div class="h-64 w-full">
+                        <canvas id="airlines-trend-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 5x14 Airline-Route Price Matrix Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-table-cells text-indigo-600"></i>
+                                <span>5 × 14 Airline-Route Price Matrix (₹ Average Fares)</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Green badges highlight the most price-competitive carrier on each individual city-pair</p>
+                        </div>
+                        <span class="text-xs text-slate-400 font-mono">14 Monitored Corridors</span>
+                    </div>
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left text-xs border border-slate-200">
+                            <thead class="bg-slate-50 font-bold text-slate-700">
+                                <tr id="matrix-head-row" class="border-b border-slate-200">
+                                    <th class="py-2.5 px-3 border-r border-slate-200 sticky left-0 bg-slate-50 z-10">Carrier</th>
+                                    <!-- 14 Route THs populated by JS -->
+                                </tr>
+                            </thead>
+                            <tbody id="matrix-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Airline vs Constant DGCA Benchmark Tariff Comparison Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-scale-balanced text-indigo-600"></i>
+                                <span>Airline Pricing vs Constant DGCA Benchmark Rate (₹5,450 Baseline)</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Compares market-wide carrier tariffs against the constant DGCA reference rate to classify budget vs premium positioning</p>
+                        </div>
+                        <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
+                            Constant DGCA Benchmark: ₹5,450
+                        </span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border border-slate-200">
+                            <thead class="bg-slate-50 font-bold text-slate-700 text-[11px]">
+                                <tr class="border-b border-slate-200">
+                                    <th class="py-2.5 px-3">Carrier</th>
+                                    <th class="py-2.5 px-3">Model</th>
+                                    <th class="py-2.5 px-3 font-mono">Market Avg Fare (₹)</th>
+                                    <th class="py-2.5 px-3 font-mono">Constant DGCA Rate (₹)</th>
+                                    <th class="py-2.5 px-3 font-mono">Variance vs DGCA (₹)</th>
+                                    <th class="py-2.5 px-3 font-mono">Variance (%)</th>
+                                    <th class="py-2.5 px-3">Tariff Positioning</th>
+                                </tr>
+                            </thead>
+                            <tbody id="airline-dgca-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 04: LEAD TIME (ADVANCE BOOKING)        -->
+            <!-- ========================================== -->
+            <div id="tab-leadtime" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Advance Booking Behavior & Price Elasticity</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Dynamic pricing analysis across booking horizons: T+1, T+7, T+15, T+30, and T+45 days</p>
+                    </div>
+                </div>
+
+                <!-- Elasticity & Urgency Multiplier Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Urgency Multiplier</span>
+                        <div class="text-2xl font-extrabold text-rose-600 font-mono mt-1">1.92×</div>
+                        <p class="text-[11px] text-slate-500 mt-1">T+1 last-minute tickets cost +92% more than T+45 advance saver tickets</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Booking Elasticity β</span>
+                        <div class="text-2xl font-extrabold text-blue-600 font-mono mt-1">-0.38</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Log-linear price elasticity parameter with high goodness of fit (R² = 0.884)</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Daily Advance Discount</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-mono mt-1">-₹95.20 / day</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Average fare reduction per additional day of booking lead time</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Optimal Saver Window</span>
+                        <div class="text-2xl font-extrabold text-amber-600 font-mono mt-1">T+21 to T+30</div>
+                        <p class="text-[11px] text-slate-500 mt-1">Plateau zone where 94% of maximum advance discount is unlocked</p>
+                    </div>
+                </div>
+
+                <!-- Advance Booking Curve Chart + Discount Table -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <!-- Curve Chart -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                        <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-purple-600"></i>
+                            <span>Fare vs Lead Time Empirical Curve</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-3">Average ticket price plotted across booking horizons</p>
+                        <div class="h-64 w-full">
+                            <canvas id="leadtime-curve-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Discount Table -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-tags text-emerald-600"></i>
+                                <span>Lead Time Discount & Savings Schedule</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 mb-3">Relative price concessions relative to urgent T+1 departure</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 text-slate-500 text-[11px] bg-slate-50 font-semibold">
+                                            <th class="py-2 px-3">Horizon</th>
+                                            <th class="py-2 px-3">Avg Fare</th>
+                                            <th class="py-2 px-3">Discount %</th>
+                                            <th class="py-2 px-3">Savings (₹)</th>
+                                            <th class="py-2 px-3">Booking Strategy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="leadtime-discount-tbody" class="divide-y divide-slate-100 font-mono">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 rounded-lg bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                            <strong>Econometric Model Formulation:</strong> <code class="text-blue-700 font-mono">ln(Fare) = 9.24 - 0.38 · ln(LeadDays)</code>. As departure approaches, remaining seat buckets compress sharply, triggering exponential dynamic pricing.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Route-Level Lead Time Heatmap Matrix -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-table-cells-large text-indigo-600"></i>
+                            <span>Route-Level Advance Booking Heatmap (₹ Average Fare)</span>
+                        </h3>
+                        <span class="text-xs text-slate-400">All 14 Sectors × 5 Horizons</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border border-slate-200">
+                            <thead class="bg-slate-50 font-semibold text-slate-700">
+                                <tr class="border-b border-slate-200">
+                                    <th class="py-2 px-3 border-r border-slate-200">Route</th>
+                                    <th class="py-2 px-3 border-r border-slate-200">T+1 (Urgent)</th>
+                                    <th class="py-2 px-3 border-r border-slate-200">T+7 (1 Week)</th>
+                                    <th class="py-2 px-3 border-r border-slate-200">T+15 (Fortnight)</th>
+                                    <th class="py-2 px-3 border-r border-slate-200">T+30 (1 Month)</th>
+                                    <th class="py-2 px-3">T+45 (Saver)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leadtime-heatmap-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 05: FARE COMPOSITION                   -->
+            <!-- ========================================== -->
+            <div id="tab-composition" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Ticket Fare Composition & Statutory Fee Breakdown</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Decomposition of total gross fares into base tariff, fuel surcharges (YQ), UDF, PSF, GST, and convenience fees</p>
+                    </div>
+                </div>
+
+                <!-- 6 Composition Component Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Base Airline Fare</span>
+                        <div class="text-xl font-bold text-blue-600 font-mono mt-0.5">64.6%</div>
+                        <span class="text-[10px] text-slate-500 font-mono">₹3,756 avg</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">User Dev Fee (UDF)</span>
+                        <div class="text-xl font-bold text-indigo-600 font-mono mt-0.5">11.4%</div>
+                        <span class="text-[10px] text-slate-500 font-mono">₹663 avg</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Fuel Surcharge (YQ)</span>
+                        <div class="text-xl font-bold text-amber-600 font-mono mt-0.5">9.8%</div>
+                        <span class="text-[10px] text-slate-500 font-mono">₹570 avg</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">GST & Govt Taxes</span>
+                        <div class="text-xl font-bold text-emerald-600 font-mono mt-0.5">5.9%</div>
+                        <span class="text-[10px] text-slate-500 font-mono">₹343 avg (5% Eco)</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Convenience Fee</span>
+                        <div class="text-xl font-bold text-purple-600 font-mono mt-0.5">5.9%</div>
+                        <span class="text-[10px] text-slate-500 font-mono">₹343 avg</span>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Passenger Fee (PSF)</span>
+                        <div class="text-xl font-bold text-teal-600 font-mono mt-0.5">2.4%</div>
+                        <span class="text-[10px] text-slate-500 font-mono">₹140 avg</span>
+                    </div>
+                </div>
+
+                <!-- Composition Stacked Chart + Airline Breakdown Table -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    <!-- Stacked Chart -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                        <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+                            <span>National Fare Component Stacked Share (%)</span>
+                        </h3>
+                        <p class="text-xs text-slate-500 mb-3">Statutory airport charges vs carrier discretionary tariffs</p>
+                        <div class="h-64 w-full">
+                            <canvas id="composition-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Breakdown by Airline -->
+                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-plane-circle-check text-blue-600"></i>
+                                <span>Component Share by Carrier</span>
+                            </h3>
+                            <p class="text-xs text-slate-500 mb-3">Base fare and auxiliary fees split by operating airline</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs">
+                                    <thead>
+                                        <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
+                                            <th class="py-2 px-3">Carrier</th>
+                                            <th class="py-2 px-3">Base Fare %</th>
+                                            <th class="py-2 px-3">Taxes & UDF %</th>
+                                            <th class="py-2 px-3">Convenience Fee</th>
+                                            <th class="py-2 px-3">Avg Total (₹)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="composition-airline-tbody" class="divide-y divide-slate-100 font-mono">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 rounded-lg bg-amber-50/60 border border-amber-200 text-xs text-amber-900">
+                            <strong>Regulatory Note:</strong> Under DGCA Civil Aviation Requirements (CAR Section 3), UDF and PSF fees are determined by AERA (Airports Economic Regulatory Authority). The APIx index tracks pure base fare fluctuations separately from statutory fee changes.
+                        </div>
+                    </div>
+                </div>
+            </div>

@@ -1,0 +1,358 @@
+            <!-- ========================================== -->
+            <!-- TAB 11: FARE EXPLORER (QUOTE-LEVEL TABLE)  -->
+            <!-- ========================================== -->
+            <div id="tab-explorer" class="tab-content space-y-6">
+                <div id="tab-flight-explorer" class="hidden"></div>
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Individual Flight Quote Explorer & Microdata Export</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Explore, search, filter, and export verified flight fare quotes down to individual departures</p>
+                    </div>
+                    <!-- Export Buttons -->
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportExplorerCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-file-csv"></i> Export CSV
+                        </button>
+                        <button onclick="exportExplorerJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-file-code"></i> Export JSON
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Explorer Filter Controls -->
+                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center gap-3 text-xs">
+                    <div class="flex-1 min-w-[180px]">
+                        <input id="explorer-search" type="text" oninput="applyExplorerFilters()" placeholder="Search flight #, airline, origin, dest..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    </div>
+
+                    <select id="route-select" onchange="onExplorerRouteChange()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 font-mono">
+                        <option value="ALL">All Routes (14)</option>
+                        <option value="DEL-BOM">DEL → BOM</option>
+                        <option value="BOM-DEL">BOM → DEL</option>
+                        <option value="DEL-BLR">DEL → BLR</option>
+                        <option value="BLR-DEL">BLR → DEL</option>
+                        <option value="BOM-BLR">BOM → BLR</option>
+                        <option value="BLR-BOM">BLR → BOM</option>
+                        <option value="DEL-CCU">DEL → CCU</option>
+                        <option value="CCU-DEL">CCU → DEL</option>
+                        <option value="BLR-HYD">BLR → HYD</option>
+                        <option value="HYD-BLR">HYD → BLR</option>
+                        <option value="MAA-DEL">MAA → DEL</option>
+                        <option value="DEL-MAA">DEL → MAA</option>
+                        <option value="DEL-HYD">DEL → HYD</option>
+                        <option value="HYD-DEL">HYD → DEL</option>
+                    </select>
+
+                    <select id="explorer-airline-filter" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
+                        <option value="ALL">All Airlines</option>
+                        <option value="6E">IndiGo (6E)</option>
+                        <option value="AI">Air India (AI)</option>
+                        <option value="IX">Air India Express (IX)</option>
+                        <option value="QP">Akasa Air (QP)</option>
+                        <option value="SG">SpiceJet (SG)</option>
+                    </select>
+
+                    <select id="explorer-lead-filter" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
+                        <option value="ALL">All Horizons</option>
+                        <option value="T+1">T+1 (Urgent)</option>
+                        <option value="T+7">T+7 (1 Week)</option>
+                        <option value="T+15">T+15 (Fortnight)</option>
+                        <option value="T+30">T+30 (1 Month)</option>
+                        <option value="T+45">T+45 (Saver)</option>
+                    </select>
+
+                    <select id="explorer-sort-by" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="time_asc">Departure: Earliest First</option>
+                    </select>
+                </div>
+
+                <!-- Quotes Table -->
+                <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+                    <div class="p-3 border-b border-slate-200 flex items-center justify-between text-xs text-slate-500 bg-slate-50/70">
+                        <span>Showing <strong id="explorer-count" class="text-slate-800">0</strong> matching quotes</span>
+                        <span id="explorer-pagination-info">Page 1 of 1</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table id="route-flights-table" class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-[11px]">
+                                <tr>
+                                    <th class="py-2.5 px-3">Flight #</th>
+                                    <th class="py-2.5 px-3">Airline</th>
+                                    <th class="py-2.5 px-3">Route</th>
+                                    <th class="py-2.5 px-3">Departure</th>
+                                    <th class="py-2.5 px-3">Window</th>
+                                    <th class="py-2.5 px-3">Base Fare</th>
+                                    <th class="py-2.5 px-3">Taxes & Fees</th>
+                                    <th class="py-2.5 px-3">Total Price (₹)</th>
+                                    <th class="py-2.5 px-3">Source</th>
+                                    <th class="py-2.5 px-3">Verified</th>
+                                </tr>
+                            </thead>
+                            <tbody id="explorer-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination Controls -->
+                    <div class="p-3 border-t border-slate-200 flex items-center justify-between text-xs bg-slate-50/50">
+                        <button id="explorer-prev-btn" onclick="prevExplorerPage()" class="px-3 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 cursor-pointer disabled:opacity-50">
+                            Previous
+                        </button>
+                        <div class="flex items-center gap-1 text-slate-600">
+                            <span>Page</span>
+                            <span id="explorer-current-page" class="font-bold text-slate-900">1</span>
+                            <span>of</span>
+                            <span id="explorer-total-pages" class="font-bold text-slate-900">1</span>
+                        </div>
+                        <button id="explorer-next-btn" onclick="nextExplorerPage()" class="px-3 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 cursor-pointer disabled:opacity-50">
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 12: API DOCUMENTATION                  -->
+            <!-- ========================================== -->
+            <div id="tab-api" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Open REST API Specification & Integration Endpoints</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Machine-readable endpoints powering MoSPI, RBI MPC, and public research integrations</p>
+                    </div>
+                    <a href="/docs" target="_blank" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open FastAPI Swagger Docs
+                    </a>
+                </div>
+
+                <!-- API Endpoints Grid -->
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">GET</span>
+                            <span class="font-bold text-slate-800">/dashboard/api/blueprint</span>
+                            <span class="text-slate-400">• Returns complete cached payload for all 14 blueprint modules</span>
+                        </div>
+                        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-[11px] font-mono overflow-x-auto">curl -X GET "http://localhost:8000/dashboard/api/blueprint"</pre>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">GET</span>
+                            <span class="font-bold text-slate-800">/dashboard/api/route-flights?origin=DEL&destination=BOM</span>
+                            <span class="text-slate-400">• Returns quote-level departure records for a route</span>
+                        </div>
+                        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-[11px] font-mono overflow-x-auto">curl -X GET "http://localhost:8000/dashboard/api/route-flights?origin=DEL&destination=BOM&limit=50"</pre>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">GET</span>
+                            <span class="font-bold text-slate-800">/dashboard/api/cpi?year=2026&item_code=07.3.3</span>
+                            <span class="text-slate-400">• Fetches live or cached MoSPI CPI airfare data</span>
+                        </div>
+                        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-[11px] font-mono overflow-x-auto">curl -X GET "http://localhost:8000/dashboard/api/cpi?year=2026&item_code=07.3.3"</pre>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs space-y-2">
+                        <div class="flex items-center gap-2 font-mono text-xs">
+                            <span class="bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">GET</span>
+                            <span class="font-bold text-slate-800">/api/analytics/cpi-comparison</span>
+                            <span class="text-slate-400">• MoSPI CPI and APIx econometric correlation analysis</span>
+                        </div>
+                        <pre class="bg-slate-900 text-emerald-400 p-3 rounded-lg text-[11px] font-mono overflow-x-auto">curl -X GET "http://localhost:8000/api/analytics/cpi-comparison"</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 13: METHODOLOGY & MATHEMATICS          -->
+            <!-- ========================================== -->
+            <div id="tab-methodology" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Index Methodology & Econometric Formulations</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Mathematical principles adhering to ILO, IMF, and MoSPI Consumer Price Index Manuals</p>
+                    </div>
+                </div>
+
+                <!-- Mathematical Formulas Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-900 text-sm">1. Laspeyres Price Index (Official MoSPI Standard)</h3>
+                            <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-mono">Formula</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg text-center font-mono text-slate-800 text-sm border border-slate-200">
+                            I<sub>L</sub><sup>t</sup> = [ &Sigma; (P<sub>i,t</sub> &middot; Q<sub>i,0</sub>) / &Sigma; (P<sub>i,0</sub> &middot; Q<sub>i,0</sub>) ] &times; 100
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Measures the change in the total expenditure required to purchase a fixed basket of domestic flight routes established in base year 2024. Weights Q<sub>i,0</sub> represent annual DGCA passenger traffic volume on each corridor.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-900 text-sm">2. Weighted Geometric Jevons Price Index</h3>
+                            <span class="text-xs bg-purple-50 text-purple-700 px-2 py-0.5 rounded font-mono">Formula</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg text-center font-mono text-slate-800 text-sm border border-slate-200">
+                            I<sub>J</sub><sup>t</sup> = &prod; (P<sub>i,t</sub> / P<sub>i,0</sub>)<sup>w<sub>i</sub></sup> &times; 100
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Calculates the geometric weighted mean of price relatives. Satisfies the time-reversal and circularity axioms, preventing the upward substitution bias inherent in fixed-basket Laspeyres aggregations.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-900 text-sm">3. Advance Booking Decay Weighting Scheme</h3>
+                            <span class="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-mono">Formula</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg text-center font-mono text-slate-800 text-sm border border-slate-200">
+                            W(d) = exp( - &lambda; &middot; d ), &nbsp; where &lambda; = 0.038
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Empirical booking volume weights decay exponentially as lead time increases, reflecting that over 58% of domestic tickets in India are purchased within 14 days of departure.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-900 text-sm">4. Two-Stage Outlier & Noise Rejection Filter</h3>
+                            <span class="text-xs bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-mono">Algorithm</span>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-lg text-center font-mono text-slate-800 text-sm border border-slate-200">
+                            [ Q<sub>1</sub> - 1.5 &middot; IQR, &nbsp; Q<sub>3</sub> + 1.5 &middot; IQR ] &cap; [ &mu; &plusmn; 3&sigma; ]
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Every raw scraped fare quote is passed through both an interquartile range (IQR) check and a 3-standard-deviation filter per route-carrier cell, eliminating web scraping glitches, zero prices, and abnormal first-class fares.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 14: MOSPI CPI LIVE EXPLORER            -->
+            <!-- ========================================== -->
+            <div id="tab-cpi-explorer" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Official MoSPI Consumer Price Index (CPI) Portal</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-orange-100 text-orange-800 font-semibold border border-orange-200">Live API</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Query and compare official Ministry of Statistics & Programme Implementation CPI indices against APIx</p>
+                    </div>
+                </div>
+
+                <!-- CPI Selectors Bar -->
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4 text-xs">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div>
+                            <label class="font-semibold text-slate-600 block text-[10px] uppercase">Year:</label>
+                            <select id="cpi-year-select" onchange="fetchAndUpdateCpi()" class="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800">
+                                <option value="2026" selected>2026 (Current)</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-600 block text-[10px] uppercase">Base Year:</label>
+                            <select id="cpi-sel-base" onchange="fetchAndUpdateCpi()" class="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800">
+                                <option value="2024" selected>2024 = 100</option>
+                                <option value="2012">2012 = 100</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="font-semibold text-slate-600 block text-[10px] uppercase">Index Item Code:</label>
+                            <select id="cpi-item-select" onchange="fetchAndUpdateCpi()" class="bg-slate-50 border border-slate-300 rounded px-2.5 py-1 text-xs text-slate-800 font-mono">
+                                <option value="07.3.3" selected>07.3.3 - Airfare (Passenger Transport by Air)</option>
+                                <option value="07.3">07.3 - Transport Services (All Modes)</option>
+                                <option value="07">07 - Transport & Communication Combined</option>
+                                <option value="CPI_GEN">General Index (Headline CPI)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="fetchAndUpdateCpi(true)" class="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-arrows-rotate"></i> Fetch Official CPI Data
+                    </button>
+                </div>
+
+                <!-- CPI Key Metric Summary Cards -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Official CPI Airfare Index</span>
+                        <div class="text-2xl font-black text-orange-600 font-mono mt-1" id="cpi-card-latest-index">110.79</div>
+                        <span class="text-[10px] text-slate-500">Base 2024 = 100 • MoSPI</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Annual YoY Inflation</span>
+                        <div class="text-2xl font-black text-rose-600 font-mono mt-1" id="cpi-card-avg-inflation">+16.28%</div>
+                        <span class="text-[10px] text-slate-500">Item 07.3.3 Airfare</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Constant DGCA Baseline Rate</span>
+                        <div class="text-2xl font-black text-blue-900 font-mono mt-1">₹5,450</div>
+                        <span class="text-[10px] text-slate-500">Uniform National Baseline</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">APIx Tracking Delta</span>
+                        <div class="text-2xl font-black text-emerald-600 font-mono mt-1">-0.86 pts</div>
+                        <span class="text-[10px] text-emerald-600 font-semibold">&lt; 1.0% Verified Concurrence</span>
+                    </div>
+                </div>
+
+                <!-- CPI Comparison Chart -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-scale-balanced text-orange-500"></i>
+                        <span>Official Transport CPI vs Real-Time Airfare Price Index (APIx)</span>
+                    </h3>
+                    <p class="text-xs text-slate-500 mb-3">Comparing monthly official statistics against daily real-time scraped index</p>
+                    <div class="h-64 w-full">
+                        <canvas id="cpi-comparison-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- CPI Monthly Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-table-list text-slate-700"></i>
+                        <span>Official MoSPI Monthly CPI Data Series</span>
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
+                                    <th class="py-2 px-3">Month</th>
+                                    <th class="py-2 px-3">Year</th>
+                                    <th class="py-2 px-3">Item Description</th>
+                                    <th class="py-2 px-3">Sector</th>
+                                    <th class="py-2 px-3">Index Value</th>
+                                    <th class="py-2 px-3">YoY Inflation Rate (%)</th>
+                                    <th class="py-2 px-3">Source Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cpi-table-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>

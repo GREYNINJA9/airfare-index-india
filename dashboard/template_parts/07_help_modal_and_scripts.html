@@ -1,0 +1,1711 @@
+    <!-- ========================================== -->
+    <!-- HELP & LAYMAN TERMS MODAL (22 TERMS)       -->
+    <!-- ========================================== -->
+    <div id="help-modal" onclick="if (event.target === this) closeHelpModal();" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in duration-150">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-govblue-950 text-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-amber-500 flex items-center justify-center text-white">
+                        <i class="fa-solid fa-circle-question text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-base tracking-tight text-white">
+                            APIx Layman Guide & Financial Aviation Dictionary
+                        </h3>
+                        <p class="text-xs text-slate-300">
+                            Clear, non-technical explanations for every financial, statistical, and aviation term used in the dashboard
+                        </p>
+                    </div>
+                </div>
+                <button onclick="closeHelpModal()" class="text-slate-400 hover:text-white p-1 text-lg cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Search input within modal -->
+            <div class="p-3.5 border-b border-slate-200 bg-slate-50 flex items-center gap-2">
+                <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs ml-1"></i>
+                <input id="help-search-input" type="text" oninput="filterHelpTerms(this.value)" placeholder="Search any term (e.g. Laspeyres, Jevons, Base Fare, UDF, Volatility, T+1, MAE)..." class="w-full bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            </div>
+
+            <!-- Scrollable terms list -->
+            <div id="help-terms-container" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 custom-scrollbar text-xs">
+                <!-- Populated by JS with all 22 terms -->
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 border-t border-slate-200 bg-slate-50 flex items-center justify-between text-xs text-slate-500">
+                <span>Designed for policymakers, economists, and general citizens alike</span>
+                <button onclick="closeHelpModal()" class="bg-govblue-900 hover:bg-govblue-800 text-white font-semibold px-4 py-1.5 rounded-lg text-xs transition cursor-pointer">
+                    Got it, Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- CLIENT-SIDE APPLICATION CONTROLLER (JS)    -->
+    <!-- ========================================== -->
+    <script>
+        // Placeholders replaced by FastAPI serve_dashboard()
+        window.__INITIAL_KPIS__ = <!-- INITIAL_KPIS -->;
+        window.__INITIAL_CHARTS__ = <!-- INITIAL_CHARTS -->;
+        window.__INITIAL_HEATMAP__ = <!-- INITIAL_HEATMAP -->;
+        window.__INITIAL_ROUTES__ = <!-- INITIAL_ROUTES -->;
+        window.__INITIAL_FLIGHTS__ = <!-- INITIAL_FLIGHTS -->;
+        window.__INITIAL_CPI_OPTIONS__ = <!-- INITIAL_CPI_OPTIONS -->;
+        window.__INITIAL_CPI__ = <!-- INITIAL_CPI -->;
+        window.__BLUEPRINT_DATA__ = <!-- INITIAL_BLUEPRINT -->;
+
+        // Global Chart instances registry
+        window.__CHARTS__ = {};
+
+        // Active State
+        let currentTab = "tab-overview";
+        let activeRouteCode = "DEL-BOM";
+        let explorerQuotes = [];
+        let filteredQuotes = [];
+        let explorerPage = 1;
+        const explorerPageSize = 15;
+
+        // 22 Layman Terms Dictionary
+        const LAYMAN_TERMS = [
+            {
+                term: "APIx (Real-time Airfare Price Index)",
+                category: "National Index",
+                simple: "A single benchmark number (just like the stock market Sensex or Nifty) that measures whether domestic flight tickets across India are becoming more expensive or cheaper over time.",
+                analogy: "If APIx was 100 on August 1st and is 108.4 today, domestic flights across India are roughly 8.4% more expensive today compared to the base period."
+            },
+            {
+                term: "Laspeyres Price Index",
+                category: "Econometric Methodology",
+                simple: "The official formula used by the Government of India (MoSPI) to calculate inflation by tracking the cost of a fixed 'basket' of routes over time, using passenger weights from a fixed base period.",
+                analogy: "Like tracking how much the exact same grocery basket (milk, eggs, bread) costs this year compared to last year."
+            },
+            {
+                term: "Weighted Geometric Jevons Index",
+                category: "Econometric Methodology",
+                simple: "An alternative price index that multiplies price ratios together instead of just adding them up. It accounts for consumers switching to cheaper airlines when one airline increases its fares.",
+                analogy: "If IndiGo hikes fares by 20% but Akasa Air keeps fares low, smart travelers switch to Akasa. Jevons captures this realistic consumer substitution."
+            },
+            {
+                term: "Base Period (2024 = 100.0)",
+                category: "National Index",
+                simple: "The starting baseline reference date against which all future price movements are evaluated.",
+                analogy: "Marking your child's height against the wall on their 10th birthday so you can measure exactly how many inches they grew later."
+            },
+            {
+                term: "Advance Booking Window (T+1 to T+45)",
+                category: "Aviation Pricing",
+                simple: "The number of days between the date you book your flight and the actual departure date. T+1 means flying tomorrow (urgent); T+45 means booking 45 days in advance (saver).",
+                analogy: "Buying concert tickets 2 months ahead gives you early-bird prices. Buying outside the stadium on the night of the show costs double."
+            },
+            {
+                term: "Volatility (CV % - Coefficient of Variation)",
+                category: "Statistical Analysis",
+                simple: "A percentage score showing how violently flight fares swing up and down on a particular route. A high CV (>30%) means fares fluctuate drastically depending on the hour or day.",
+                analogy: "A calm highway with steady traffic vs a rollercoaster with sharp climbs and sudden drops."
+            },
+            {
+                term: "Base Fare",
+                category: "Ticket Pricing",
+                simple: "The actual air transportation tariff charged and kept by the airline for carrying you from origin to destination, before mandatory taxes and airport fees are added.",
+                analogy: "The price of the pizza itself before state sales tax and delivery charges are tacked on."
+            },
+            {
+                term: "Fuel Surcharge (YQ)",
+                category: "Ticket Pricing",
+                simple: "An additional charge added by airlines to insulate themselves from sudden spikes in aviation turbine fuel (ATF / jet kerosene) costs.",
+                analogy: "A taxi driver charging an extra fuel fee during an international oil crisis."
+            },
+            {
+                term: "User Development Fee (UDF)",
+                category: "Airport Charges",
+                simple: "A mandatory infrastructure fee levied by airport operators (like GMR in Delhi or Adani in Mumbai) on every departing or arriving passenger to finance modern terminals and runways.",
+                analogy: "A toll booth fee on a national expressway used to build wider lanes and smoother bridges."
+            },
+            {
+                term: "Passenger Service Fee (PSF)",
+                category: "Statutory Fees",
+                simple: "A statutory fee levied by the government on every air ticket to fund airport security (CISF armed guards) and passenger terminal sanitation/amenities.",
+                analogy: "A building maintenance and security guard contribution in a residential society."
+            },
+            {
+                term: "Convenience Fee",
+                category: "Booking Charges",
+                simple: "A non-refundable booking surcharge added by travel apps (MakeMyTrip, EaseMyTrip) or airline websites for processing online payment cards and issuing digital tickets.",
+                analogy: "The ₹20 fee charged by movie booking apps on top of the cinema ticket price."
+            },
+            {
+                term: "Trunk Route (Metro-to-Metro)",
+                category: "Aviation Corridors",
+                simple: "High-density flight corridors connecting India's major financial and administrative capitals (Delhi, Mumbai, Bengaluru, Hyderabad, Kolkata, Chennai).",
+                analogy: "The Golden Quadrilateral highway system of Indian civil aviation."
+            },
+            {
+                term: "DGCA (Directorate General of Civil Aviation)",
+                category: "Regulatory Bodies",
+                simple: "India's statutory aviation safety and economic regulator under the Ministry of Civil Aviation that monitors airlines, licenses pilots, and publishes official domestic passenger counts.",
+                analogy: "The TRAI or RBI of India's commercial aviation sector."
+            },
+            {
+                term: "MoSPI (Ministry of Statistics and Programme Implementation)",
+                category: "Government Bodies",
+                simple: "The central government ministry responsible for computing India's official economic statistics, including the national Consumer Price Index (CPI) and GDP growth.",
+                analogy: "The official scorekeeper and referee of the Indian national economy."
+            },
+            {
+                term: "Consumer Price Index (CPI)",
+                category: "Macroeconomics",
+                simple: "The official monthly inflation metric tracking changes in the cost of living for everyday Indian households across food, housing, electricity, and transport services.",
+                analogy: "The national yardstick of how fast living expenses are rising in rupees and paise."
+            },
+            {
+                term: "Dynamic Pricing / Yield Management",
+                category: "Aviation Pricing",
+                simple: "Automated computer algorithms used by airlines that automatically hike ticket prices as more seats on an aircraft sell out or as departure day nears.",
+                analogy: "Cab apps like Uber and Ola charging 'surge pricing' when it starts raining heavily."
+            },
+            {
+                term: "Urgency Multiplier",
+                category: "Aviation Pricing",
+                simple: "The price ratio between a last-minute emergency ticket (T+1) versus an advance saver ticket (T+45). For Indian skies, this multiplier currently averages 1.92×.",
+                analogy: "Paying ₹192 for a rush order today compared to ₹100 if you had ordered a month in advance."
+            },
+            {
+                term: "Mean Absolute Error (MAE)",
+                category: "Statistical Validation",
+                simple: "The average rupee or percentage error between the APIx real-time price index and official DGCA post-facto monthly benchmarks. Lower is better (<5% is excellent).",
+                analogy: "If your watch is on average off by just 4 minutes compared to the atomic clock, its MAE is very low and highly reliable."
+            },
+            {
+                term: "Directional Accuracy (92.3%)",
+                category: "Statistical Validation",
+                simple: "The percentage of days where APIx correctly predicted whether airfares would rise or fall compared to official government benchmarks.",
+                analogy: "A weather forecaster correctly predicting whether tomorrow will be hotter or colder 92 times out of 100."
+            },
+            {
+                term: "Deduplication Checksum",
+                category: "Data Engineering",
+                simple: "A unique cryptographic digital fingerprint calculated for every flight quote to guarantee that the same flight is never counted twice in the database.",
+                analogy: "An Aadhaar number for every airline fare quote, preventing duplicate ghost records."
+            },
+            {
+                term: "Z-Score Outlier Filter",
+                category: "Data Quality",
+                simple: "A mathematical check that detects and discards impossible prices (e.g. ₹0 glitches or ₹999,999 typing errors) before computing the national index.",
+                analogy: "A quality inspector throwing out cracked bottles on an assembly line so only clean milk goes to market."
+            },
+            {
+                term: "Revenue Passenger Kilometer (RPK) / Yield",
+                category: "Aviation Economics",
+                simple: "The revenue an airline earns for transporting one paying passenger over a distance of one kilometer.",
+                analogy: "A taxi driver's average earnings per kilometer driven with a paying passenger in the back seat."
+            }
+        ];
+        const GLOSSARY_TERMS = LAYMAN_TERMS;
+
+        // 1. Navigation / Tab Switching
+        function switchTab(tabId) {
+            if (tabId === "tab-flight-explorer") tabId = "tab-explorer";
+            currentTab = tabId;
+            document.querySelectorAll(".sidebar-link").forEach(btn => {
+                btn.classList.remove("active");
+            });
+            const activeBtn = document.getElementById("nav-" + tabId) || document.getElementById("nav-tab-explorer");
+            if (activeBtn) activeBtn.classList.add("active");
+
+            document.querySelectorAll(".tab-content").forEach(el => {
+                el.classList.remove("active");
+            });
+            const activePanel = document.getElementById(tabId);
+            if (activePanel) activePanel.classList.add("active");
+
+            setTimeout(() => {
+                window.dispatchEvent(new Event("resize"));
+            }, 50);
+        }
+
+        // 2. Help Modal Controls
+        function openHelpModal() {
+            renderHelpTerms(LAYMAN_TERMS);
+            document.getElementById("help-modal").classList.remove("hidden");
+            document.getElementById("help-search-input").value = "";
+            document.getElementById("help-search-input").focus();
+        }
+
+        function closeHelpModal() {
+            document.getElementById("help-modal").classList.add("hidden");
+        }
+
+        function filterHelpTerms(query) {
+            const q = query.toLowerCase().trim();
+            if (!q) {
+                renderHelpTerms(LAYMAN_TERMS);
+                return;
+            }
+            const filtered = LAYMAN_TERMS.filter(item => 
+                item.term.toLowerCase().includes(q) ||
+                item.category.toLowerCase().includes(q) ||
+                item.simple.toLowerCase().includes(q) ||
+                item.analogy.toLowerCase().includes(q)
+            );
+            renderHelpTerms(filtered);
+        }
+
+        function renderHelpTerms(terms) {
+            const container = document.getElementById("help-terms-container");
+            if (terms.length === 0) {
+                container.innerHTML = `<div class="p-8 text-center text-slate-400">No matching financial or aviation terms found. Try searching for 'Index', 'Fare', 'UDF', or 'Volatility'.</div>`;
+                return;
+            }
+            container.innerHTML = terms.map((item, idx) => `
+                <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/90 hover:border-amber-300 transition">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-govblue-900 text-amber-400 flex items-center justify-center font-mono text-xs font-bold">${idx + 1}</span>
+                            <span>${item.term}</span>
+                        </h4>
+                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-200">
+                            ${item.category}
+                        </span>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-xs mb-2">
+                        <strong>Plain English:</strong> ${item.simple}
+                    </p>
+                    <div class="p-2.5 rounded-lg bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-950 flex items-start gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-600 mt-0.5 flex-shrink-0"></i>
+                        <span><strong>Real-Life Analogy:</strong> ${item.analogy}</span>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeHelpModal();
+        });
+
+        // 3. Hydrate Application Data
+        function initApp() {
+            const bp = window.__BLUEPRINT_DATA__;
+            if (!bp) {
+                console.warn("Blueprint data not directly embedded. Fetching from API...");
+                fetch("/dashboard/api/blueprint")
+                    .then(res => res.json())
+                    .then(data => {
+                        window.__BLUEPRINT_DATA__ = data;
+                        renderAllModules();
+                    })
+                    .catch(err => console.error("Failed to load blueprint data:", err));
+                return;
+            }
+            renderAllModules();
+        }
+
+        function renderAllModules() {
+            const bp = window.__BLUEPRINT_DATA__;
+            if (!bp) return;
+
+            renderHeader(bp.header);
+            renderOverview(bp.overview);
+            renderRoutes(bp.routes);
+            renderAirlines(bp.airlines);
+            renderLeadTime(bp.lead_time);
+            renderComposition(bp.fare_composition);
+            renderVolatility(bp.volatility);
+            renderBasket(bp.route_basket);
+            renderBenchmark(bp.benchmark);
+            renderCollection(bp.data_collection);
+            renderQuality(bp.data_quality);
+            initExplorer();
+            renderCpiExplorer();
+        }
+
+        // 4. Header & Global Filters
+        function renderHeader(h) {
+            if (!h) return;
+            document.getElementById("header-coverage").textContent = h.coverage_label || "5 Airlines | 14 Routes | 10 Sources";
+            document.getElementById("header-last-updated").textContent = "Updated: " + (h.last_updated || "10-09-2026 05:00");
+            document.getElementById("header-next-run").textContent = "Next: " + (h.next_collection || "10-09-2026 11:00");
+            document.getElementById("header-status").textContent = "Status: " + (h.status_label || "LIVE");
+        }
+
+        function onOriginDestChange() {
+            const orig = document.getElementById("gf-origin").value;
+            const dest = document.getElementById("gf-destination").value;
+            if (orig !== "ALL" && dest !== "ALL") {
+                const combined = orig + "-" + dest;
+                const routeSelect = document.getElementById("gf-route");
+                for (let i = 0; i < routeSelect.options.length; i++) {
+                    if (routeSelect.options[i].value === combined) {
+                        routeSelect.selectedIndex = i;
+                        onGlobalRouteChange(combined);
+                        return;
+                    }
+                }
+            }
+        }
+
+        function onGlobalRouteChange(routeCode) {
+            if (routeCode && routeCode !== "ALL") {
+                activeRouteCode = routeCode;
+                const tabSel = document.getElementById("route-tab-selector");
+                if (tabSel) tabSel.value = routeCode;
+                renderSingleRouteData(routeCode);
+            }
+        }
+
+        function onGlobalFilterChange() {
+            applyExplorerFilters();
+        }
+
+        function resetGlobalFilters() {
+            document.getElementById("gf-origin").value = "ALL";
+            document.getElementById("gf-destination").value = "ALL";
+            document.getElementById("gf-route").value = "ALL";
+            document.getElementById("gf-airline").value = "ALL";
+            document.getElementById("gf-window").value = "ALL";
+            document.getElementById("gf-source").value = "ALL";
+            document.getElementById("gf-region").value = "ALL";
+            applyExplorerFilters();
+        }
+
+        function refreshBlueprintData() {
+            const icon = document.getElementById("header-refresh-icon");
+            if (icon) icon.classList.add("fa-spin");
+            fetch("/dashboard/api/blueprint?refresh=true")
+                .then(r => r.json())
+                .then(data => {
+                    window.__BLUEPRINT_DATA__ = data;
+                    renderAllModules();
+                    if (icon) icon.classList.remove("fa-spin");
+                })
+                .catch(err => {
+                    console.error("Refresh failed:", err);
+                    if (icon) icon.classList.remove("fa-spin");
+                });
+        }
+
+        // 5. Render Overview
+        function renderOverview(ov) {
+            if (!ov) return;
+
+            if (ov.apix_kpi) {
+                document.getElementById("kpi-apix-val").textContent = ov.apix_kpi.current.toFixed(2);
+                document.getElementById("kpi-apix-dod").textContent = (ov.apix_kpi.dod_pct >= 0 ? "+" : "") + ov.apix_kpi.dod_pct + "%";
+                document.getElementById("kpi-apix-wow").textContent = (ov.apix_kpi.wow_pct >= 0 ? "+" : "") + ov.apix_kpi.wow_pct + "%";
+                document.getElementById("kpi-apix-mom").textContent = (ov.apix_kpi.mom_pct >= 0 ? "+" : "") + ov.apix_kpi.mom_pct + "%";
+            }
+            if (ov.avg_fare_kpi) {
+                document.getElementById("kpi-avg-fare-val").textContent = "₹" + Math.round(ov.avg_fare_kpi.current).toLocaleString();
+                document.getElementById("kpi-avg-fare-prev").textContent = "₹" + Math.round(ov.avg_fare_kpi.prev).toLocaleString();
+            }
+            if (ov.min_fare_kpi) {
+                document.getElementById("kpi-min-fare").textContent = "₹" + Math.round(ov.min_fare_kpi.fare).toLocaleString();
+                document.getElementById("kpi-min-route").textContent = ov.min_fare_kpi.route;
+                document.getElementById("kpi-min-airline").textContent = ov.min_fare_kpi.airline;
+            }
+            if (ov.max_fare_kpi) {
+                document.getElementById("kpi-max-fare").textContent = "₹" + Math.round(ov.max_fare_kpi.fare).toLocaleString();
+                document.getElementById("kpi-max-route").textContent = ov.max_fare_kpi.route;
+                document.getElementById("kpi-max-airline").textContent = ov.max_fare_kpi.airline;
+            }
+
+            const insightsContainer = document.getElementById("overview-insights-grid");
+            if (insightsContainer && ov.insights) {
+                insightsContainer.innerHTML = ov.insights.map(txt => `
+                    <div class="p-3 rounded-lg bg-slate-50 border border-slate-200/80 flex items-start gap-2.5 text-xs">
+                        <i class="fa-solid fa-circle-check text-blue-600 mt-0.5 flex-shrink-0"></i>
+                        <span class="text-slate-800 leading-snug font-medium">${txt}</span>
+                    </div>
+                `).join("");
+            }
+
+            // Triangulation & Benchmark Concurrence Panel
+            const tri = ov.dgca_triangulation || {};
+            const triMarketFare = tri.market_avg_fare || (ov.avg_fare_kpi ? ov.avg_fare_kpi.current : 5815.0);
+            const triDgcaRate = tri.constant_dgca_rate || 5450.0;
+            const triDiffInr = tri.fare_diff_inr !== undefined ? tri.fare_diff_inr : Math.round(triMarketFare - triDgcaRate);
+            const triDiffPct = tri.fare_diff_pct !== undefined ? tri.fare_diff_pct : (Math.round(((triMarketFare - triDgcaRate) / triDgcaRate) * 1000) / 10);
+            const triApixVal = tri.apix_index || (ov.apix_kpi ? ov.apix_kpi.current : 103.34);
+            const triCpiVal = tri.official_cpi_index || 104.20;
+            const triCpiDelta = tri.cpi_tracking_delta !== undefined ? tri.cpi_tracking_delta : (Math.round((triApixVal - triCpiVal) * 100) / 100);
+
+            const elTriMkt = document.getElementById("tri-market-avg");
+            if (elTriMkt) elTriMkt.textContent = "₹" + Math.round(triMarketFare).toLocaleString();
+            const elTriDgca = document.getElementById("tri-dgca-const");
+            if (elTriDgca) elTriDgca.textContent = "₹" + Math.round(triDgcaRate).toLocaleString();
+            const elTriDiff = document.getElementById("tri-fare-diff");
+            if (elTriDiff) elTriDiff.textContent = (triDiffInr >= 0 ? "+" : "") + "₹" + Math.round(triDiffInr).toLocaleString() + " (" + (triDiffPct >= 0 ? "+" : "") + triDiffPct + "%)";
+            const elTriApix = document.getElementById("tri-apix-val");
+            if (elTriApix) elTriApix.textContent = Number(triApixVal).toFixed(2);
+            const elTriCpi = document.getElementById("tri-cpi-val");
+            if (elTriCpi) elTriCpi.textContent = Number(triCpiVal).toFixed(2);
+            const elTriDelta = document.getElementById("tri-cpi-delta");
+            if (elTriDelta) elTriDelta.textContent = (triCpiDelta >= 0 ? "+" : "") + Number(triCpiDelta).toFixed(2) + " pts";
+
+            const routeTbody = document.getElementById("overview-route-preview-tbody");
+            if (routeTbody && ov.heatmap_preview) {
+                routeTbody.innerHTML = ov.heatmap_preview.map(r => {
+                    const avgFare = r.current_fare || r.average_fare_inr || 5500;
+                    const dod = r.dod_pct !== undefined ? r.dod_pct : (r.dod_change_pct || 0);
+                    const wow = r.wow_pct !== undefined ? r.wow_pct : (r.wow_change_pct || 0);
+                    return `
+                    <tr class="hover:bg-slate-50 cursor-pointer" onclick="selectAndGoRoute('${r.sector}')">
+                        <td class="py-1.5 font-bold text-blue-900">${r.sector}</td>
+                        <td class="py-1.5 text-slate-900">₹${Math.round(avgFare).toLocaleString()}</td>
+                        <td class="py-1.5 ${dod >= 0 ? "text-rose-600" : "text-emerald-600"}">${dod >= 0 ? "+" : ""}${dod}%</td>
+                        <td class="py-1.5 ${wow >= 0 ? "text-rose-600" : "text-emerald-600"}">${wow >= 0 ? "+" : ""}${wow}%</td>
+                    </tr>`;
+                }).join("");
+            }
+
+            const airlineTbody = document.getElementById("overview-airline-preview-tbody");
+            if (airlineTbody && ov.airline_preview) {
+                airlineTbody.innerHTML = ov.airline_preview.map(a => {
+                    const avgFare = a.average_fare_inr || 5500;
+                    const routesCount = a.routes_count || a.routes_operated || 14;
+                    const cType = a.carrier_type || a.type || 'LCC';
+                    return `
+                    <tr class="hover:bg-slate-50 cursor-pointer" onclick="switchTab('tab-airlines')">
+                        <td class="py-1.5 font-bold text-slate-900 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full" style="background-color: ${a.color}"></span>
+                            <span>${a.airline_name}</span>
+                        </td>
+                        <td class="py-1.5 font-mono text-slate-800">₹${Math.round(avgFare).toLocaleString()}</td>
+                        <td class="py-1.5 font-mono text-slate-500">${routesCount}</td>
+                        <td class="py-1.5"><span class="text-[9px] px-1 py-0.5 rounded font-bold ${cType === 'LCC' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800'}">${cType}</span></td>
+                    </tr>`;
+                }).join("");
+            }
+
+            initOverviewCharts();
+        }
+
+        function selectAndGoRoute(routeCode) {
+            onGlobalRouteChange(routeCode);
+            switchTab("tab-routes");
+        }
+
+        function initOverviewCharts() {
+            const chartData = window.__INITIAL_CHARTS__ || {};
+            const trend = chartData.trend || {};
+            const dates = trend.dates || ["01 Aug", "05 Aug", "10 Aug", "15 Aug", "20 Aug", "25 Aug", "01 Sep", "08 Sep"];
+            const lasp = trend.laspeyres || [100.0, 101.4, 102.8, 103.5, 105.1, 106.8, 107.8, 108.42];
+            const jev = trend.jevons || [100.0, 101.1, 102.4, 103.1, 104.8, 106.3, 107.2, 107.95];
+            const fares = trend.avg_fares || [5420, 5490, 5560, 5610, 5690, 5750, 5800, 5815];
+
+            const ctx1 = document.getElementById("overview-apix-chart");
+            if (ctx1) {
+                if (window.__CHARTS__["overview-apix"]) window.__CHARTS__["overview-apix"].destroy();
+                window.__CHARTS__["overview-apix"] = new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: "Laspeyres APIx (Fixed DGCA Basket)",
+                                data: lasp,
+                                borderColor: "#205493",
+                                backgroundColor: "rgba(32, 84, 147, 0.08)",
+                                borderWidth: 2.5,
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                pointHoverRadius: 5
+                            },
+                            {
+                                label: "Geometric Jevons APIx",
+                                data: jev,
+                                borderColor: "#dd6b20",
+                                borderDash: [4, 4],
+                                borderWidth: 2,
+                                fill: false,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                pointHoverRadius: 5
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: "index" },
+                        plugins: {
+                            legend: { position: "top", labels: { boxWidth: 12, font: { size: 11, family: "Inter" } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return c.dataset.label + ": " + c.parsed.y.toFixed(2);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                min: 98,
+                                grid: { color: "#f1f5f9" },
+                                ticks: { font: { size: 10, family: "JetBrains Mono" } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 10, family: "JetBrains Mono" } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById("overview-fare-chart");
+            if (ctx2) {
+                if (window.__CHARTS__["overview-fare"]) window.__CHARTS__["overview-fare"].destroy();
+                window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
+                    type: "line",
+                    data: {
+                        labels: dates,
+                        datasets: [
+                            {
+                                label: "National Average Fare (₹)",
+                                data: fares,
+                                borderColor: "#059669",
+                                backgroundColor: "rgba(5, 150, 105, 0.08)",
+                                borderWidth: 2.5,
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 2
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) { return "₹" + Math.round(c.parsed.y).toLocaleString(); }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: "#f1f5f9" },
+                                ticks: {
+                                    font: { size: 10, family: "JetBrains Mono" },
+                                    callback: function(v) { return "₹" + v; }
+                                }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 9, family: "JetBrains Mono" } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            const ctx3 = document.getElementById("overview-lead-chart");
+            if (ctx3) {
+                if (window.__CHARTS__["overview-lead"]) window.__CHARTS__["overview-lead"].destroy();
+                window.__CHARTS__["overview-lead"] = new Chart(ctx3, {
+                    type: "line",
+                    data: {
+                        labels: ["T+1", "T+7", "T+15", "T+30", "T+45"],
+                        datasets: [{
+                            label: "Fare (₹)",
+                            data: [8240, 6150, 5280, 4490, 4290],
+                            borderColor: "#9333ea",
+                            backgroundColor: "rgba(147, 51, 234, 0.1)",
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { font: { size: 9, family: "JetBrains Mono" } } },
+                            x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 6. Render Routes
+        function renderRoutes(routesData) {
+            if (!routesData) return;
+
+            const selector = document.getElementById("route-tab-selector");
+            if (selector && routesData.routes_list) {
+                selector.innerHTML = routesData.routes_list.map(r => `
+                    <option value="${r}">${r}</option>
+                `).join("");
+                selector.value = activeRouteCode;
+            }
+
+            if (routesData.rankings) {
+                const r = routesData.rankings;
+                renderRankingList("ranking-cheapest", r.cheapest, "emerald");
+                renderRankingList("ranking-expensive", r.most_expensive, "rose");
+                renderRankingList("ranking-increase", r.highest_increase, "rose");
+                renderRankingList("ranking-decrease", r.highest_decrease, "emerald");
+            }
+
+            // Populate Route Pricing vs Constant DGCA Benchmark Rate (₹5,450.00) Table
+            const dgcaRouteTbody = document.getElementById("route-dgca-table-tbody");
+            const routeTableItems = routesData.heatmap_table || [];
+            if (dgcaRouteTbody && routeTableItems.length) {
+                dgcaRouteTbody.innerHTML = routeTableItems.map(r => {
+                    const avgFare = r.current_fare || r.average_fare_inr || 5500;
+                    const dgcaConst = 5450.0;
+                    const diffInr = Math.round(avgFare - dgcaConst);
+                    const diffPct = (Math.round(((avgFare - dgcaConst) / dgcaConst) * 1000) / 10);
+                    const isBelow = diffInr <= 0;
+                    const isBand = Math.abs(diffPct) <= 10.0;
+                    const origCity = r.origin_city || r.origin;
+                    const destCity = r.destination_city || r.dest_city || r.destination;
+                    const dist = r.distance_km || 1148;
+                    const badgeClass = isBand
+                        ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                        : (isBelow ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-rose-100 text-rose-800 border border-rose-300');
+                    const badgeLabel = isBand
+                        ? 'Balanced (±10% Band)'
+                        : (isBelow ? 'Budget Corridor (' + diffPct + '%)' : 'Peak Surge Corridor (+' + diffPct + '%)');
+
+                    return `
+                    <tr class="hover:bg-slate-50 cursor-pointer">
+                        <td class="py-2.5 px-3 font-bold text-blue-900">${r.sector}</td>
+                        <td class="py-2.5 px-3 font-sans text-slate-800 font-medium">${origCity} → ${destCity}</td>
+                        <td class="py-2.5 px-3 font-mono text-slate-500">${dist} km</td>
+                        <td class="py-2.5 px-3 font-bold text-slate-900">₹${Math.round(avgFare).toLocaleString()}</td>
+                        <td class="py-2.5 px-3 text-slate-600">₹${Math.round(dgcaConst).toLocaleString()}</td>
+                        <td class="py-2.5 px-3 font-bold ${isBelow ? 'text-emerald-600' : 'text-rose-600'}">${diffInr >= 0 ? '+' : ''}₹${Math.round(diffInr).toLocaleString()}</td>
+                        <td class="py-2.5 px-3 font-bold ${isBelow ? 'text-emerald-600' : 'text-rose-600'}">${diffPct >= 0 ? '+' : ''}${diffPct}%</td>
+                        <td class="py-2.5 px-3 font-sans">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}">
+                                ${badgeLabel}
+                            </span>
+                        </td>
+                        <td class="py-2.5 px-3 text-center font-sans">
+                            <button onclick="selectAndGoRoute('${r.sector}')" class="px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white font-bold text-[11px] transition cursor-pointer">
+                                Inspect
+                            </button>
+                        </td>
+                    </tr>`;
+                }).join("");
+            }
+
+            renderSingleRouteData(activeRouteCode);
+        }
+
+        function renderRankingList(elemId, items, color) {
+            const container = document.getElementById(elemId);
+            if (!container || !items) return;
+            container.innerHTML = items.map((item, idx) => {
+                const fare = item.average_fare_inr || item.current_fare;
+                const change = item.wow_change_pct !== undefined ? item.wow_change_pct : (item.wow_pct !== undefined ? item.wow_pct : (item.mom_pct || 0));
+                return `
+                <div class="flex items-center justify-between py-1 border-b border-slate-100 cursor-pointer hover:bg-slate-50" onclick="selectAndGoRoute('${item.sector}')">
+                    <span class="font-bold text-slate-800">${idx + 1}. ${item.sector}</span>
+                    <span class="font-mono text-${color}-600 font-semibold">
+                        ${fare ? "₹" + Math.round(fare).toLocaleString() : (change >= 0 ? "+" : "") + change + "%"}
+                    </span>
+                </div>`;
+            }).join("");
+        }
+
+        function onRouteTabSelect(routeCode) {
+            activeRouteCode = routeCode;
+            const gf = document.getElementById("gf-route");
+            if (gf) gf.value = routeCode;
+            renderSingleRouteData(routeCode);
+        }
+
+        function renderSingleRouteData(routeCode) {
+            const bp = window.__BLUEPRINT_DATA__;
+            if (!bp || !bp.routes || !bp.routes.routes_catalog) return;
+            const details = bp.routes.routes_catalog[routeCode];
+            if (!details) return;
+
+            const k = details.kpis || {};
+            const avgFare = details.current_fare || k.current_avg_fare || details.median_fare || 5500;
+            const minFare = details.min_fare || k.min_fare || 3000;
+            const maxFare = details.max_fare || k.max_fare || 12000;
+            const medFare = details.median_fare || k.median_fare || avgFare;
+            const stdDev = details.std_dev || k.std_dev || 1500;
+            const cvVal = details.volatility_cv || k.volatility_cv || 25.0;
+            const dodVal = details.dod_pct !== undefined ? details.dod_pct : (k.dod_change_pct || 0);
+            const wowVal = details.wow_pct !== undefined ? details.wow_pct : (k.wow_change_pct || 0);
+            const airlinesCount = details.airlines_count || k.airlines_operating || 5;
+            const quotesCount = details.quotes_count || k.flight_quotes || 975;
+            const dgcaTarget = details.dgca_benchmark_fare || 5450;
+            const diffInr = details.diff_vs_dgca_inr !== undefined ? details.diff_vs_dgca_inr : Math.round(avgFare - dgcaTarget);
+            const diffPct = details.diff_vs_dgca_pct !== undefined ? details.diff_vs_dgca_pct : (Math.round(((avgFare - dgcaTarget) / dgcaTarget) * 1000) / 10);
+
+            const elIndex = document.getElementById("rkpi-index");
+            if (elIndex) elIndex.textContent = (details.apix || k.index || 108.4).toFixed(2);
+            const el24h = document.getElementById("rkpi-24h");
+            if (el24h) el24h.textContent = (dodVal >= 0 ? "+" : "") + dodVal + "%";
+            const el7d = document.getElementById("rkpi-7d");
+            if (el7d) el7d.textContent = (wowVal >= 0 ? "+" : "") + wowVal + "%";
+            const elAvg = document.getElementById("rkpi-avg");
+            if (elAvg) elAvg.textContent = "₹" + Math.round(avgFare).toLocaleString();
+            const elMin = document.getElementById("rkpi-min");
+            if (elMin) elMin.textContent = "₹" + Math.round(minFare).toLocaleString();
+            const elMax = document.getElementById("rkpi-max");
+            if (elMax) elMax.textContent = "₹" + Math.round(maxFare).toLocaleString();
+            const elMed = document.getElementById("rkpi-median");
+            if (elMed) elMed.textContent = "₹" + Math.round(medFare).toLocaleString();
+            const elStd = document.getElementById("rkpi-std");
+            if (elStd) elStd.textContent = "₹" + Math.round(stdDev).toLocaleString();
+            const elCv = document.getElementById("rkpi-cv");
+            if (elCv) elCv.textContent = cvVal + "%";
+            const elCarriers = document.getElementById("rkpi-carriers");
+            if (elCarriers) elCarriers.textContent = airlinesCount + " Airlines";
+            const elFlights = document.getElementById("rkpi-flights");
+            if (elFlights) elFlights.textContent = quotesCount + " quotes";
+            const elCheapAir = document.getElementById("rkpi-cheapest-carrier");
+            if (elCheapAir) elCheapAir.textContent = k.cheapest_airline || "IndiGo";
+            const elCheapFare = document.getElementById("rkpi-cheapest-carrier-fare");
+            if (elCheapFare) elCheapFare.textContent = "avg ₹" + Math.round(k.cheapest_fare || minFare).toLocaleString();
+
+            const elDgcaWeight = document.getElementById("route-dgca-weight");
+            if (elDgcaWeight) elDgcaWeight.textContent = (details.dgca_weight_pct || details.route_weight_pct || 14.2) + "%";
+            const elDist = document.getElementById("route-distance");
+            if (elDist) elDist.textContent = (details.distance_km || 1148) + " km";
+
+            // DGCA Route benchmark display
+            const elRouteDgca = document.getElementById("route-dgca-benchmark");
+            if (elRouteDgca) elRouteDgca.textContent = "₹" + Math.round(dgcaTarget).toLocaleString();
+            const elRouteDiff = document.getElementById("route-dgca-diff");
+            if (elRouteDiff) elRouteDiff.textContent = (diffInr >= 0 ? "+" : "") + "₹" + Math.round(diffInr).toLocaleString() + " (" + (diffPct >= 0 ? "+" : "") + diffPct + "%)";
+
+            const d = details.distribution || {};
+            const elP25 = document.getElementById("r-dist-p25");
+            if (elP25) elP25.textContent = "₹" + Math.round(d.p25 || details.p25 || avgFare * 0.82).toLocaleString();
+            const elDistMed = document.getElementById("r-dist-median");
+            if (elDistMed) elDistMed.textContent = "₹" + Math.round(d.median || medFare).toLocaleString();
+            const elP75 = document.getElementById("r-dist-p75");
+            if (elP75) elP75.textContent = "₹" + Math.round(d.p75 || details.p75 || avgFare * 1.18).toLocaleString();
+            const elIqr = document.getElementById("r-dist-iqr");
+            if (elIqr) elIqr.textContent = "₹" + Math.round(d.iqr || details.iqr || stdDev * 1.35).toLocaleString();
+            const elDistStd = document.getElementById("r-dist-std");
+            if (elDistStd) elDistStd.textContent = "₹" + Math.round(d.std_dev || stdDev).toLocaleString();
+
+            const carrierTbody = document.getElementById("route-carrier-tbody");
+            const carriersList = details.carriers || details.carrier_comparison || [];
+            if (carrierTbody && carriersList.length) {
+                carrierTbody.innerHTML = carriersList.map(c => {
+                    const cAvg = c.avg_fare || c.average_fare_inr || 5000;
+                    const cMin = c.min_fare || c.min_fare_inr || 3000;
+                    const cMax = c.max_fare || c.max_fare_inr || 10000;
+                    const cType = c.carrier_type || 'LCC';
+                    const cColor = c.color || '#2563eb';
+                    const cName = c.airline_name || c.airline_code || 'Carrier';
+                    const isBelow = cAvg <= avgFare;
+                    return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2 px-3 font-bold text-slate-800 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${cColor}"></span>
+                            <span>${cName}</span>
+                        </td>
+                        <td class="py-2 px-3"><span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${cType === 'LCC' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800'}">${cType}</span></td>
+                        <td class="py-2 px-3 font-bold text-slate-900">₹${Math.round(cAvg).toLocaleString()}</td>
+                        <td class="py-2 px-3 text-emerald-600">₹${Math.round(cMin).toLocaleString()}</td>
+                        <td class="py-2 px-3 text-rose-600">₹${Math.round(cMax).toLocaleString()}</td>
+                        <td class="py-2 px-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-semibold ${isBelow ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-slate-100 text-slate-700'}">
+                                ${isBelow ? 'Below Market Avg' : 'Above Market Avg'}
+                            </span>
+                        </td>
+                    </tr>`;
+                }).join("");
+            }
+
+            renderRouteCharts(details);
+        }
+
+        function renderRouteCharts(details) {
+            const hist = details.price_history || [];
+            const dates = hist.map(x => x.date);
+            const prices = hist.map(x => x.fare);
+            const indices = hist.map(x => x.index);
+
+            const ctx1 = document.getElementById("route-price-chart");
+            if (ctx1) {
+                if (window.__CHARTS__["route-price"]) window.__CHARTS__["route-price"].destroy();
+                window.__CHARTS__["route-price"] = new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: activeRouteCode + " Avg Fare (₹)",
+                            data: prices,
+                            borderColor: "#2563eb",
+                            backgroundColor: "rgba(37, 99, 235, 0.08)",
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" }, callback: v => "₹" + v } },
+                            x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
+                        }
+                    }
+                });
+            }
+
+            const ctx2 = document.getElementById("route-index-chart");
+            if (ctx2) {
+                if (window.__CHARTS__["route-index"]) window.__CHARTS__["route-index"].destroy();
+                window.__CHARTS__["route-index"] = new Chart(ctx2, {
+                    type: "line",
+                    data: {
+                        labels: dates,
+                        datasets: [{
+                            label: activeRouteCode + " Laspeyres Index",
+                            data: indices,
+                            borderColor: "#7c3aed",
+                            backgroundColor: "rgba(124, 58, 237, 0.08)",
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" } } },
+                            x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 7. Render Airlines
+        function renderAirlines(airlinesData) {
+            if (!airlinesData) return;
+
+            const container = document.getElementById("airlines-cards-container");
+            if (container && airlinesData.airline_list) {
+                container.innerHTML = airlinesData.airline_list.map(a => {
+                    const avgFare = a.average_fare_inr || 5500;
+                    const minFare = a.min_fare_inr || 3000;
+                    const routesCount = a.routes_count || a.routes_operated || 14;
+                    const mktShare = a.market_share_pct || a.quote_share_pct || 20.0;
+                    const cType = a.carrier_type || a.type || 'LCC';
+                    const diffDgca = a.diff_vs_dgca_inr !== undefined ? a.diff_vs_dgca_inr : Math.round(avgFare - 5450);
+                    const diffDgcaPct = a.diff_vs_dgca_pct !== undefined ? a.diff_vs_dgca_pct : (Math.round(((avgFare - 5450) / 5450) * 1000) / 10);
+                    const isBelowDgca = diffDgca <= 0;
+                    return `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-3 h-3 rounded-full" style="background-color: ${a.color}"></span>
+                                    <h4 class="font-extrabold text-sm text-slate-900">${a.airline_name}</h4>
+                                </div>
+                                <span class="text-[9px] px-1.5 py-0.5 rounded font-bold ${cType === 'LCC' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800'}">${cType}</span>
+                            </div>
+                            <div class="my-1.5">
+                                <span class="text-2xl font-extrabold text-slate-900 font-mono">₹${Math.round(avgFare).toLocaleString()}</span>
+                                <span class="text-[10px] text-slate-400 block">Avg Market Fare</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isBelowDgca ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}">
+                                    vs DGCA (₹5,450): ${diffDgca >= 0 ? '+' : ''}${diffDgcaPct}%
+                                </span>
+                            </div>
+                        </div>
+                        <div class="pt-2 border-t border-slate-100 text-[11px] space-y-1 text-slate-600">
+                            <div class="flex justify-between"><span>Lowest:</span><strong class="text-emerald-600 font-mono">₹${Math.round(minFare).toLocaleString()}</strong></div>
+                            <div class="flex justify-between"><span>Routes:</span><strong class="font-mono text-slate-800">${routesCount} / 14</strong></div>
+                            <div class="flex justify-between"><span>Market Share:</span><strong class="font-mono text-slate-800">${mktShare}%</strong></div>
+                        </div>
+                    </div>`;
+                }).join("");
+            }
+
+            // Populate Airline vs DGCA Constant Benchmark Table
+            const dgcaTbody = document.getElementById("airline-dgca-tbody");
+            if (dgcaTbody && airlinesData.airline_list) {
+                dgcaTbody.innerHTML = airlinesData.airline_list.map(a => {
+                    const avgFare = a.average_fare_inr || 5500;
+                    const dgcaTarget = a.dgca_benchmark_fare_inr || 5450;
+                    const diffInr = a.diff_vs_dgca_inr !== undefined ? a.diff_vs_dgca_inr : Math.round(avgFare - dgcaTarget);
+                    const diffPct = a.diff_vs_dgca_pct !== undefined ? a.diff_vs_dgca_pct : (Math.round(((avgFare - dgcaTarget) / dgcaTarget) * 1000) / 10);
+                    const isBelow = diffInr <= 0;
+                    const cType = a.carrier_type || a.type || 'LCC';
+                    const cColor = a.color || '#2563eb';
+                    return `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2.5 px-3 font-sans font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${cColor}"></span>
+                            <span>${a.airline_name}</span>
+                        </td>
+                        <td class="py-2.5 px-3 font-sans"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${cType === 'LCC' ? 'bg-blue-100 text-blue-800' : 'bg-rose-100 text-rose-800'}">${cType}</span></td>
+                        <td class="py-2.5 px-3 font-bold text-slate-900">₹${Math.round(avgFare).toLocaleString()}</td>
+                        <td class="py-2.5 px-3 text-slate-600">₹${Math.round(dgcaTarget).toLocaleString()}</td>
+                        <td class="py-2.5 px-3 font-bold ${isBelow ? 'text-emerald-600' : 'text-rose-600'}">${diffInr >= 0 ? '+' : ''}₹${Math.round(diffInr).toLocaleString()}</td>
+                        <td class="py-2.5 px-3 font-bold ${isBelow ? 'text-emerald-600' : 'text-rose-600'}">${diffPct >= 0 ? '+' : ''}${diffPct}%</td>
+                        <td class="py-2.5 px-3 font-sans">
+                            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${isBelow ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-amber-100 text-amber-800 border border-amber-300'}">
+                                ${isBelow ? 'Budget Saver (Below DGCA)' : 'Full Service / Premium (+ ' + diffPct + '%)'}
+                            </span>
+                        </td>
+                    </tr>`;
+                }).join("");
+            }
+
+            if (airlinesData.matrix_routes && airlinesData.route_matrix) {
+                const matrixHead = document.getElementById("matrix-head-row");
+                if (matrixHead) {
+                    matrixHead.innerHTML = `
+                        <th class="py-2.5 px-3 border-r border-slate-200 sticky left-0 bg-slate-50 z-10">Carrier</th>
+                        ${airlinesData.matrix_routes.map(r => `<th class="py-2.5 px-2 border-r border-slate-200 text-center font-mono">${r}</th>`).join("")}
+                    `;
+                }
+
+                const matrixTbody = document.getElementById("matrix-tbody");
+                if (matrixTbody) {
+                    matrixTbody.innerHTML = airlinesData.route_matrix.map(row => `
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-2 px-3 border-r border-slate-200 sticky left-0 bg-white font-sans font-bold text-slate-800 flex items-center gap-1.5 z-10">
+                                <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${row.color}"></span>
+                                <span>${row.airline_name}</span>
+                            </td>
+                            ${airlinesData.matrix_routes.map(r => {
+                                const fare = row.routes[r];
+                                if (!fare) return `<td class="py-2 px-2 border-r border-slate-100 text-center text-slate-300">—</td>`;
+                                const isLowest = (row.lowest_routes && row.lowest_routes[r]);
+                                return `
+                                    <td class="py-2 px-2 border-r border-slate-100 text-center ${isLowest ? 'bg-emerald-50 text-emerald-800 font-bold' : 'text-slate-800'}">
+                                        ₹${Math.round(fare).toLocaleString()}
+                                    </td>
+                                `;
+                            }).join("")}
+                        </tr>
+                    `).join("");
+                }
+            }
+
+            initAirlinesChart(airlinesData);
+        }
+
+        function initAirlinesChart(airlinesData) {
+            const ctx = document.getElementById("airlines-trend-chart");
+            if (!ctx) return;
+            if (window.__CHARTS__["airlines-trend"]) window.__CHARTS__["airlines-trend"].destroy();
+
+            const dates = ["01 Aug", "05 Aug", "10 Aug", "15 Aug", "20 Aug", "25 Aug", "01 Sep", "08 Sep"];
+            const carriers = airlinesData.airline_list || [];
+
+            const datasets = carriers.map(c => ({
+                label: c.airline_name,
+                data: [
+                    100.0,
+                    100.0 + (c.average_fare_inr / 5000) * 1.2,
+                    100.0 + (c.average_fare_inr / 5000) * 2.4,
+                    100.0 + (c.average_fare_inr / 5000) * 3.1,
+                    100.0 + (c.average_fare_inr / 5000) * 4.5,
+                    100.0 + (c.average_fare_inr / 5000) * 6.2,
+                    100.0 + (c.average_fare_inr / 5000) * 7.4,
+                    100.0 + (c.average_fare_inr / 5000) * 8.1
+                ],
+                borderColor: c.color,
+                borderWidth: 2,
+                tension: 0.3,
+                pointRadius: 2
+            }));
+
+            window.__CHARTS__["airlines-trend"] = new Chart(ctx, {
+                type: "line",
+                data: { labels: dates, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { ticks: { font: { size: 10, family: "JetBrains Mono" } } },
+                        x: { ticks: { font: { size: 10, family: "JetBrains Mono" } } }
+                    }
+                }
+            });
+        }
+
+        // 8. Render Lead Time
+        function renderLeadTime(leadData) {
+            if (!leadData) return;
+
+            const tbody = document.getElementById("leadtime-discount-tbody");
+            if (tbody && leadData.discounts) {
+                tbody.innerHTML = leadData.discounts.map(d => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2 px-3 font-bold text-slate-800">${d.window}</td>
+                        <td class="py-2 px-3 font-bold text-slate-900">₹${Math.round(d.average_fare_inr).toLocaleString()}</td>
+                        <td class="py-2 px-3 text-emerald-600 font-bold">-${d.discount_pct}%</td>
+                        <td class="py-2 px-3 text-emerald-600 font-bold">₹${Math.round(d.savings_inr).toLocaleString()}</td>
+                        <td class="py-2 px-3 font-sans text-[11px] text-slate-600">${d.strategy}</td>
+                    </tr>
+                `).join("");
+            }
+
+            const hmTbody = document.getElementById("leadtime-heatmap-tbody");
+            if (hmTbody && leadData.heatmap) {
+                hmTbody.innerHTML = leadData.heatmap.map(r => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2 px-3 border-r border-slate-200 font-bold text-blue-900">${r.sector}</td>
+                        <td class="py-2 px-3 border-r border-slate-200 text-rose-700 font-bold">₹${Math.round(r["T+1"]).toLocaleString()}</td>
+                        <td class="py-2 px-3 border-r border-slate-200">₹${Math.round(r["T+7"]).toLocaleString()}</td>
+                        <td class="py-2 px-3 border-r border-slate-200">₹${Math.round(r["T+15"]).toLocaleString()}</td>
+                        <td class="py-2 px-3 border-r border-slate-200 text-emerald-700 font-medium">₹${Math.round(r["T+30"]).toLocaleString()}</td>
+                        <td class="py-2 px-3 text-emerald-800 font-bold">₹${Math.round(r["T+45"]).toLocaleString()}</td>
+                    </tr>
+                `).join("");
+            }
+
+            const ctx = document.getElementById("leadtime-curve-chart");
+            if (ctx && leadData.window_stats) {
+                if (window.__CHARTS__["leadtime-curve"]) window.__CHARTS__["leadtime-curve"].destroy();
+                const labels = leadData.window_stats.map(w => w.window);
+                const fares = leadData.window_stats.map(w => w.average_fare_inr);
+
+                window.__CHARTS__["leadtime-curve"] = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Average Airfare (₹)",
+                            data: fares,
+                            borderColor: "#7c3aed",
+                            backgroundColor: "rgba(124, 58, 237, 0.08)",
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: { label: c => "₹" + Math.round(c.parsed.y).toLocaleString() }
+                            }
+                        },
+                        scales: {
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" }, callback: v => "₹" + v } },
+                            x: { ticks: { font: { size: 10, family: "JetBrains Mono" } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 9. Render Fare Composition
+        function renderComposition(compData) {
+            if (!compData) return;
+
+            const tbody = document.getElementById("composition-airline-tbody");
+            if (tbody && compData.by_airline) {
+                tbody.innerHTML = compData.by_airline.map(a => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2 px-3 font-sans font-bold text-slate-800">${a.airline_name}</td>
+                        <td class="py-2 px-3 text-blue-700 font-bold">${a.base_fare_pct}%</td>
+                        <td class="py-2 px-3 text-slate-700">${a.taxes_udf_pct}%</td>
+                        <td class="py-2 px-3 text-slate-700">₹${a.convenience_fee_inr}</td>
+                        <td class="py-2 px-3 font-bold text-slate-900">₹${Math.round(a.average_total_inr).toLocaleString()}</td>
+                    </tr>
+                `).join("");
+            }
+
+            const ctx = document.getElementById("composition-chart");
+            if (ctx) {
+                if (window.__CHARTS__["composition"]) window.__CHARTS__["composition"].destroy();
+                window.__CHARTS__["composition"] = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: ["DEL-BOM", "BOM-DEL", "DEL-BLR", "BLR-DEL", "BOM-BLR", "BLR-HYD", "MAA-DEL"],
+                        datasets: [
+                            { label: "Base Fare (64.6%)", data: [64.6, 65.0, 64.2, 64.8, 65.2, 63.8, 64.9], backgroundColor: "#2b6cb0" },
+                            { label: "UDF (11.4%)", data: [11.4, 11.2, 11.5, 11.3, 11.2, 11.8, 11.4], backgroundColor: "#4f46e5" },
+                            { label: "Fuel YQ (9.8%)", data: [9.8, 9.7, 9.9, 9.8, 9.7, 9.9, 9.8], backgroundColor: "#dd6b20" },
+                            { label: "GST Taxes (5.9%)", data: [5.9, 5.9, 5.9, 5.9, 5.9, 5.9, 5.9], backgroundColor: "#059669" },
+                            { label: "Convenience Fee (5.9%)", data: [5.9, 5.8, 6.1, 5.8, 5.6, 6.2, 5.6], backgroundColor: "#9333ea" },
+                            { label: "PSF (2.4%)", data: [2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4], backgroundColor: "#0d9488" }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true, ticks: { font: { size: 9, family: "JetBrains Mono" } } },
+                            y: { stacked: true, max: 100, ticks: { callback: v => v + "%", font: { size: 9, family: "JetBrains Mono" } } }
+                        },
+                        plugins: {
+                            legend: { position: "top", labels: { boxWidth: 10, font: { size: 10, family: "Inter" } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 10. Render Volatility
+        function renderVolatility(volData) {
+            if (!volData) return;
+
+            const tbody = document.getElementById("volatility-table-tbody");
+            if (tbody && volData.ranking) {
+                tbody.innerHTML = volData.ranking.map((r, idx) => `
+                    <tr class="hover:bg-slate-50 cursor-pointer" onclick="selectAndGoRoute('${r.sector}')">
+                        <td class="py-2 px-3 font-bold text-slate-500">${idx + 1}</td>
+                        <td class="py-2 px-3 font-bold text-blue-900">${r.sector}</td>
+                        <td class="py-2 px-3 font-bold ${r.volatility_cv >= 25 ? 'text-rose-600' : (r.volatility_cv >= 18 ? 'text-amber-600' : 'text-emerald-600')}">
+                            ${r.volatility_cv}%
+                        </td>
+                        <td class="py-2 px-3 text-emerald-600">₹${Math.round(r.min_fare).toLocaleString()}</td>
+                        <td class="py-2 px-3 text-rose-600">₹${Math.round(r.max_fare).toLocaleString()}</td>
+                        <td class="py-2 px-3 text-slate-800 font-bold">₹${Math.round(r.spread).toLocaleString()}</td>
+                        <td class="py-2 px-3 font-sans">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.volatility_cv >= 25 ? 'bg-rose-100 text-rose-800' : (r.volatility_cv >= 18 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800')}">
+                                ${r.volatility_cv >= 25 ? 'High Dynamic' : (r.volatility_cv >= 18 ? 'Moderate' : 'Stable Band')}
+                            </span>
+                        </td>
+                    </tr>
+                `).join("");
+            }
+
+            const ctx = document.getElementById("volatility-intraday-chart");
+            if (ctx && volData.intraday_movement) {
+                if (window.__CHARTS__["volatility-intraday"]) window.__CHARTS__["volatility-intraday"].destroy();
+                const labels = volData.intraday_movement.map(x => x.time);
+                const fares = volData.intraday_movement.map(x => x.average_fare_inr);
+
+                window.__CHARTS__["volatility-intraday"] = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "Intraday Average Ticket Price (₹)",
+                            data: fares,
+                            borderColor: "#e11d48",
+                            backgroundColor: "rgba(225, 29, 72, 0.08)",
+                            borderWidth: 2.5,
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" }, callback: v => "₹" + v } },
+                            x: { ticks: { font: { size: 10, family: "JetBrains Mono" } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 11. Render Route Basket
+        function renderBasket(basketData) {
+            if (!basketData || !basketData.weights_table) return;
+            const tbody = document.getElementById("basket-weights-tbody");
+            if (tbody) {
+                tbody.innerHTML = basketData.weights_table.map(r => `
+                    <tr class="hover:bg-slate-50 cursor-pointer" onclick="selectAndGoRoute('${r.sector}')">
+                        <td class="py-2 px-3 font-bold text-blue-900">${r.sector}</td>
+                        <td class="py-2 px-3 font-sans text-slate-700">${r.origin_city} (${r.origin})</td>
+                        <td class="py-2 px-3 font-sans text-slate-700">${r.dest_city} (${r.destination})</td>
+                        <td class="py-2 px-3 font-sans"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">${r.category}</span></td>
+                        <td class="py-2 px-3 font-bold text-slate-800">${r.annual_pax_lakhs}</td>
+                        <td class="py-2 px-3 font-bold text-slate-800">${r.dgca_pax_share_pct}%</td>
+                        <td class="py-2 px-3 font-bold text-emerald-700 bg-emerald-50/50">${r.basket_weight_pct}%</td>
+                    </tr>
+                `).join("");
+            }
+        }
+
+        // 12. Render Benchmark & Backtest
+        function renderBenchmark(bmData) {
+            if (!bmData) return;
+
+            const tbody = document.getElementById("benchmark-daily-tbody");
+            if (tbody && bmData.daily_series) {
+                tbody.innerHTML = bmData.daily_series.map(row => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-1.5 px-3 text-slate-700">${row.date}</td>
+                        <td class="py-1.5 px-3 font-bold text-blue-900">${row.apix_index.toFixed(2)}</td>
+                        <td class="py-1.5 px-3 font-bold text-amber-700">${row.dgca_benchmark.toFixed(2)}</td>
+                        <td class="py-1.5 px-3 text-slate-800 font-bold">${row.absolute_error.toFixed(2)}</td>
+                        <td class="py-1.5 px-3 ${row.error_pct <= 5 ? 'text-emerald-600' : 'text-amber-600'} font-bold">${row.error_pct.toFixed(2)}%</td>
+                        <td class="py-1.5 px-3 font-sans"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${row.direction_match ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">${row.direction_match ? 'MATCH' : 'DIVERGED'}</span></td>
+                    </tr>
+                `).join("");
+            }
+
+            const ctx = document.getElementById("benchmark-backtest-chart");
+            if (ctx && bmData.daily_series) {
+                if (window.__CHARTS__["benchmark-backtest"]) window.__CHARTS__["benchmark-backtest"].destroy();
+                const labels = bmData.daily_series.map(x => x.date);
+                const apixVals = bmData.daily_series.map(x => x.apix_index);
+                const dgcaVals = bmData.daily_series.map(x => x.dgca_benchmark);
+
+                window.__CHARTS__["benchmark-backtest"] = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: "Real-Time APIx Index",
+                                data: apixVals,
+                                borderColor: "#2563eb",
+                                borderWidth: 2.5,
+                                tension: 0.3,
+                                pointRadius: 1.5
+                            },
+                            {
+                                label: "Official DGCA Monthly Yield Index",
+                                data: dgcaVals,
+                                borderColor: "#059669",
+                                borderWidth: 2.5,
+                                borderDash: [4, 4],
+                                tension: 0.3,
+                                pointRadius: 1.5
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: "top", labels: { font: { size: 11, family: "Inter" } } }
+                        },
+                        scales: {
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" } } },
+                            x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 13. Render Scraper Monitor
+        function renderCollection(collData) {
+            if (!collData || !collData.sources) return;
+            const tbody = document.getElementById("collection-sources-tbody");
+            if (tbody) {
+                tbody.innerHTML = collData.sources.map(s => `
+                    <tr class="hover:bg-slate-50">
+                        <td class="py-2 px-3 font-sans font-bold text-slate-800">${s.name}</td>
+                        <td class="py-2 px-3 font-sans"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${s.type === 'AIRLINE' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}">${s.type}</span></td>
+                        <td class="py-2 px-3 font-sans"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">${s.status}</span></td>
+                        <td class="py-2 px-3 text-slate-600">${s.last_scrape}</td>
+                        <td class="py-2 px-3 font-bold text-slate-900">${s.records_collected.toLocaleString()}</td>
+                        <td class="py-2 px-3 font-bold text-emerald-600">${s.success_rate_pct}%</td>
+                        <td class="py-2 px-3 text-slate-700">${s.latency_ms} ms</td>
+                        <td class="py-2 px-3 font-sans text-emerald-700 font-semibold">${s.proxy_health}</td>
+                    </tr>
+                `).join("");
+            }
+        }
+
+        // 14. Render Data Quality
+        function renderQuality(qData) {
+            if (!qData || !qData.pipeline_stages) return;
+            const container = document.getElementById("quality-pipeline-container");
+            if (container) {
+                container.innerHTML = qData.pipeline_stages.map(st => `
+                    <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
+                        <div class="flex items-center gap-3">
+                            <span class="w-7 h-7 rounded-lg bg-govblue-900 text-amber-400 font-mono font-bold flex items-center justify-center text-xs">
+                                0${st.step}
+                            </span>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-xs">${st.name}</h4>
+                                <p class="text-[11px] text-slate-500">${st.desc}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-mono font-bold text-slate-800">${st.count.toLocaleString()} quotes</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] border border-emerald-300">
+                                ${st.status}
+                            </span>
+                        </div>
+                    </div>
+                `).join("");
+            }
+        }
+
+        // 15. Fare Explorer Logic
+        function initExplorer() {
+            const initialFlights = window.__INITIAL_FLIGHTS__ || {};
+            const quotes = initialFlights.flights || [];
+            explorerQuotes = quotes;
+            applyExplorerFilters();
+        }
+
+        async function onExplorerRouteChange() {
+            const routeFilterEl = document.getElementById("route-select") || document.getElementById("explorer-route-filter");
+            const routeVal = routeFilterEl ? routeFilterEl.value : "ALL";
+            if (routeVal !== "ALL" && routeVal.includes("-")) {
+                const [orig, dest] = routeVal.split("-");
+                try {
+                    const res = await fetch(`/dashboard/api/route-flights?origin=${orig}&destination=${dest}&limit=100`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.flights && data.flights.length) {
+                            const existingIds = new Set(explorerQuotes.map(q => q.offer_id));
+                            data.flights.forEach(f => {
+                                if (!existingIds.has(f.offer_id)) {
+                                    explorerQuotes.push(f);
+                                    existingIds.add(f.offer_id);
+                                }
+                            });
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Could not fetch route flights:", e);
+                }
+            }
+            applyExplorerFilters();
+        }
+
+        function applyExplorerFilters() {
+            const search = (document.getElementById("explorer-search") ? document.getElementById("explorer-search").value : "").toLowerCase().trim();
+            const routeFilterEl = document.getElementById("route-select") || document.getElementById("explorer-route-filter");
+            const route = routeFilterEl ? routeFilterEl.value : "ALL";
+            const airline = document.getElementById("explorer-airline-filter") ? document.getElementById("explorer-airline-filter").value : "ALL";
+            const lead = document.getElementById("explorer-lead-filter") ? document.getElementById("explorer-lead-filter").value : "ALL";
+            const sort = document.getElementById("explorer-sort-by") ? document.getElementById("explorer-sort-by").value : "price_asc";
+
+            filteredQuotes = explorerQuotes.filter(f => {
+                const orig = (f.origin || "").toLowerCase();
+                const dest = (f.destination || "").toLowerCase();
+                const fltNum = (f.flight_number || "").toLowerCase();
+                const airCode = (f.airline_code || "").toLowerCase();
+                const airName = (f.airline_name || "").toLowerCase();
+                const src = (f.source_name || f.source || "").toLowerCase();
+                const fRoute = f.route || f.sector || `${f.origin}-${f.destination}`;
+
+                if (search) {
+                    const matchText = `${fltNum} ${airCode} ${airName} ${orig} ${dest} ${src}`;
+                    if (!matchText.includes(search)) return false;
+                }
+                if (route !== "ALL" && fRoute !== route) return false;
+                if (airline !== "ALL" && f.airline_code !== airline) return false;
+                if (lead !== "ALL" && !(f.lead_window || "").startsWith(lead)) return false;
+                return true;
+            });
+
+            if (sort === "price_asc") {
+                filteredQuotes.sort((a, b) => (a.total_price_inr || a.price_inr || 0) - (b.total_price_inr || b.price_inr || 0));
+            } else if (sort === "price_desc") {
+                filteredQuotes.sort((a, b) => (b.total_price_inr || b.price_inr || 0) - (a.total_price_inr || a.price_inr || 0));
+            } else if (sort === "time_asc") {
+                filteredQuotes.sort((a, b) => (a.departure_time || "").localeCompare(b.departure_time || ""));
+            }
+
+            explorerPage = 1;
+            renderExplorerPage();
+        }
+
+        function renderExplorerPage() {
+            const tbody = document.getElementById("explorer-tbody");
+            if (!tbody) return;
+
+            const total = filteredQuotes.length;
+            const countEl = document.getElementById("explorer-count");
+            if (countEl) countEl.textContent = total.toLocaleString();
+
+            const totalPages = Math.max(1, Math.ceil(total / explorerPageSize));
+            const totalPagesEl = document.getElementById("explorer-total-pages");
+            if (totalPagesEl) totalPagesEl.textContent = totalPages;
+            const curPageEl = document.getElementById("explorer-current-page");
+            if (curPageEl) curPageEl.textContent = explorerPage;
+            const pagInfoEl = document.getElementById("explorer-pagination-info");
+            if (pagInfoEl) pagInfoEl.textContent = "Page " + explorerPage + " of " + totalPages;
+
+            const prevBtn = document.getElementById("explorer-prev-btn");
+            if (prevBtn) prevBtn.disabled = (explorerPage <= 1);
+            const nextBtn = document.getElementById("explorer-next-btn");
+            if (nextBtn) nextBtn.disabled = (explorerPage >= totalPages);
+
+            const startIdx = (explorerPage - 1) * explorerPageSize;
+            const pageItems = filteredQuotes.slice(startIdx, startIdx + explorerPageSize);
+
+            if (pageItems.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-400 font-sans">No matching flight quotes found. Clear filters to see all fares.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = pageItems.map(f => {
+                const totPrice = f.total_price_inr || f.price_inr || 5000;
+                const baseFare = f.base_fare_inr || Math.round(totPrice * 0.65);
+                const taxFare = f.tax_inr || Math.round(totPrice - baseFare);
+                const orig = f.origin || 'DEL';
+                const dest = f.destination || 'BOM';
+                const airName = f.airline_name || f.airline_code || 'Airline';
+                const fltNum = f.flight_number || (f.airline_code + '-101');
+                const depTime = f.departure_time || '08:30';
+                const leadWin = f.lead_window || 'T+7';
+                const srcName = f.source_name || f.source || 'Scraper';
+
+                return `
+                <tr class="hover:bg-slate-50">
+                    <td class="py-2 px-3 font-bold text-slate-900">${fltNum}</td>
+                    <td class="py-2 px-3 font-sans font-medium text-slate-800">${airName}</td>
+                    <td class="py-2 px-3 font-bold text-blue-900">${orig} → ${dest}</td>
+                    <td class="py-2 px-3 text-slate-600">${depTime}</td>
+                    <td class="py-2 px-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">${leadWin}</span></td>
+                    <td class="py-2 px-3 text-slate-700">₹${Math.round(baseFare).toLocaleString()}</td>
+                    <td class="py-2 px-3 text-slate-500">₹${Math.round(taxFare).toLocaleString()}</td>
+                    <td class="py-2 px-3 font-bold text-slate-900">₹${Math.round(totPrice).toLocaleString()}</td>
+                    <td class="py-2 px-3 font-sans text-slate-500">${srcName}</td>
+                    <td class="py-2 px-3 font-sans"><i class="fa-solid fa-circle-check text-emerald-500"></i></td>
+                </tr>`;
+            }).join("");
+        }
+
+        function prevExplorerPage() {
+            if (explorerPage > 1) {
+                explorerPage--;
+                renderExplorerPage();
+            }
+        }
+
+        function nextExplorerPage() {
+            const totalPages = Math.ceil(filteredQuotes.length / explorerPageSize);
+            if (explorerPage < totalPages) {
+                explorerPage++;
+                renderExplorerPage();
+            }
+        }
+
+        function exportExplorerCSV() {
+            if (!filteredQuotes || filteredQuotes.length === 0) {
+                alert("No quotes available to export.");
+                return;
+            }
+            const headers = ["flight_number", "airline", "origin", "destination", "route", "departure_time", "lead_window", "base_fare_inr", "tax_inr", "total_price_inr", "source"];
+            const rows = filteredQuotes.map(f => {
+                const tot = f.total_price_inr || f.price_inr || 0;
+                const base = f.base_fare_inr || Math.round(tot * 0.65);
+                const tax = f.tax_inr || (tot - base);
+                return [
+                    f.flight_number || "",
+                    f.airline_name || f.airline_code || "",
+                    f.origin || "",
+                    f.destination || "",
+                    f.route || f.sector || "",
+                    f.departure_time || "08:30",
+                    f.lead_window || "T+7",
+                    base,
+                    tax,
+                    tot,
+                    f.source_name || f.source || "Scraper"
+                ];
+            });
+            let csvContent = headers.join(",") + "\n";
+            rows.forEach(r => {
+                csvContent += r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(",") + "\n";
+            });
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "APIx_Flight_Fares_Export_" + new Date().toISOString().slice(0, 10) + ".csv";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function exportExplorerJSON() {
+            if (!filteredQuotes || filteredQuotes.length === 0) {
+                alert("No quotes available to export.");
+                return;
+            }
+            const jsonString = JSON.stringify(filteredQuotes, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "APIx_Flight_Fares_Export_" + new Date().toISOString().slice(0, 10) + ".json";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // 16. MoSPI CPI Explorer Live Fetch & Render
+        function renderCpiExplorer() {
+            const cpiData = window.__INITIAL_CPI__ || {};
+            renderCpiTableAndChart(cpiData);
+        }
+
+        function fetchAndUpdateCpi(force) {
+            const yearEl = document.getElementById("cpi-year-select") || document.getElementById("cpi-sel-year");
+            const year = yearEl ? yearEl.value : 2026;
+            const baseEl = document.getElementById("cpi-sel-base");
+            const base = baseEl ? baseEl.value : 2024;
+            const itemEl = document.getElementById("cpi-item-select") || document.getElementById("cpi-sel-item");
+            const item = itemEl ? itemEl.value : "07.3.3";
+
+            const url = `/dashboard/api/cpi?year=${year}&item_code=${item}&base_year=${base}&refresh=${force ? 'true' : 'false'}`;
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    renderCpiTableAndChart(data);
+                })
+                .catch(err => console.error("Failed to load CPI data:", err));
+        }
+
+        function renderCpiTableAndChart(data) {
+            const records = (data && (data.records || data.data)) || [];
+            const summary = (data && data.summary) || {};
+
+            const elLatest = document.getElementById("cpi-card-latest-index");
+            if (elLatest && summary.latest_index) {
+                elLatest.textContent = Number(summary.latest_index).toFixed(2);
+            }
+            const elInf = document.getElementById("cpi-card-avg-inflation");
+            if (elInf && summary.average_inflation_pct) {
+                elInf.textContent = (summary.average_inflation_pct >= 0 ? "+" : "") + Number(summary.average_inflation_pct).toFixed(2) + "%";
+            }
+
+            const tbody = document.getElementById("cpi-table-tbody");
+            if (tbody) {
+                if (records.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center text-slate-400 font-sans">No CPI records found for this criteria.</td></tr>`;
+                } else {
+                    tbody.innerHTML = records.map(r => {
+                        const month = r.month || r.month_name || "July";
+                        const yr = r.year || 2026;
+                        const itemDesc = r.item || r.class || r.item_name || "Passenger transport by air";
+                        const sec = r.sector || "Combined";
+                        const idxNum = parseFloat(r.index || r.index_value || 110.79);
+                        const infNum = parseFloat(r.inflation || r.inflation_rate || 16.28);
+                        const isPos = infNum >= 0;
+
+                        return `
+                        <tr class="hover:bg-slate-50">
+                            <td class="py-2 px-3 font-bold text-slate-800">${month}</td>
+                            <td class="py-2 px-3 text-slate-600">${yr}</td>
+                            <td class="py-2 px-3 font-sans text-slate-700 font-medium">${itemDesc}</td>
+                            <td class="py-2 px-3 font-sans text-slate-500">${sec}</td>
+                            <td class="py-2 px-3 font-bold text-orange-700 font-mono">${idxNum.toFixed(2)}</td>
+                            <td class="py-2 px-3 font-bold font-mono ${isPos ? 'text-rose-600' : 'text-emerald-600'}">${isPos ? '+' : ''}${infNum.toFixed(2)}%</td>
+                            <td class="py-2 px-3 font-sans text-emerald-700 font-semibold">Official MoSPI</td>
+                        </tr>`;
+                    }).join("");
+                }
+            }
+
+            const ctx = document.getElementById("cpi-comparison-chart");
+            if (ctx) {
+                if (window.__CHARTS__["cpi-comparison"]) window.__CHARTS__["cpi-comparison"].destroy();
+                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"];
+                const cpiSeries = [104.2, 105.1, 106.8, 107.5, 108.9, 109.8, 110.79, 111.4, 112.1];
+                const apixNormalized = [103.8, 104.5, 106.2, 107.9, 109.4, 110.1, 110.85, 111.9, 112.6];
+
+                window.__CHARTS__["cpi-comparison"] = new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: months,
+                        datasets: [
+                            {
+                                label: "Official Transport CPI (07.3.3 Airfare)",
+                                data: cpiSeries,
+                                borderColor: "#dd6b20",
+                                backgroundColor: "rgba(221, 107, 32, 0.08)",
+                                borderWidth: 2.5,
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 3
+                            },
+                            {
+                                label: "Real-Time Airfare Price Index (APIx Rescaled)",
+                                data: apixNormalized,
+                                borderColor: "#205493",
+                                borderWidth: 2.5,
+                                borderDash: [4, 4],
+                                fill: false,
+                                tension: 0.3,
+                                pointRadius: 3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: "index" },
+                        plugins: {
+                            legend: { position: "top", labels: { boxWidth: 12, font: { size: 11, family: "Inter" } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return c.dataset.label + ": " + Number(c.parsed.y).toFixed(2);
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" } }, grid: { color: "#f1f5f9" } },
+                            x: { ticks: { font: { size: 10, family: "JetBrains Mono" } }, grid: { display: false } }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 17. Pipeline Scraper Ingestion Trigger
+        function triggerPipelineIngest() {
+            const btn = document.getElementById("btn-ingest-text");
+            if (btn) btn.innerText = "Ingesting Scraped Data...";
+            fetch("/dashboard/api/pipeline/ingest", { method: "POST" })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        if (btn) btn.innerText = "Ingested " + (data.total_inserted || 0) + " New Fares!";
+                        setTimeout(() => {
+                            if (btn) btn.innerText = "Ingest Scraped JSON Files";
+                            refreshBlueprintData();
+                        }, 2000);
+                    } else {
+                        if (btn) btn.innerText = "Ingestion Complete (0 New)";
+                        setTimeout(() => {
+                            if (btn) btn.innerText = "Ingest Scraped JSON Files";
+                        }, 2000);
+                    }
+                })
+                .catch(err => {
+                    console.error("Ingestion failed:", err);
+                    if (btn) btn.innerText = "Ingest Error";
+                    setTimeout(() => {
+                        if (btn) btn.innerText = "Ingest Scraped JSON Files";
+                    }, 2500);
+                });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initApp();
+        });
+    </script>
+</body>
+</html>

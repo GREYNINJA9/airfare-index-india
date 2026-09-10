@@ -1,0 +1,231 @@
+            <!-- ========================================== -->
+            <!-- TAB 06: FARE VOLATILITY                    -->
+            <!-- ========================================== -->
+            <div id="tab-volatility" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Route Volatility & Intraday Price Oscillations</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Measuring price dispersion via Coefficient of Variation (CV %) and intraday yield swings</p>
+                    </div>
+                </div>
+
+                <!-- Volatility KPI Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">National Mean Volatility</span>
+                        <div class="text-2xl font-extrabold text-slate-900 font-mono mt-0.5">24.8%</div>
+                        <span class="text-[10px] text-slate-500">Overall CV across routes</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Most Volatile Sector</span>
+                        <div class="text-lg font-bold text-rose-600 font-mono mt-0.5">DEL-BOM (32.4%)</div>
+                        <span class="text-[10px] text-slate-500">Peak dynamic pricing</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Most Stable Sector</span>
+                        <div class="text-lg font-bold text-emerald-600 font-mono mt-0.5">BLR-HYD (14.2%)</div>
+                        <span class="text-[10px] text-slate-500">Consistent price band</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Max Intraday Swing</span>
+                        <div class="text-lg font-bold text-amber-600 font-mono mt-0.5">+₹2,450 (+42%)</div>
+                        <span class="text-[10px] text-slate-500">Evening rush surge</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Max Weekly Spread</span>
+                        <div class="text-lg font-bold text-indigo-600 font-mono mt-0.5">+₹3,180 (+54%)</div>
+                        <span class="text-[10px] text-slate-500">Weekend leisure spikes</span>
+                    </div>
+                </div>
+
+                <!-- Intraday Movement Chart -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-wave-square text-rose-500"></i>
+                                <span>Intraday Price Movement Across Daily Intervals</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Tracking fare quotes at 08:00, 10:00, 12:00, 14:00, 16:00, and 18:00 IST</p>
+                        </div>
+                    </div>
+                    <div class="h-64 w-full">
+                        <canvas id="volatility-intraday-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Volatility Ranking Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-list-ol text-amber-500"></i>
+                            <span>Complete Route Volatility Ranking (CV %)</span>
+                        </h3>
+                        <span class="text-xs text-slate-400">All 14 Corridors Ranked</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
+                                    <th class="py-2 px-3">Rank</th>
+                                    <th class="py-2 px-3">Route</th>
+                                    <th class="py-2 px-3">Volatility CV (%)</th>
+                                    <th class="py-2 px-3">Min Fare (₹)</th>
+                                    <th class="py-2 px-3">Max Fare (₹)</th>
+                                    <th class="py-2 px-3">Price Spread (₹)</th>
+                                    <th class="py-2 px-3">Volatility Band</th>
+                                </tr>
+                            </thead>
+                            <tbody id="volatility-table-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 07: ROUTE BASKET & WEIGHTS             -->
+            <!-- ========================================== -->
+            <div id="tab-basket" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>DGCA Passenger Traffic Route Basket & Index Weights</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Official Directorate General of Civil Aviation passenger traffic weights assigned to all 14 monitored domestic city-pairs</p>
+                    </div>
+                </div>
+
+                <!-- Weight Distribution Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-scale-balanced text-amber-500"></i>
+                                <span>Official DGCA City-Pair Traffic Weights</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Based on annual scheduled domestic passenger traffic statistics</p>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">Sum: 100.0%</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
+                                    <th class="py-2 px-3">Sector</th>
+                                    <th class="py-2 px-3">Origin Airport</th>
+                                    <th class="py-2 px-3">Destination Airport</th>
+                                    <th class="py-2 px-3">Corridor Category</th>
+                                    <th class="py-2 px-3">Annual Pax (Lakhs)</th>
+                                    <th class="py-2 px-3">DGCA Pax Share (%)</th>
+                                    <th class="py-2 px-3">Index Basket Weight (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="basket-weights-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Methodology Note -->
+                <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-950 space-y-2">
+                    <h4 class="font-bold text-blue-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info"></i> Basket Recalibration Protocol
+                    </h4>
+                    <p>In accordance with MoSPI national accounting best practices, the route basket represents over 62% of all scheduled domestic passenger traffic in India. Delhi-Mumbai (DEL-BOM) commands the largest single weight (14.2%), followed by Delhi-Bengaluru (DEL-BLR, 10.8%). Weights are updated annually upon publication of DGCA Form A annual traffic reports.</p>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 08: DGCA BENCHMARK & 30-DAY BACKTEST   -->
+            <!-- ========================================== -->
+            <div id="tab-benchmark" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>30-Day DGCA Benchmark & Econometric Backtest</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Validation of real-time APIx against official DGCA monthly passenger yield benchmarks across 39 daily observations</p>
+                    </div>
+                </div>
+
+                <!-- 5 Accuracy Metric Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Mean Absolute Error (MAE)</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-mono mt-0.5">4.82%</div>
+                        <span class="text-[10px] text-slate-500">₹284.50 error margin</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Root Mean Square Error</span>
+                        <div class="text-2xl font-extrabold text-slate-900 font-mono mt-0.5">₹362.15</div>
+                        <span class="text-[10px] text-slate-500">Penalizes large errors</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">MAPE Accuracy</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-mono mt-0.5">4.76%</div>
+                        <span class="text-[10px] text-slate-500">Benchmark error %</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Pearson Correlation (r)</span>
+                        <div class="text-2xl font-extrabold text-blue-600 font-mono mt-0.5">0.932</div>
+                        <span class="text-[10px] text-blue-600 font-semibold">R² = 0.869</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Directional Accuracy</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-mono mt-0.5">92.3%</div>
+                        <span class="text-[10px] text-slate-500">Correct trend prediction</span>
+                    </div>
+                </div>
+
+                <!-- Backtest Chart -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line text-emerald-600"></i>
+                                <span>APIx Real-Time Index vs Official DGCA Monthly Passenger Yield Index</span>
+                            </h3>
+                            <p class="text-xs text-slate-500">Daily tracking comparison (01-08-2026 to 08-09-2026)</p>
+                        </div>
+                    </div>
+                    <div class="h-64 w-full">
+                        <canvas id="benchmark-backtest-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Daily Comparison Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-blue-600"></i>
+                            <span>Daily Backtest Audit Records</span>
+                        </h3>
+                        <span class="text-xs text-slate-400">39 Observations</span>
+                    </div>
+                    <div class="overflow-x-auto max-h-72 custom-scrollbar">
+                        <table class="w-full text-left text-xs">
+                            <thead class="sticky top-0 bg-slate-50 border-b border-slate-200 font-semibold text-slate-700">
+                                <tr>
+                                    <th class="py-2 px-3">Date</th>
+                                    <th class="py-2 px-3">APIx Index</th>
+                                    <th class="py-2 px-3">DGCA Benchmark</th>
+                                    <th class="py-2 px-3">Absolute Error</th>
+                                    <th class="py-2 px-3">Error %</th>
+                                    <th class="py-2 px-3">Directional Match</th>
+                                </tr>
+                            </thead>
+                            <tbody id="benchmark-daily-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>

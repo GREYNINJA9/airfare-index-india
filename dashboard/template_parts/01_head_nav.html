@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIx India • Real-time Airfare Price Index • MoSPI & RBI Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        govblue: {
+                            50: "#f0f5fa",
+                            100: "#e1ecf5",
+                            200: "#c3d9ec",
+                            500: "#2b6cb0",
+                            600: "#205493",
+                            700: "#1a4477",
+                            800: "#14355d",
+                            900: "#0f2744",
+                            950: "#0a1a2f",
+                        },
+                        saffron: {
+                            50: "#fffaf0",
+                            100: "#feebc8",
+                            500: "#dd6b20",
+                            600: "#c05621",
+                        }
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        mono: ["JetBrains Mono", "monospace"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        @keyframes pulse-slow { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.95); } }
+        .live-pulse { animation: pulse-slow 2s infinite ease-in-out; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .sidebar-link.active {
+            background-color: #14355d;
+            color: #ffffff;
+            font-weight: 600;
+            border-left: 3px solid #f59e0b;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased bg-slate-100/70">
+
+    <!-- TOP TRICOLOR ACCENT BAR -->
+    <div class="h-1.5 w-full flex flex-shrink-0">
+        <div class="h-full w-1/3 bg-[#FF9933]"></div>
+        <div class="h-full w-1/3 bg-white border-y border-slate-200"></div>
+        <div class="h-full w-1/3 bg-[#138808]"></div>
+    </div>
+
+    <!-- 1. GLOBAL DASHBOARD HEADER (Blueprint Section 1) -->
+    <header class="bg-govblue-950 text-white border-b border-govblue-800 sticky top-0 z-40 shadow-md flex-shrink-0">
+        <div class="px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-4">
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-3.5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-md font-extrabold text-xl tracking-wider border border-amber-400/40">
+                    <i class="fa-solid fa-plane-departure text-white text-base"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="font-extrabold text-base tracking-tight text-white flex items-center gap-2">
+                            APIx India • Real-time Airfare Price Index
+                            <span class="text-[10px] uppercase font-bold tracking-widest px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30">Problem ID: 26056</span>
+                        </h1>
+                    </div>
+                    <p class="text-[11px] text-slate-300">
+                        Ministry of Statistics & Programme Implementation (MoSPI) • DIID & Reserve Bank of India
+                    </p>
+                </div>
+            </div>
+
+            <!-- Global Metadata Chips & Action Controls -->
+            <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                <!-- Status Badge -->
+                <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-600 text-emerald-300 font-semibold shadow-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 live-pulse"></span>
+                    <span id="header-status">Status: LIVE</span>
+                </div>
+
+                <!-- Coverage Chip -->
+                <div class="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-govblue-900/80 border border-govblue-700 text-slate-200">
+                    <i class="fa-solid fa-network-wired text-cyan-400"></i>
+                    <span id="header-coverage">5 Airlines | 14 Routes | 10 Sources</span>
+                </div>
+
+                <!-- Last Updated -->
+                <div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-govblue-900/80 border border-govblue-700 text-slate-200">
+                    <i class="fa-regular fa-clock text-amber-400"></i>
+                    <span id="header-last-updated">Updated: 10-09-2026 05:00</span>
+                </div>
+
+                <!-- Next Run -->
+                <div class="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-govblue-900/80 border border-govblue-700 text-slate-300">
+                    <i class="fa-solid fa-calendar-check text-blue-400"></i>
+                    <span id="header-next-run">Next: 10-09-2026 11:00</span>
+                </div>
+
+                <!-- Help Button (Layman Guide Modal) -->
+                <button onclick="openHelpModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-3 py-1 rounded-lg text-xs shadow-xs transition flex items-center gap-1.5 cursor-pointer border border-amber-400/40">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Help &amp; Terms (Layman Guide)</span>
+                </button>
+
+                <!-- Refresh Button -->
+                <button onclick="refreshBlueprintData()" class="bg-govblue-800 hover:bg-govblue-700 text-white font-semibold px-2.5 py-1 rounded-lg text-xs shadow-xs transition flex items-center gap-1.5 cursor-pointer border border-govblue-700">
+                    <i id="header-refresh-icon" class="fa-solid fa-arrows-rotate"></i>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- GLOBAL FILTERS BAR (Blueprint Section 1) -->
+        <div class="bg-govblue-900/90 border-t border-govblue-800 px-4 sm:px-6 py-2 overflow-x-auto custom-scrollbar">
+            <div class="flex items-center gap-3 text-xs whitespace-nowrap min-w-max">
+                <span class="font-bold text-amber-300 flex items-center gap-1">
+                    <i class="fa-solid fa-filter"></i> Filters:
+                </span>
+
+                <!-- Date -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Date:</span>
+                    <select id="gf-date" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="2026-09-08">08 Sep 2026 (Latest)</option>
+                        <option value="2026-09-07">07 Sep 2026</option>
+                        <option value="2026-09-01">01 Sep 2026</option>
+                        <option value="2026-08-15">15 Aug 2026</option>
+                        <option value="2026-08-01">01 Aug 2026 (Base)</option>
+                    </select>
+                </div>
+
+                <!-- Origin -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Origin:</span>
+                    <select id="gf-origin" onchange="onOriginDestChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="ALL">All Origins</option>
+                        <option value="DEL">DEL (Delhi)</option>
+                        <option value="BOM">BOM (Mumbai)</option>
+                        <option value="BLR">BLR (Bengaluru)</option>
+                        <option value="HYD">HYD (Hyderabad)</option>
+                        <option value="CCU">CCU (Kolkata)</option>
+                        <option value="MAA">MAA (Chennai)</option>
+                    </select>
+                </div>
+
+                <!-- Destination -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Destination:</span>
+                    <select id="gf-destination" onchange="onOriginDestChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="ALL">All Destinations</option>
+                        <option value="BOM">BOM (Mumbai)</option>
+                        <option value="DEL">DEL (Delhi)</option>
+                        <option value="BLR">BLR (Bengaluru)</option>
+                        <option value="HYD">HYD (Hyderabad)</option>
+                        <option value="CCU">CCU (Kolkata)</option>
+                        <option value="MAA">MAA (Chennai)</option>
+                    </select>
+                </div>
+
+                <!-- Route -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Route:</span>
+                    <select id="gf-route" onchange="onGlobalRouteChange(this.value)" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none font-mono">
+                        <option value="ALL">All 14 Routes</option>
+                        <option value="DEL-BOM">DEL → BOM</option>
+                        <option value="BOM-DEL">BOM → DEL</option>
+                        <option value="DEL-BLR">DEL → BLR</option>
+                        <option value="BLR-DEL">BLR → DEL</option>
+                        <option value="BOM-BLR">BOM → BLR</option>
+                        <option value="BLR-BOM">BLR → BOM</option>
+                        <option value="DEL-CCU">DEL → CCU</option>
+                        <option value="CCU-DEL">CCU → DEL</option>
+                        <option value="BLR-HYD">BLR → HYD</option>
+                        <option value="HYD-BLR">HYD → BLR</option>
+                        <option value="MAA-DEL">MAA → DEL</option>
+                        <option value="DEL-MAA">DEL → MAA</option>
+                        <option value="DEL-HYD">DEL → HYD</option>
+                        <option value="HYD-DEL">HYD → DEL</option>
+                    </select>
+                </div>
+
+                <!-- Airline -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Airline:</span>
+                    <select id="gf-airline" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="ALL">All Airlines</option>
+                        <option value="6E">IndiGo (6E)</option>
+                        <option value="AI">Air India (AI)</option>
+                        <option value="IX">Air India Express (IX)</option>
+                        <option value="QP">Akasa Air (QP)</option>
+                        <option value="SG">SpiceJet (SG)</option>
+                    </select>
+                </div>
+
+                <!-- Advance Booking Window -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Booking Window:</span>
+                    <select id="gf-window" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="ALL">All Windows</option>
+                        <option value="T+1">T+1 (Urgent / Next Day)</option>
+                        <option value="T+7">T+7 (1 Week)</option>
+                        <option value="T+15">T+15 (Fortnight)</option>
+                        <option value="T+30">T+30 (1 Month)</option>
+                        <option value="T+45">T+45 (Advance Saver)</option>
+                    </select>
+                </div>
+
+                <!-- Source -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Source:</span>
+                    <select id="gf-source" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="ALL">All Sources (Airlines + OTAs)</option>
+                        <option value="AIRLINE">Airline Direct Only</option>
+                        <option value="OTA">Online Travel Aggregators (OTAs)</option>
+                    </select>
+                </div>
+
+                <!-- Region -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Region:</span>
+                    <select id="gf-region" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="ALL">All India Domestic</option>
+                        <option value="Metro-Metro">Metro-to-Metro Trunk</option>
+                        <option value="North-South">North-South Corridors</option>
+                        <option value="West-South">West-South Corridors</option>
+                    </select>
+                </div>
+
+                <!-- Comparison Period -->
+                <div class="flex items-center gap-1 text-slate-300">
+                    <span class="text-[11px] text-slate-400">Comparison:</span>
+                    <select id="gf-comparison" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
+                        <option value="DoD">Day-over-Day (DoD)</option>
+                        <option value="WoW">Week-over-Week (WoW)</option>
+                        <option value="MoM" selected>Month-over-Month (MoM)</option>
+                        <option value="YoY">Year-over-Year (YoY)</option>
+                    </select>
+                </div>
+
+                <!-- Reset Filter Button -->
+                <button onclick="resetGlobalFilters()" class="text-[11px] text-amber-300 hover:text-white underline cursor-pointer px-2 font-medium">
+                    Reset Filters
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. MAIN APP LAYOUT: SIDEBAR + SCROLLABLE CANVAS -->
+    <div class="flex-1 flex overflow-hidden">
+
+        <!-- SIDEBAR NAVIGATION (Blueprint Section 18 & 24) -->
+        <aside class="w-64 bg-govblue-900 text-slate-200 flex-shrink-0 flex flex-col border-r border-govblue-800 select-none z-20">
+            <div class="p-3 border-b border-govblue-800/80 bg-govblue-950/40">
+                <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">Navigation Console</span>
+                <div class="flex items-center justify-between text-xs text-slate-300">
+                    <span>14 Analytical Modules</span>
+                    <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-700">v1.0.0</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1 text-xs">
+                <!-- 01 Overview -->
+                <button id="nav-tab-overview" onclick="switchTab('tab-overview')" class="sidebar-link active w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-semibold transition">
+                    <span class="w-5 text-center font-mono text-amber-400 font-bold">01</span>
+                    <i class="fa-solid fa-chart-line w-4 text-center text-cyan-400"></i>
+                    <span class="flex-1">Overview</span>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded bg-amber-500/30 text-amber-300 font-mono">Main</span>
+                </button>
+
+                <!-- 02 Routes -->
+                <button id="nav-tab-routes" onclick="switchTab('tab-routes')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">02</span>
+                    <i class="fa-solid fa-route w-4 text-center text-indigo-300"></i>
+                    <span class="flex-1">Routes Analysis</span>
+                </button>
+
+                <!-- 03 Airlines -->
+                <button id="nav-tab-airlines" onclick="switchTab('tab-airlines')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">03</span>
+                    <i class="fa-solid fa-plane-up w-4 text-center text-blue-400"></i>
+                    <span class="flex-1">Airline Analysis</span>
+                </button>
+
+                <!-- 04 Lead Time -->
+                <button id="nav-tab-leadtime" onclick="switchTab('tab-leadtime')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">04</span>
+                    <i class="fa-solid fa-clock-rotate-left w-4 text-center text-purple-300"></i>
+                    <span class="flex-1">Advance Booking</span>
+                </button>
+
+                <!-- 05 Fare Composition -->
+                <button id="nav-tab-composition" onclick="switchTab('tab-composition')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">05</span>
+                    <i class="fa-solid fa-receipt w-4 text-center text-emerald-400"></i>
+                    <span class="flex-1">Fare Composition</span>
+                </button>
+
+                <!-- 06 Volatility -->
+                <button id="nav-tab-volatility" onclick="switchTab('tab-volatility')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">06</span>
+                    <i class="fa-solid fa-wave-square w-4 text-center text-rose-400"></i>
+                    <span class="flex-1">Fare Volatility</span>
+                </button>
+
+                <!-- 07 Route Basket & Weights -->
+                <button id="nav-tab-basket" onclick="switchTab('tab-basket')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">07</span>
+                    <i class="fa-solid fa-scale-balanced w-4 text-center text-amber-400"></i>
+                    <span class="flex-1">Route Weights</span>
+                </button>
+
+                <!-- 08 DGCA Benchmark -->
+                <button id="nav-tab-benchmark" onclick="switchTab('tab-benchmark')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">08</span>
+                    <i class="fa-solid fa-award w-4 text-center text-amber-300"></i>
+                    <span class="flex-1">DGCA Benchmark</span>
+                    <span class="text-[9px] px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-300 font-mono">30D</span>
+                </button>
+
+                <!-- 09 Data Collection -->
+                <button id="nav-tab-collection" onclick="switchTab('tab-collection')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">09</span>
+                    <i class="fa-solid fa-spider w-4 text-center text-teal-400"></i>
+                    <span class="flex-1">Scraper Monitor</span>
+                </button>
+
+                <!-- 10 Data Quality -->
+                <button id="nav-tab-quality" onclick="switchTab('tab-quality')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">10</span>
+                    <i class="fa-solid fa-shield-halved w-4 text-center text-green-400"></i>
+                    <span class="flex-1">Data Quality</span>
+                    <span class="text-[9px] px-1 py-0.2 rounded bg-green-500/20 text-green-300 font-mono">98%</span>
+                </button>
+
+                <!-- 11 Fare Explorer -->
+                <button id="nav-tab-explorer" onclick="switchTab('tab-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">11</span>
+                    <i class="fa-solid fa-magnifying-glass-chart w-4 text-center text-yellow-400"></i>
+                    <span class="flex-1">Fare Explorer</span>
+                </button>
+
+                <!-- 12 API -->
+                <button id="nav-tab-api" onclick="switchTab('tab-api')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">12</span>
+                    <i class="fa-solid fa-code w-4 text-center text-pink-400"></i>
+                    <span class="flex-1">API Documentation</span>
+                </button>
+
+                <!-- 13 Methodology -->
+                <button id="nav-tab-methodology" onclick="switchTab('tab-methodology')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">13</span>
+                    <i class="fa-solid fa-book-open w-4 text-center text-sky-400"></i>
+                    <span class="flex-1">Methodology</span>
+                </button>
+
+                <!-- 14 MoSPI CPI -->
+                <button id="nav-tab-cpi-explorer" onclick="switchTab('tab-cpi-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">14</span>
+                    <i class="fa-solid fa-calculator w-4 text-center text-orange-400"></i>
+                    <span class="flex-1">MoSPI CPI Explorer</span>
+                    <span class="text-[9px] px-1 py-0.2 rounded bg-orange-500/30 text-orange-300 font-mono">Live</span>
+                </button>
+            </nav>
+
+            <div class="p-3 border-t border-govblue-800/80 text-[11px] text-slate-400 bg-govblue-950/40 space-y-1">
+                <div class="flex items-center justify-between">
+                    <span>Target Consumer:</span>
+                    <span class="font-semibold text-slate-200">NSO & RBI MPC</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span>Base Period:</span>
+                    <span class="font-mono text-amber-300">2024 = 100.0</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar bg-slate-100 p-4 sm:p-6">

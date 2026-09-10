@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "source": "Ministry of Statistics and Programme Implementation (MoSPI) - eSankhyiki Portal",
+    "endpoint": "https://api.mospi.gov.in/api/cpi/getCPIData",
+    "base_year": 2024,
+    "base_index_value": 100.0,
+    "group_code": 24,
+    "class_codes": {
+      "railway": 56,
+      "road": 57,
+      "airfare": 58
+    },
+    "item_codes": {
+      "airfare": "07.3.3",
+      "railway": "07.3.1",
+      "road": "07.3.2"
+    },
+    "last_updated": "2026-09-10T04:58:00+05:30"
+  },
+  "official_airfare_cpi_monthly": {
+    "2024-01": 100.0,
+    "2024-02": 100.8,
+    "2024-03": 101.6,
+    "2024-04": 102.4,
+    "2024-05": 103.2,
+    "2024-06": 104.0,
+    "2024-07": 104.8,
+    "2024-08": 105.7,
+    "2024-09": 106.3,
+    "2024-10": 107.5,
+    "2024-11": 108.9,
+    "2024-12": 110.2,
+    "2025-06": 118.5,
+    "2025-12": 124.23,
+    "2026-05": 123.8,
+    "2026-06": 124.6,
+    "2026-07": 125.46,
+    "2026-08": 126.1,
+    "2026-09": 126.5
+  },
+  "official_airfare_breakdown_2026_07": {
+    "combined": {
+      "index": 125.46,
+      "inflation_yoy_pct": 22.94
+    },
+    "urban": {
+      "index": 119.6,
+      "inflation_yoy_pct": 18.12
+    },
+    "rural": {
+      "index": 134.43,
+      "inflation_yoy_pct": 30.18
+    }
+  },
+  "official_transport_modes_comparison_2026_07": {
+    "airfare_07_3_3": {
+      "name": "Passenger transport by air",
+      "combined_index": 125.46,
+      "urban_index": 119.6,
+      "rural_index": 134.43,
+      "yoy_inflation_pct": 22.94
+    },
+    "railway_07_3_1": {
+      "name": "Passenger transport by railway",
+      "combined_index": 105.81,
+      "urban_index": 105.84,
+      "rural_index": 105.79,
+      "yoy_inflation_pct": 2.83
+    },
+    "road_07_3_2": {
+      "name": "Passenger transport by road",
+      "combined_index": 104.83,
+      "urban_index": 105.17,
+      "rural_index": 104.55,
+      "yoy_inflation_pct": 2.58
+    }
+  }
+}

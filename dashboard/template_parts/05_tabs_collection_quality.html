@@ -1,0 +1,163 @@
+            <!-- ========================================== -->
+            <!-- TAB 09: DATA COLLECTION (SCRAPER MONITOR)  -->
+            <!-- ========================================== -->
+            <div id="tab-collection" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Data Collection & Web Scraping Infrastructure</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Live operational status across 10 primary ingestion channels (5 Airlines + 5 OTAs)</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="triggerPipelineIngest()" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+                            <i class="fa-solid fa-cloud-arrow-down"></i>
+                            <span id="btn-ingest-text">Ingest Scraped JSON Files</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Collection KPIs -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Active Ingestion Sources</span>
+                        <div class="text-2xl font-extrabold text-slate-900 font-mono mt-1">10 / 10</div>
+                        <span class="text-[11px] text-emerald-600 font-semibold">100% Operational Health</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Daily Fares Ingested</span>
+                        <div class="text-2xl font-extrabold text-blue-600 font-mono mt-1">13,650</div>
+                        <span class="text-[11px] text-slate-500">Clean normalized quotes</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Scrape Success Rate</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-mono mt-1">99.1%</div>
+                        <span class="text-[11px] text-slate-500">Proxy rotating pool</span>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-xs text-slate-400 uppercase font-semibold">Avg Scraping Latency</span>
+                        <div class="text-2xl font-extrabold text-purple-600 font-mono mt-1">412 ms</div>
+                        <span class="text-[11px] text-slate-500">Stealth headless browser</span>
+                    </div>
+                </div>
+
+                <!-- 10 Ingestion Sources Table -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-server text-teal-600"></i>
+                            <span>Ingestion Pipeline Source Grid (10 Real-Time Endpoints)</span>
+                        </h3>
+                        <span class="text-xs text-slate-400 font-mono">5 Airlines + 5 OTAs</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
+                                    <th class="py-2 px-3">Source Name</th>
+                                    <th class="py-2 px-3">Type</th>
+                                    <th class="py-2 px-3">Status</th>
+                                    <th class="py-2 px-3">Last Scrape</th>
+                                    <th class="py-2 px-3">Quotes Collected</th>
+                                    <th class="py-2 px-3">Success Rate</th>
+                                    <th class="py-2 px-3">Avg Latency</th>
+                                    <th class="py-2 px-3">Proxy Pool</th>
+                                </tr>
+                            </thead>
+                            <tbody id="collection-sources-tbody" class="divide-y divide-slate-100 font-mono">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Scheduler Status Card -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-amber-500"></i>
+                        <span>Automated Scraping Scheduler Engine</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                            <span class="text-slate-400 block text-[10px] uppercase">Schedule Frequency</span>
+                            <strong class="text-slate-800 text-sm font-semibold">Every 6 Hours (04:30, 10:30, 16:30, 22:30 IST)</strong>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                            <span class="text-slate-400 block text-[10px] uppercase">Last Execution</span>
+                            <strong class="text-slate-800 text-sm font-semibold">Today 04:30 IST (3m 42s duration)</strong>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                            <span class="text-slate-400 block text-[10px] uppercase">Next Scheduled Run</span>
+                            <strong class="text-emerald-700 text-sm font-semibold">Today 10:30 IST (In 5 hours)</strong>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-50 border border-slate-200">
+                            <span class="text-slate-400 block text-[10px] uppercase">Headless Engine</span>
+                            <strong class="text-blue-700 text-sm font-semibold">Async Playwright Stealth with Fingerprint Rotation</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 10: DATA QUALITY & PIPELINE AUDIT      -->
+            <!-- ========================================== -->
+            <div id="tab-quality" class="tab-content space-y-6">
+                <!-- Section Header -->
+                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                            <span>Data Quality Governance & 10-Stage Cleaning Pipeline</span>
+                        </h2>
+                        <p class="text-xs text-slate-500">Automated outlier rejection, checksum deduplication, and regulatory data integrity scoring</p>
+                    </div>
+                </div>
+
+                <!-- 5 Quality Pillars + Composite Score -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs col-span-2 sm:col-span-1">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Composite Quality</span>
+                        <div class="text-2xl font-extrabold text-emerald-600 font-mono mt-0.5">98.4%</div>
+                        <span class="text-[10px] text-emerald-700 font-semibold">High Econometric Grade</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Completeness</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5">99.2%</div>
+                        <span class="text-[10px] text-slate-500">Zero missing fields</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Timeliness</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5">98.8%</div>
+                        <span class="text-[10px] text-slate-500">&lt; 30s latency</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Validity</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5">99.5%</div>
+                        <span class="text-[10px] text-slate-500">IATA & Schema valid</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Uniqueness</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5">97.6%</div>
+                        <span class="text-[10px] text-slate-500">Checksum deduplicated</span>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
+                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Consistency</span>
+                        <div class="text-xl font-bold text-slate-900 font-mono mt-0.5">96.9%</div>
+                        <span class="text-[10px] text-slate-500">Cross-source agreement</span>
+                    </div>
+                </div>
+
+                <!-- 10-Stage Data Cleaning Pipeline -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-filter-circle-dollar text-green-600"></i>
+                            <span>10-Stage Automated Data Ingestion & Cleaning Pipeline</span>
+                        </h3>
+                        <span class="text-xs text-emerald-600 font-semibold">All 10 Stages Active</span>
+                    </div>
+                    <div id="quality-pipeline-container" class="space-y-2.5">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>

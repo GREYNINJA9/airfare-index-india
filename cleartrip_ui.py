@@ -1174,6 +1174,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Show Chromium instead of running headless",
     )
+    parser.add_argument(
+        "--ingest",
+        action="store_true",
+        help="Immediately ingest normalized output through the pipeline into PostgreSQL and update dashboard",
+    )
     return parser
 
 
@@ -1181,7 +1186,7 @@ def main() -> int:
     args = build_arg_parser().parse_args()
 
     try:
-        capture_cleartrip(
+        _raw_path, normalized_path = capture_cleartrip(
             origin=args.origin,
             destination=args.destination,
             depart_date=args.date,
@@ -1191,6 +1196,16 @@ def main() -> int:
             wait_seconds=args.wait_seconds,
             headless=not args.headed,
         )
+
+        if getattr(args, "ingest", False):
+            print("\n--- Ingesting into Pipeline & Database ---")
+            from pipeline.ingest import ingest_normalized_file
+            res = ingest_normalized_file(normalized_path)
+            print(
+                f"✓ Pipeline ingested {res.get('valid_fares', 0)} valid fares into database "
+                f"({res.get('new_fares_inserted', 0)} new rows)."
+            )
+
         return 0
     except KeyboardInterrupt:
         print("Interrupted.", file=sys.stderr)

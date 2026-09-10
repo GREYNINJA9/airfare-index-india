@@ -229,6 +229,10 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
     conn = _db()
     index_results = get_index_results(conn)
 
+    from index_engine.cpi_client import get_official_monthly_cpi_series
+    official_series = get_official_monthly_cpi_series()
+    base_val = official_series.get("2026-08", 126.10)
+
     if not index_results:
         # Generate baseline 30-day series if not yet indexed
         fares = get_fares(conn)
@@ -239,8 +243,11 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
                 apix_laspeyres_daily=d.apix_laspeyres,
                 apix_jevons_daily=d.apix_jevons,
                 apix_weekly_moving_avg=d.apix_laspeyres,
-                official_cpi_transport=d.cpi_transport_subindex,
-                inflation_tracking_gap=round(d.apix_laspeyres - 100.0, 2),
+                official_cpi_transport=round((official_series.get(d.date.strftime("%Y-%m"), base_val) / base_val) * 100.0, 2),
+                inflation_tracking_gap=round(
+                    d.apix_laspeyres - round((official_series.get(d.date.strftime("%Y-%m"), base_val) / base_val) * 100.0, 2),
+                    2,
+                ),
             )
             for d in rep.daily_series
         ]
@@ -255,11 +262,10 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
         window = lasp_vals[-7:]
         rolling_7d = sum(window) / len(window)
 
-        # MoSPI baseline reference normalized to 100 on base period
+        # Official MoSPI CPI reference normalized to 100 on base period (2026-08)
         month_key = res.current_period.strftime("%Y-%m")
-        cpi_base = 180.0
-        cpi_current = 181.3 if month_key >= "2026-08" else 180.1
-        cpi_normalized = round((cpi_current / cpi_base) * 100.0, 2)
+        official_current = official_series.get(month_key, base_val)
+        cpi_normalized = round((official_current / base_val) * 100.0, 2)
 
         points.append(
             CPIComparisonSeriesPoint(
@@ -323,3 +329,37 @@ def rbi_nso_data_feed(
         "record_count": len(rows),
         "data": rows,
     }
+
+
+@router.get("/cpi-mospi")
+def get_mospi_cpi_data(
+    year: Optional[int] = Query(2026, description="Reference year e.g. 2026, 2025, 2024"),
+    item_code: Optional[str] = Query("07.3.3", description="MoSPI item/index code, e.g. '07.3.3' for airfare"),
+    base_year: Optional[int] = Query(2024, description="Base year comparison e.g. 2024"),
+    group_code: Optional[int] = Query(24, description="MoSPI group code"),
+    class_code: Optional[int] = Query(58, description="MoSPI class code"),
+    limit: Optional[int] = Query(100, description="Max records to retrieve"),
+    sector: Optional[str] = Query(None, description="Optional sector filter e.g. 'Combined', 'Urban', 'Rural'"),
+    refresh: bool = Query(False, description="Force network refresh from MoSPI API"),
+):
+    """Fetch live or cached CPI data directly from the official MoSPI API endpoint."""
+    from index_engine.cpi_client import fetch_cpi_data
+
+    return fetch_cpi_data(
+        year=year,
+        item_code=item_code,
+        base_year=base_year,
+        group_code=group_code,
+        class_code=class_code,
+        limit=limit,
+        sector=sector,
+        force_refresh=refresh,
+    )
+
+
+@router.get("/cpi-options")
+def get_mospi_cpi_options():
+    """Return available choices for years, indices, and sectors for UI dropdowns."""
+    from index_engine.cpi_client import get_cpi_options
+
+    return get_cpi_options()

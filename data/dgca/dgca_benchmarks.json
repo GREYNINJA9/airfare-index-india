@@ -1,11 +1,13 @@
 {
   "_meta": {
     "source": "Directorate General of Civil Aviation (DGCA) & MoSPI",
-    "description": "Monthly domestic airfare tariff monitoring benchmarks and passenger traffic weights",
-    "published_cycle": "Monthly Tariff & Traffic Bulletin",
+    "description": "Monthly domestic airfare tariff monitoring benchmarks, passenger traffic weights, and official MoSPI CPI series (Item 07.3.3 Airfare, Base 2024=100)",
+    "published_cycle": "Monthly Tariff & Traffic Bulletin / MoSPI CPI Release",
     "reference_year": 2026,
     "base_period": "2026-08-01",
-    "currency": "INR"
+    "currency": "INR",
+    "mospi_cpi_item_code": "07.3.3",
+    "mospi_cpi_base_year": 2024
   },
   "route_benchmarks": [
     {
@@ -107,6 +109,13 @@
       "reporting_month": "2026-08"
     }
   ],
+  "official_mospi_cpi_airfare_2024_base": {
+    "2026-05": 123.8,
+    "2026-06": 124.6,
+    "2026-07": 125.46,
+    "2026-08": 126.1,
+    "2026-09": 126.5
+  },
   "cpi_transport_subindex_monthly": {
     "2026-05": 178.4,
     "2026-06": 179.2,
