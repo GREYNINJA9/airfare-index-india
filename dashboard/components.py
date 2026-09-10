@@ -47,6 +47,7 @@ def get_dashboard_kpis() -> Dict[str, Any]:
         current_date_str = latest_idx.current_period.isoformat()
         base_date_str = latest_idx.base_period.isoformat()
     else:
+        # Note: these are fallback values when no data is available
         apix_laspeyres = 104.2
         apix_jevons = 103.6
         delta_24h = 0.45
@@ -77,6 +78,7 @@ def get_dashboard_kpis() -> Dict[str, Any]:
         }
         highest_fare_sector = max(sector_medians, key=sector_medians.get) if sector_medians else "DEL-BLR"
     else:
+        # Note: these are fallback values when no data is available
         median_price = 5420.0
         most_competitive_carrier = "IX (AI Express)"
         highest_fare_sector = "MAA-DEL"
@@ -88,7 +90,7 @@ def get_dashboard_kpis() -> Dict[str, Any]:
         "delta_24h_pct": delta_24h_pct,
         "current_period": current_date_str,
         "base_period": base_date_str,
-        "total_observations": total_quotes or 13650,
+        "total_observations": total_quotes,
         "market_median_fare_inr": median_price,
         "most_competitive_carrier": most_competitive_carrier,
         "highest_fare_sector": highest_fare_sector,

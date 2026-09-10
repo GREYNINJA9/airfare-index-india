@@ -84,10 +84,6 @@ def get_available_routes() -> List[Dict[str, Any]]:
         if sec in route_meta:
             route_meta[sec]["flight_count"] = count
 
-    for meta in route_meta.values():
-        if meta["flight_count"] == 0:
-            meta["flight_count"] = 975
-
     return [route_meta[sec] for sec in sorted(route_meta.keys())]
 
 
@@ -128,7 +124,7 @@ def get_route_flight_details(
             5450.0,
         )
 
-    use_mock_data = os.environ.get("USE_MOCK_DATA", "true").strip().lower() in {
+    use_mock_data = os.environ.get("USE_MOCK_DATA", "false").strip().lower() in {
         "1",
         "true",
         "yes",

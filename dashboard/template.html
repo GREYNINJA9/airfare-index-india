@@ -2107,14 +2107,14 @@
     <!-- ========================================== -->
     <script>
         // Placeholders replaced by FastAPI serve_dashboard()
-        window.__INITIAL_KPIS__ = <!-- INITIAL_KPIS -->;
-        window.__INITIAL_CHARTS__ = <!-- INITIAL_CHARTS -->;
-        window.__INITIAL_HEATMAP__ = <!-- INITIAL_HEATMAP -->;
-        window.__INITIAL_ROUTES__ = <!-- INITIAL_ROUTES -->;
-        window.__INITIAL_FLIGHTS__ = <!-- INITIAL_FLIGHTS -->;
-        window.__INITIAL_CPI_OPTIONS__ = <!-- INITIAL_CPI_OPTIONS -->;
-        window.__INITIAL_CPI__ = <!-- INITIAL_CPI -->;
-        window.__BLUEPRINT_DATA__ = <!-- INITIAL_BLUEPRINT -->;
+        window.__INITIAL_KPIS__ = /* INITIAL_KPIS */ null;
+        window.__INITIAL_CHARTS__ = /* INITIAL_CHARTS */ null;
+        window.__INITIAL_HEATMAP__ = /* INITIAL_HEATMAP */ null;
+        window.__INITIAL_ROUTES__ = /* INITIAL_ROUTES */ null;
+        window.__INITIAL_FLIGHTS__ = /* INITIAL_FLIGHTS */ null;
+        window.__INITIAL_CPI_OPTIONS__ = /* INITIAL_CPI_OPTIONS */ null;
+        window.__INITIAL_CPI__ = /* INITIAL_CPI */ null;
+        window.__BLUEPRINT_DATA__ = /* INITIAL_BLUEPRINT */ null;
 
         // Global Chart instances registry
         window.__CHARTS__ = {};
@@ -2346,19 +2346,64 @@
 
         // 3. Hydrate Application Data
         function initApp() {
-            const bp = window.__BLUEPRINT_DATA__;
-            if (!bp) {
-                console.warn("Blueprint data not directly embedded. Fetching from API...");
-                fetch("/dashboard/api/blueprint")
-                    .then(res => res.json())
-                    .then(data => {
-                        window.__BLUEPRINT_DATA__ = data;
+            const promises = [];
+
+            // Fetch any missing initial payloads from the backend API
+            if (!window.__INITIAL_KPIS__ || Object.keys(window.__INITIAL_KPIS__).length === 0) {
+                promises.push(
+                    fetch("/dashboard/api/kpis").then(r => r.json()).then(d => { window.__INITIAL_KPIS__ = d; })
+                );
+            }
+            if (!window.__INITIAL_CHARTS__ || Object.keys(window.__INITIAL_CHARTS__).length === 0) {
+                promises.push(
+                    fetch("/dashboard/api/charts").then(r => r.json()).then(d => { window.__INITIAL_CHARTS__ = d; })
+                );
+            }
+            if (!window.__INITIAL_HEATMAP__ || Object.keys(window.__INITIAL_HEATMAP__).length === 0) {
+                promises.push(
+                    fetch("/dashboard/api/heatmap").then(r => r.json()).then(d => { window.__INITIAL_HEATMAP__ = d; })
+                );
+            }
+            if (!window.__INITIAL_ROUTES__ || (Array.isArray(window.__INITIAL_ROUTES__) && window.__INITIAL_ROUTES__.length === 0)) {
+                promises.push(
+                    fetch("/dashboard/api/routes").then(r => r.json()).then(d => { window.__INITIAL_ROUTES__ = d; })
+                );
+            }
+            if (!window.__INITIAL_FLIGHTS__ || Object.keys(window.__INITIAL_FLIGHTS__).length === 0) {
+                promises.push(
+                    fetch("/dashboard/api/route-flights?origin=ALL&destination=ALL&limit=300").then(r => r.json()).then(d => { window.__INITIAL_FLIGHTS__ = d; })
+                );
+            }
+            if (!window.__INITIAL_CPI_OPTIONS__ || Object.keys(window.__INITIAL_CPI_OPTIONS__).length === 0) {
+                promises.push(
+                    fetch("/dashboard/api/cpi/options").then(r => r.json()).then(d => { window.__INITIAL_CPI_OPTIONS__ = d; })
+                );
+            }
+            if (!window.__INITIAL_CPI__ || Object.keys(window.__INITIAL_CPI__).length === 0) {
+                promises.push(
+                    fetch("/dashboard/api/cpi?year=2026&item_code=07.3.3").then(r => r.json()).then(d => { window.__INITIAL_CPI__ = d; })
+                );
+            }
+            if (!window.__BLUEPRINT_DATA__) {
+                promises.push(
+                    fetch("/dashboard/api/blueprint").then(r => r.json()).then(d => { window.__BLUEPRINT_DATA__ = d; })
+                );
+            }
+
+            if (promises.length > 0) {
+                console.info(`Fetching ${promises.length} data endpoint(s) from backend API...`);
+                Promise.all(promises)
+                    .then(() => {
+                        console.info("All dashboard data loaded from API.");
                         renderAllModules();
                     })
-                    .catch(err => console.error("Failed to load blueprint data:", err));
-                return;
+                    .catch(err => {
+                        console.error("Failed to load dashboard data from API:", err);
+                        renderAllModules();  // Render with whatever we have
+                    });
+            } else {
+                renderAllModules();
             }
-            renderAllModules();
         }
 
         function renderAllModules() {
@@ -2432,17 +2477,21 @@
         function refreshBlueprintData() {
             const icon = document.getElementById("header-refresh-icon");
             if (icon) icon.classList.add("fa-spin");
-            fetch("/dashboard/api/blueprint?refresh=true")
-                .then(r => r.json())
-                .then(data => {
-                    window.__BLUEPRINT_DATA__ = data;
-                    renderAllModules();
-                    if (icon) icon.classList.remove("fa-spin");
-                })
-                .catch(err => {
-                    console.error("Refresh failed:", err);
-                    if (icon) icon.classList.remove("fa-spin");
-                });
+
+            Promise.all([
+                fetch("/dashboard/api/blueprint?refresh=true").then(r => r.json()).then(d => { window.__BLUEPRINT_DATA__ = d; }),
+                fetch("/dashboard/api/kpis?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_KPIS__ = d; }),
+                fetch("/dashboard/api/charts?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_CHARTS__ = d; }),
+                fetch("/dashboard/api/heatmap?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_HEATMAP__ = d; }),
+            ])
+            .then(() => {
+                renderAllModules();
+                if (icon) icon.classList.remove("fa-spin");
+            })
+            .catch(err => {
+                console.error("Refresh failed:", err);
+                if (icon) icon.classList.remove("fa-spin");
+            });
         }
 
         // 5. Render Overview

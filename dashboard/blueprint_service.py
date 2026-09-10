@@ -640,9 +640,9 @@ def get_blueprint_data(force_refresh: bool = False) -> Dict[str, Any]:
                 "fare_diff_inr": round(cur_avg_fare - 5450.0, 2),
                 "fare_diff_pct": round(((cur_avg_fare - 5450.0) / 5450.0) * 100.0, 2),
                 "apix_index": cur_lasp,
-                "official_cpi_index": 104.20,
-                "cpi_tracking_delta": round(cur_lasp - 104.20, 2),
-                "status": "Verified Concurrence (< 1.0% CPI Tracking Delta)",
+                "official_cpi_index": 110.79,
+                "cpi_tracking_delta": round(cur_lasp - 110.79, 2),
+                "status": "High-Frequency Dynamic Surge (> 1.0 pt CPI Tracking Delta)" if (cur_lasp - 110.79) > 1.0 else ("Verified Concurrence (<= 1.0 pt CPI Tracking Delta)" if abs(cur_lasp - 110.79) <= 1.0 else "Below Monthly CPI Reference"),
             },
             "min_fare_kpi": {
                 "fare": min_fare_obj.price_inr if min_fare_obj else 2150.0,

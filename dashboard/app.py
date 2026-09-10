@@ -225,14 +225,14 @@ def serve_dashboard():
 
     rendered = (
         html_content
-        .replace("<!-- INITIAL_KPIS -->", kpis_json)
-        .replace("<!-- INITIAL_CHARTS -->", charts_json)
-        .replace("<!-- INITIAL_HEATMAP -->", heatmap_json)
-        .replace("<!-- INITIAL_ROUTES -->", routes_json)
-        .replace("<!-- INITIAL_FLIGHTS -->", initial_flight_json)
-        .replace("<!-- INITIAL_CPI_OPTIONS -->", cpi_options_json)
-        .replace("<!-- INITIAL_CPI -->", initial_cpi_json)
-        .replace("<!-- INITIAL_BLUEPRINT -->", blueprint_json)
+        .replace("/* INITIAL_KPIS */ null", kpis_json)
+        .replace("/* INITIAL_CHARTS */ null", charts_json)
+        .replace("/* INITIAL_HEATMAP */ null", heatmap_json)
+        .replace("/* INITIAL_ROUTES */ null", routes_json)
+        .replace("/* INITIAL_FLIGHTS */ null", initial_flight_json)
+        .replace("/* INITIAL_CPI_OPTIONS */ null", cpi_options_json)
+        .replace("/* INITIAL_CPI */ null", initial_cpi_json)
+        .replace("/* INITIAL_BLUEPRINT */ null", blueprint_json)
     )
     return HTMLResponse(content=rendered)
 
