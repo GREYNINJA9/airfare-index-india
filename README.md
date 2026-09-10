@@ -2,11 +2,11 @@
 
 > **Augmentation of the Consumer Price Index (CPI) via Automated High-Frequency Multi-Source Web Scraping & Econometric Index Construction**
 
-[![Tests](https://img.shields.io/badge/tests-301%20passed-success)](tests)
+[![Tests](https://img.shields.io/badge/tests-314%20passed-success)](tests)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.14-blue)](pyproject.toml)
 [![FastAPI](https://img.shields.io/badge/FastAPI-1.0.0-009688)](api)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)](database)
-[![Playwright](https://img.shields.io/badge/Patchright-Chromium-green)](scraper)
+[![Playwright](https://img.shields.io/badge/Playwright-Chromium-green)](scraper)
 
 ---
 
