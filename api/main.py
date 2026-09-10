@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import os
+import threading
 from contextlib import asynccontextmanager
 from typing import Any, Dict
 
@@ -47,30 +48,23 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.warning("Auto-seed on startup skipped or failed: %s", e)
 
-    # Pre-warm repository and dashboard caches on startup so first user request is instant
-    logger.info("Pre-warming repository and dashboard caches on startup...")
-    try:
-        from dashboard.charts import (
-            get_backtest_chart_data,
-            get_carrier_chart_data,
-            get_elasticity_chart_data,
-            get_trend_chart_data,
-        )
-        from dashboard.components import get_dashboard_kpis
-        from dashboard.heatmap import get_heatmap_matrix
-        from database.repository import get_fares, get_index_results
+    # Pre-warm repository and dashboard caches without blocking API readiness.
+    logger.info("Starting dashboard cache pre-warm in the background...")
 
-        get_fares(conn)
-        get_index_results(conn)
-        get_dashboard_kpis()
-        get_trend_chart_data()
-        get_elasticity_chart_data()
-        get_carrier_chart_data()
-        get_backtest_chart_data()
-        get_heatmap_matrix()
-        logger.info("All caches successfully pre-warmed on startup.")
-    except Exception as e:
-        logger.warning("Cache pre-warming on startup skipped: %s", e)
+    def _prewarm_dashboard() -> None:
+        try:
+            from dashboard.app import prewarm_dashboard
+
+            prewarm_dashboard()
+            logger.info("All caches successfully pre-warmed in the background.")
+        except Exception as e:
+            logger.warning("Background cache pre-warming skipped or failed: %s", e)
+
+    threading.Thread(
+        target=_prewarm_dashboard,
+        name="dashboard-prewarm",
+        daemon=True,
+    ).start()
 
     yield
 

@@ -186,13 +186,7 @@ def get_fares(conn) -> List[Fare]:
     global _FARES_CACHE, _FARES_CACHE_TIME
     now = time.time()
     with _FARES_LOCK:
-        # The API and scheduler are separate processes. Do not serve a stale
-        # process-local snapshot for PostgreSQL connections after a scheduler write.
-        if (
-            _FARES_CACHE is not None
-            and not _is_postgres_connection(conn)
-            and (now - _FARES_CACHE_TIME) < _FARES_CACHE_TTL
-        ):
+        if _FARES_CACHE is not None and (now - _FARES_CACHE_TIME) < _FARES_CACHE_TTL:
             return list(_FARES_CACHE)
 
     cur = conn.execute(

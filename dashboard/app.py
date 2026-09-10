@@ -7,6 +7,7 @@ Real-time Airfare Price Index (APIx) platform.
 from __future__ import annotations
 
 import json
+import threading
 import time
 from typing import Optional
 
@@ -26,11 +27,14 @@ router = APIRouter(tags=["Dashboard"])
 
 _CHARTS_CACHE = None
 _CHARTS_CACHE_TIME = 0.0
-_CHARTS_CACHE_TTL = 300.0
+_CHARTS_CACHE_TTL = 3600.0
 
 _HEATMAP_CACHE = None
 _HEATMAP_CACHE_TIME = 0.0
-_HEATMAP_CACHE_TTL = 300.0
+_HEATMAP_CACHE_TTL = 3600.0
+
+_INITIAL_PAYLOADS = None
+_INITIAL_PAYLOADS_LOCK = threading.Lock()
 
 
 @router.get("/dashboard/api/kpis")
@@ -73,6 +77,35 @@ def dashboard_heatmap(refresh: bool = False):
     _HEATMAP_CACHE = payload
     _HEATMAP_CACHE_TIME = time.time()
     return payload
+
+
+def prewarm_dashboard() -> None:
+    """Build the initial dashboard payloads in the background."""
+    global _INITIAL_PAYLOADS
+    try:
+        from dashboard.blueprint_service import get_blueprint_data
+        from dashboard.flight_explorer import get_available_routes, get_route_flight_details
+        from index_engine.cpi_client import fetch_cpi_data, get_cpi_options
+
+        payloads = {
+            "kpis": dashboard_kpis(),
+            "charts": dashboard_charts(),
+            "heatmap": dashboard_heatmap(),
+            "routes": get_available_routes(),
+            "flights": get_route_flight_details("ALL", "ALL", limit=300),
+            "cpi_options": get_cpi_options(),
+            "cpi": fetch_cpi_data(year=2026, item_code="07.3.3"),
+            "blueprint": get_blueprint_data(),
+        }
+        with _INITIAL_PAYLOADS_LOCK:
+            _INITIAL_PAYLOADS = payloads
+    except Exception:
+        return
+
+
+def _initial_payloads():
+    with _INITIAL_PAYLOADS_LOCK:
+        return _INITIAL_PAYLOADS
 
 
 @router.get("/dashboard/api/routes")
@@ -165,19 +198,27 @@ def serve_dashboard():
     with open(__file__.replace("app.py", "template.html"), "r", encoding="utf-8") as f:
         html_content = f.read()
 
-    kpis_json = json.dumps(dashboard_kpis())
-    charts_json = json.dumps(dashboard_charts(refresh=False))
-    heatmap_json = json.dumps(dashboard_heatmap(refresh=False))
+    payloads = _initial_payloads()
+    if payloads is None:
+        payloads = {
+            "kpis": {},
+            "charts": {},
+            "heatmap": {},
+            "routes": [],
+            "flights": {"flights": []},
+            "cpi_options": {},
+            "cpi": {},
+            "blueprint": None,
+        }
 
-    from dashboard.blueprint_service import get_blueprint_data
-    from dashboard.flight_explorer import get_available_routes, get_route_flight_details
-    from index_engine.cpi_client import fetch_cpi_data, get_cpi_options
-
-    routes_json = json.dumps(get_available_routes())
-    initial_flight_json = json.dumps(get_route_flight_details("ALL", "ALL", limit=300))
-    cpi_options_json = json.dumps(get_cpi_options())
-    initial_cpi_json = json.dumps(fetch_cpi_data(year=2026, item_code="07.3.3"))
-    blueprint_json = json.dumps(get_blueprint_data(force_refresh=False))
+    kpis_json = json.dumps(payloads["kpis"])
+    charts_json = json.dumps(payloads["charts"])
+    heatmap_json = json.dumps(payloads["heatmap"])
+    routes_json = json.dumps(payloads["routes"])
+    initial_flight_json = json.dumps(payloads["flights"])
+    cpi_options_json = json.dumps(payloads["cpi_options"])
+    initial_cpi_json = json.dumps(payloads["cpi"])
+    blueprint_json = json.dumps(payloads["blueprint"])
 
     rendered = (
         html_content
