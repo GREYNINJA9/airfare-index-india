@@ -29,7 +29,8 @@ services:
     environment:
       - ENVIRONMENT=development
       - LOG_LEVEL=INFO
-      - AUTO_SEED=true
+      - AUTO_SEED=false
+      - USE_MOCK_DATA=false
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-airfare_index}
     depends_on:
       postgres:
@@ -39,6 +40,22 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: airfare-scheduler
+    environment:
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - SAVE_RAW=${SAVE_RAW:-false}
+      - SCHEDULER_INTERVAL_SECONDS=${SCHEDULER_INTERVAL_SECONDS:-3600}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-airfare_index}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["python", "-m", "scheduler.runner"]
 
 volumes:
   pgdata:

@@ -32,6 +32,8 @@ COPY pyproject.toml README.md ./
 RUN pip install --no-cache-dir -e .[dev] \
     && patchright install chromium
 
+RUN pip install --no-cache-dir pyyaml requests
+
 COPY . .
 
 EXPOSE 8000

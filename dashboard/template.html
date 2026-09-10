@@ -1681,6 +1681,19 @@
             <!-- ========================================== -->
             <div id="tab-explorer" class="tab-content space-y-6">
                 <div id="tab-flight-explorer" class="hidden"></div>
+                <form id="interactive-search-form" onsubmit="submitInteractiveSearch(event)" class="bg-blue-50 p-4 rounded-xl border border-blue-200 space-y-3">
+                    <div class="flex flex-wrap items-end gap-3 text-xs">
+                        <label class="font-semibold">Origin<select id="search-origin" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option>DEL</option><option>BOM</option><option>BLR</option><option>HYD</option><option>CCU</option><option>MAA</option></select></label>
+                        <label class="font-semibold">Destination<select id="search-destination" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option>BLR</option><option>BOM</option><option>DEL</option><option>HYD</option><option>CCU</option><option>MAA</option></select></label>
+                        <label class="font-semibold">Departure<input id="search-departure-date" type="date" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
+                        <label class="font-semibold">Adults<input id="search-adults" type="number" min="1" value="1" required class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
+                        <label class="font-semibold">Children<input id="search-children" type="number" min="0" value="0" class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
+                        <label class="font-semibold">Infants<input id="search-infants" type="number" min="0" value="0" class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
+                        <label class="font-semibold">Cabin<select id="search-cabin" class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option value="ECONOMY">Economy</option><option value="PREMIUM_ECONOMY">Premium Economy</option><option value="BUSINESS">Business</option><option value="FIRST">First</option></select></label>
+                        <button id="interactive-search-submit" type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-1.5 rounded-lg">Search Cleartrip</button>
+                    </div>
+                    <p id="interactive-search-status" class="text-xs text-slate-600" aria-live="polite"></p>
+                </form>
                 <!-- Section Header -->
                 <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
                     <div>
@@ -2528,10 +2541,11 @@
         function initOverviewCharts() {
             const chartData = window.__INITIAL_CHARTS__ || {};
             const trend = chartData.trend || {};
-            const dates = trend.dates || ["01 Aug", "05 Aug", "10 Aug", "15 Aug", "20 Aug", "25 Aug", "01 Sep", "08 Sep"];
-            const lasp = trend.laspeyres || [100.0, 101.4, 102.8, 103.5, 105.1, 106.8, 107.8, 108.42];
-            const jev = trend.jevons || [100.0, 101.1, 102.4, 103.1, 104.8, 106.3, 107.2, 107.95];
-            const fares = trend.avg_fares || [5420, 5490, 5560, 5610, 5690, 5750, 5800, 5815];
+            const dates = trend.labels || [];
+            const trendDatasets = trend.datasets || [];
+            const lasp = trendDatasets.find(d => d.label.includes("Laspeyres"))?.data || [];
+            const jev = trendDatasets.find(d => d.label.includes("Jevons"))?.data || [];
+            const fares = trendDatasets.find(d => d.label.includes("Average Fare"))?.data || [];
 
             const ctx1 = document.getElementById("overview-apix-chart");
             if (ctx1) {
@@ -3399,6 +3413,71 @@
             applyExplorerFilters();
         }
 
+        let activeInteractiveSearchId = null;
+
+        async function submitInteractiveSearch(event) {
+            event.preventDefault();
+            const requestId = Symbol("interactive-search");
+            window.__ACTIVE_INTERACTIVE_SEARCH__ = requestId;
+            const status = document.getElementById("interactive-search-status");
+            const button = document.getElementById("interactive-search-submit");
+            const payload = {
+                origin: document.getElementById("search-origin").value,
+                destination: document.getElementById("search-destination").value,
+                departure_date: document.getElementById("search-departure-date").value,
+                adults: Number(document.getElementById("search-adults").value),
+                children: Number(document.getElementById("search-children").value),
+                infants: Number(document.getElementById("search-infants").value),
+                cabin: document.getElementById("search-cabin").value,
+                trip_type: "ONE_WAY"
+            };
+            button.disabled = true;
+            status.textContent = `Searching ${payload.origin} → ${payload.destination} for ${payload.departure_date}...`;
+            explorerQuotes = [];
+            applyExplorerFilters();
+            try {
+                const created = await fetch("/search/jobs", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)});
+                if (!created.ok) throw new Error((await created.json()).detail || "Search request failed");
+                const job = await created.json();
+                activeInteractiveSearchId = job.job_id;
+                while (window.__ACTIVE_INTERACTIVE_SEARCH__ === requestId) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    const response = await fetch(`/search/jobs/${job.job_id}`);
+                    const current = await response.json();
+                    if (window.__ACTIVE_INTERACTIVE_SEARCH__ !== requestId) return;
+                    if (current.status === "failed") throw new Error(current.error || "Cleartrip search failed");
+                    if (current.status === "completed") {
+                        explorerQuotes = (current.results || []).map(f => ({
+                            offer_id: f.source?.raw_offer_id,
+                            flight_number: f.airline_code,
+                            airline_code: f.airline_code,
+                            airline_name: f.airline_code,
+                            origin: f.route.origin,
+                            destination: f.route.destination,
+                            route: `${f.route.origin}-${f.route.destination}`,
+                            departure_datetime: f.departure_at,
+                            departure_time: new Date(f.departure_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}),
+                            price_inr: f.price_inr,
+                            total_price_inr: f.price_inr,
+                            base_fare_inr: f.price_inr,
+                            tax_inr: 0,
+                            source: f.source.source_name,
+                            source_name: f.source.source_name,
+                            source_type: f.source.source_type
+                        }));
+                        applyExplorerFilters();
+                        status.textContent = `Search complete: ${current.result_count} matching fares.`;
+                        break;
+                    }
+                    status.textContent = `Searching ${payload.origin} → ${payload.destination} for ${payload.departure_date} (${current.status})...`;
+                }
+            } catch (error) {
+                if (window.__ACTIVE_INTERACTIVE_SEARCH__ === requestId) status.textContent = `Search failed: ${error.message}`;
+            } finally {
+                if (window.__ACTIVE_INTERACTIVE_SEARCH__ === requestId) button.disabled = false;
+            }
+        }
+
         async function onExplorerRouteChange() {
             const routeFilterEl = document.getElementById("route-select") || document.getElementById("explorer-route-filter");
             const routeVal = routeFilterEl ? routeFilterEl.value : "ALL";
@@ -3431,6 +3510,7 @@
             const route = routeFilterEl ? routeFilterEl.value : "ALL";
             const airline = document.getElementById("explorer-airline-filter") ? document.getElementById("explorer-airline-filter").value : "ALL";
             const lead = document.getElementById("explorer-lead-filter") ? document.getElementById("explorer-lead-filter").value : "ALL";
+            const source = document.getElementById("gf-source") ? document.getElementById("gf-source").value : "ALL";
             const sort = document.getElementById("explorer-sort-by") ? document.getElementById("explorer-sort-by").value : "price_asc";
 
             filteredQuotes = explorerQuotes.filter(f => {
@@ -3449,6 +3529,7 @@
                 if (route !== "ALL" && fRoute !== route) return false;
                 if (airline !== "ALL" && f.airline_code !== airline) return false;
                 if (lead !== "ALL" && !(f.lead_window || "").startsWith(lead)) return false;
+                if (source !== "ALL" && (f.source_type || "").toUpperCase() !== source) return false;
                 return true;
             });
 

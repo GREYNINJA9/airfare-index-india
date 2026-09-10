@@ -13,6 +13,7 @@ It does **not** implement a continuously running production scheduler.
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from typing import Any, Dict, List, Mapping
@@ -33,6 +34,8 @@ from index_engine.weights import compute_uniform_base_basket_weights
 from models.route import Route
 from pipeline import process_raw_fares
 from scheduler.search import SearchJob
+
+logger = logging.getLogger("scheduler.jobs")
 
 
 def _utc_day(dt: datetime) -> date:
@@ -141,6 +144,13 @@ def run_collection_cycle(
             continue
 
         scraper_name = getattr(scraper, "name", source_cfg.name)
+
+        # This legacy entry point remains the deterministic fixture cycle used
+        # by tests. Production acquisition uses run_configured_search_cycle().
+        if source_cfg.name.lower() == "cleartrip" and hasattr(scraper, "search"):
+            from scraper.otas.cleartrip import ClearTripScraper
+
+            scraper = ClearTripScraper()
 
         try:
             template = _select_del_bom_template(scraper)
@@ -302,6 +312,43 @@ def generate_search_jobs(
     return jobs
 
 
+def run_configured_search_cycle(
+    *,
+    routes: List[Route] | None = None,
+    dates: List[str] | None = None,
+    conn: Any | None = None,
+    save_raw: bool = False,
+    compute_index: bool = True,
+    routes_path: str = "config/routes.yaml",
+    sources_path: str = "config/sources.yaml",
+) -> Dict[str, Any]:
+    """Run enabled live acquisition sources for the configured route basket."""
+    enabled_sources = [source for source in load_sources(sources_path) if source.enabled]
+    cleartrip = next(
+        (source for source in enabled_sources if source.name.lower() == "cleartrip"),
+        None,
+    )
+    if cleartrip is None:
+        raise ValueError("ClearTrip must be enabled in source configuration")
+
+    configured_scraper = cleartrip.import_and_instantiate()
+    if not hasattr(configured_scraper, "search"):
+        raise TypeError(
+            f"Configured ClearTrip scraper {type(configured_scraper).__name__} "
+            "does not provide the live search contract"
+        )
+
+    jobs = generate_search_jobs(routes=routes, dates=dates, routes_path=routes_path)
+    logger.info("Generated %d Cleartrip SearchJobs", len(jobs))
+    return run_search_jobs(
+        jobs,
+        conn=conn,
+        scraper=configured_scraper,
+        save_raw=save_raw,
+        compute_index=compute_index,
+    )
+
+
 def run_search_jobs(
     jobs: List[SearchJob],
     *,
@@ -343,6 +390,13 @@ def run_search_jobs(
 
     for job in jobs:
         job_key = f"{job.source}:{job.origin}->{job.destination}:{job.iso_date}"
+        logger.info(
+            "SearchJob generated: source=%s route=%s->%s date=%s",
+            job.source,
+            job.origin,
+            job.destination,
+            job.iso_date,
+        )
         try:
             active_scraper = scrapers_cache.get("__default__")
             if active_scraper is None:
@@ -361,6 +415,7 @@ def run_search_jobs(
                 active_scraper = scrapers_cache[src_key]
 
             if hasattr(active_scraper, "search"):
+                logger.info("Cleartrip scraper invoked for job=%s", job_key)
                 extracted = active_scraper.search(job, save_raw=save_raw)
             else:
                 template = _select_del_bom_template(active_scraper)
@@ -378,9 +433,13 @@ def run_search_jobs(
 
             raw_records.extend(extracted)
             jobs_successful += 1
+            logger.info(
+                "SearchJob completed: job=%s records=%d", job_key, len(extracted)
+            )
         except Exception as exc:
             jobs_failed += 1
             job_errors[job_key] = str(exc)
+            logger.exception("SearchJob failed: job=%s", job_key)
 
     # Pipeline validation/cleaning/normalization/dedup
     normalized_fares: List[Any] = []

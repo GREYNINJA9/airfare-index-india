@@ -7,8 +7,8 @@ sources:
   - name: ClearTrip
     source_type: OTA
     enabled: true
-    module: scraper.otas.cleartrip
-    class: ClearTripScraper
+    module: scraper.otas.cleartrip_live
+    class: ClearTripLiveScraper
   - name: EaseMyTrip
     source_type: OTA
     enabled: false

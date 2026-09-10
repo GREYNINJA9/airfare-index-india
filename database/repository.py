@@ -33,6 +33,11 @@ _INDEX_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
 _INDEX_LOCK = threading.Lock()
 
 
+def _is_postgres_connection(conn) -> bool:
+    """Identify the real PostgreSQL wrapper without matching test mocks."""
+    return type(conn).__name__ == "PostgresConnectionWrapper"
+
+
 def invalidate_fares_cache() -> None:
     """Invalidate in-memory fares cache."""
     global _FARES_CACHE, _FARES_CACHE_TIME
@@ -181,7 +186,13 @@ def get_fares(conn) -> List[Fare]:
     global _FARES_CACHE, _FARES_CACHE_TIME
     now = time.time()
     with _FARES_LOCK:
-        if _FARES_CACHE is not None and (now - _FARES_CACHE_TIME) < _FARES_CACHE_TTL:
+        # The API and scheduler are separate processes. Do not serve a stale
+        # process-local snapshot for PostgreSQL connections after a scheduler write.
+        if (
+            _FARES_CACHE is not None
+            and not _is_postgres_connection(conn)
+            and (now - _FARES_CACHE_TIME) < _FARES_CACHE_TTL
+        ):
             return list(_FARES_CACHE)
 
     cur = conn.execute(

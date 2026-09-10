@@ -16,6 +16,8 @@ dependencies = [
     "patchright==1.62.3",
     "psycopg2-binary>=2.9.9",
     "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.1",
+    "requests>=2.31.0",
 ]
 
 [project.optional-dependencies]

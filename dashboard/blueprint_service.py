@@ -718,8 +718,16 @@ def get_blueprint_data(force_refresh: bool = False) -> Dict[str, Any]:
         "volatility": {
             "kpis": {
                 "overall_volatility_cv": 24.8,
-                "most_volatile_route": f"{volatility_ranking[0]['sector']} (CV: {volatility_ranking[0]['volatility_cv']}%)",
-                "least_volatile_route": f"{volatility_ranking[-1]['sector']} (CV: {volatility_ranking[-1]['volatility_cv']}%)",
+                "most_volatile_route": (
+                    f"{volatility_ranking[0]['sector']} (CV: {volatility_ranking[0]['volatility_cv']}%)"
+                    if volatility_ranking
+                    else "No route data"
+                ),
+                "least_volatile_route": (
+                    f"{volatility_ranking[-1]['sector']} (CV: {volatility_ranking[-1]['volatility_cv']}%)"
+                    if volatility_ranking
+                    else "No route data"
+                ),
                 "largest_intraday_change": "+₹2,450 (+42%)",
                 "largest_weekly_change": "+₹3,180 (+54%)",
             },

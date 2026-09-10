@@ -6,6 +6,7 @@ and comparison against official DGCA benchmarks for the interactive dashboard.
 
 from __future__ import annotations
 
+import os
 from typing import Any, Dict, List, Optional
 
 from database.connection import get_connection
@@ -126,6 +127,34 @@ def get_route_flight_details(
             (b.monthly_avg_fare_inr for b in benchmarks if b.origin == orig_norm and b.destination == dest_norm),
             5450.0,
         )
+
+    use_mock_data = os.environ.get("USE_MOCK_DATA", "true").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+    if not route_fares and not use_mock_data:
+        return {
+            "status": "no_data",
+            "route": {"sector": sector_key, "origin": orig_norm, "destination": dest_norm},
+            "summary": {
+                "total_route_quotes": 0,
+                "filtered_quotes": 0,
+                "median_fare_inr": 0.0,
+                "min_fare_inr": 0.0,
+                "max_fare_inr": 0.0,
+                "mean_fare_inr": 0.0,
+                "dgca_benchmark_fare_inr": dgca_target,
+                "tracking_diff_inr": 0.0,
+                "tracking_diff_pct": 0.0,
+                "tracking_status": "Awaiting live data",
+            },
+            "carriers": [],
+            "lead_time": [],
+            "flights": [],
+        }
 
     if not route_fares:
         # Generate representative fallback quotes around DGCA benchmark

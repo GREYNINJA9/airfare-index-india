@@ -21,6 +21,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from api.analytics import router as analytics_router
 from api.fares import router as fares_router
 from api.routes import router as api_router
+from api.search import router as search_router
 from dashboard.app import router as dashboard_router
 from database.connection import get_connection
 from database.schema import init_schema
@@ -96,6 +97,7 @@ app.add_middleware(GZipMiddleware, minimum_size=1000)
 # Mount domain routers
 app.include_router(dashboard_router)
 app.include_router(api_router)
+app.include_router(search_router)
 app.include_router(fares_router)
 app.include_router(analytics_router)
 

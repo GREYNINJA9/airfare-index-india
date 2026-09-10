@@ -33,11 +33,11 @@ docker compose up --build -d
 #### What this single command does automatically:
 1. Provisions a **PostgreSQL 16** container (`airfare-postgres`) with health checks.
 2. Builds the **FastAPI + Patchright Chromium** container (`airfare-api`).
-3. Automatically triggers **`AUTO_SEED=true`**:
-   - Creates database schema (`fares` and `index_results` tables).
-   - Generates and inserts **13,650 verified flight quotes** across 35+ days and 14 domestic sectors.
-   - Computes 39 daily Laspeyres & Jevons APIx index series.
-4. Starts the live web server on port **8000**.
+3. Creates the database schema (`fares` and `index_results` tables) without
+   inserting synthetic seed data.
+4. Starts the API on port **8000** and a persistent Cleartrip scheduler.
+   The scheduler loads `config/routes.yaml`, creates `SearchJob` instances,
+   runs `ClearTripLiveScraper`, and persists through the common pipeline.
 
 ---
 
@@ -96,3 +96,16 @@ pytest tests
 uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
 ```
 Open [http://localhost:8000/dashboard](http://localhost:8000/dashboard) in your browser.
+
+### 6. Run One Controlled Live Search
+```bash
+SCHEDULER_ONCE=true \
+SCHEDULER_ROUTES=DEL-BLR \
+SCHEDULER_DEPARTURE_DATES=2026-09-16 \
+python -m scheduler.runner
+```
+
+The production path is `Cleartrip -> parser -> common pipeline -> PostgreSQL`.
+Raw JSON is optional with `SAVE_RAW=true`; normalized JSON under
+`data/normalized/cleartrip/` is retained only as a debugging/replay artifact
+and is not required for database persistence.
