@@ -127,140 +127,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- GLOBAL FILTERS BAR (Blueprint Section 1) -->
-        <div class="bg-govblue-900/90 border-t border-govblue-800 px-4 sm:px-6 py-2 overflow-x-auto custom-scrollbar">
-            <div class="flex items-center gap-3 text-xs whitespace-nowrap min-w-max">
-                <span class="font-bold text-amber-300 flex items-center gap-1">
-                    <i class="fa-solid fa-filter"></i> Filters:
-                </span>
-
-                <!-- Date -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Date:</span>
-                    <select id="gf-date" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="2026-09-08">08 Sep 2026 (Latest)</option>
-                        <option value="2026-09-07">07 Sep 2026</option>
-                        <option value="2026-09-01">01 Sep 2026</option>
-                        <option value="2026-08-15">15 Aug 2026</option>
-                        <option value="2026-08-01">01 Aug 2026 (Base)</option>
-                    </select>
-                </div>
-
-                <!-- Origin -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Origin:</span>
-                    <select id="gf-origin" onchange="onOriginDestChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Origins</option>
-                        <option value="DEL">DEL (Delhi)</option>
-                        <option value="BOM">BOM (Mumbai)</option>
-                        <option value="BLR">BLR (Bengaluru)</option>
-                        <option value="HYD">HYD (Hyderabad)</option>
-                        <option value="CCU">CCU (Kolkata)</option>
-                        <option value="MAA">MAA (Chennai)</option>
-                    </select>
-                </div>
-
-                <!-- Destination -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Destination:</span>
-                    <select id="gf-destination" onchange="onOriginDestChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Destinations</option>
-                        <option value="BOM">BOM (Mumbai)</option>
-                        <option value="DEL">DEL (Delhi)</option>
-                        <option value="BLR">BLR (Bengaluru)</option>
-                        <option value="HYD">HYD (Hyderabad)</option>
-                        <option value="CCU">CCU (Kolkata)</option>
-                        <option value="MAA">MAA (Chennai)</option>
-                    </select>
-                </div>
-
-                <!-- Route -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Route:</span>
-                    <select id="gf-route" onchange="onGlobalRouteChange(this.value)" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none font-mono">
-                        <option value="ALL">All 14 Routes</option>
-                        <option value="DEL-BOM">DEL → BOM</option>
-                        <option value="BOM-DEL">BOM → DEL</option>
-                        <option value="DEL-BLR">DEL → BLR</option>
-                        <option value="BLR-DEL">BLR → DEL</option>
-                        <option value="BOM-BLR">BOM → BLR</option>
-                        <option value="BLR-BOM">BLR → BOM</option>
-                        <option value="DEL-CCU">DEL → CCU</option>
-                        <option value="CCU-DEL">CCU → DEL</option>
-                        <option value="BLR-HYD">BLR → HYD</option>
-                        <option value="HYD-BLR">HYD → BLR</option>
-                        <option value="MAA-DEL">MAA → DEL</option>
-                        <option value="DEL-MAA">DEL → MAA</option>
-                        <option value="DEL-HYD">DEL → HYD</option>
-                        <option value="HYD-DEL">HYD → DEL</option>
-                    </select>
-                </div>
-
-                <!-- Airline -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Airline:</span>
-                    <select id="gf-airline" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Airlines</option>
-                        <option value="6E">IndiGo (6E)</option>
-                        <option value="AI">Air India (AI)</option>
-                        <option value="IX">Air India Express (IX)</option>
-                        <option value="QP">Akasa Air (QP)</option>
-                        <option value="SG">SpiceJet (SG)</option>
-                    </select>
-                </div>
-
-                <!-- Advance Booking Window -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Booking Window:</span>
-                    <select id="gf-window" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Windows</option>
-                        <option value="T+1">T+1 (Urgent / Next Day)</option>
-                        <option value="T+7">T+7 (1 Week)</option>
-                        <option value="T+15">T+15 (Fortnight)</option>
-                        <option value="T+30">T+30 (1 Month)</option>
-                        <option value="T+45">T+45 (Advance Saver)</option>
-                    </select>
-                </div>
-
-                <!-- Source -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Source:</span>
-                    <select id="gf-source" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Sources (Airlines + OTAs)</option>
-                        <option value="AIRLINE">Airline Direct Only</option>
-                        <option value="OTA">Online Travel Aggregators (OTAs)</option>
-                    </select>
-                </div>
-
-                <!-- Region -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Region:</span>
-                    <select id="gf-region" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All India Domestic</option>
-                        <option value="Metro-Metro">Metro-to-Metro Trunk</option>
-                        <option value="North-South">North-South Corridors</option>
-                        <option value="West-South">West-South Corridors</option>
-                    </select>
-                </div>
-
-                <!-- Comparison Period -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Comparison:</span>
-                    <select id="gf-comparison" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="DoD">Day-over-Day (DoD)</option>
-                        <option value="WoW">Week-over-Week (WoW)</option>
-                        <option value="MoM" selected>Month-over-Month (MoM)</option>
-                        <option value="YoY">Year-over-Year (YoY)</option>
-                    </select>
-                </div>
-
-                <!-- Reset Filter Button -->
-                <button onclick="resetGlobalFilters()" class="text-[11px] text-amber-300 hover:text-white underline cursor-pointer px-2 font-medium">
-                    Reset Filters
-                </button>
-            </div>
-        </div>
     </header>
 
     <!-- 2. MAIN APP LAYOUT: SIDEBAR + SCROLLABLE CANVAS -->
@@ -271,7 +137,7 @@
             <div class="p-3 border-b border-govblue-800/80 bg-govblue-950/40">
                 <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">Navigation Console</span>
                 <div class="flex items-center justify-between text-xs text-slate-300">
-                    <span>14 Analytical Modules</span>
+                    <span>10 Analytical Modules</span>
                     <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-700">v1.0.0</span>
                 </div>
             </div>
@@ -306,77 +172,49 @@
                     <span class="flex-1">Advance Booking</span>
                 </button>
 
-                <!-- 05 Fare Composition -->
-                <button id="nav-tab-composition" onclick="switchTab('tab-composition')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">05</span>
-                    <i class="fa-solid fa-receipt w-4 text-center text-emerald-400"></i>
-                    <span class="flex-1">Fare Composition</span>
-                </button>
-
-                <!-- 06 Volatility -->
-                <button id="nav-tab-volatility" onclick="switchTab('tab-volatility')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">06</span>
-                    <i class="fa-solid fa-wave-square w-4 text-center text-rose-400"></i>
-                    <span class="flex-1">Fare Volatility</span>
-                </button>
-
-                <!-- 07 Route Basket & Weights -->
-                <button id="nav-tab-basket" onclick="switchTab('tab-basket')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">07</span>
-                    <i class="fa-solid fa-scale-balanced w-4 text-center text-amber-400"></i>
-                    <span class="flex-1">Route Weights</span>
-                </button>
-
-                <!-- 08 DGCA Benchmark -->
+                <!-- 05 DGCA Benchmark -->
                 <button id="nav-tab-benchmark" onclick="switchTab('tab-benchmark')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">08</span>
+                    <span class="w-5 text-center font-mono text-slate-400">05</span>
                     <i class="fa-solid fa-award w-4 text-center text-amber-300"></i>
                     <span class="flex-1">DGCA Benchmark</span>
                     <span class="text-[9px] px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-300 font-mono">30D</span>
                 </button>
 
-                <!-- 09 Data Collection -->
+                <!-- 06 Data Collection -->
                 <button id="nav-tab-collection" onclick="switchTab('tab-collection')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">09</span>
+                    <span class="w-5 text-center font-mono text-slate-400">06</span>
                     <i class="fa-solid fa-spider w-4 text-center text-teal-400"></i>
                     <span class="flex-1">Scraper Monitor</span>
                 </button>
 
-                <!-- 10 Data Quality -->
+                <!-- 07 Data Quality -->
                 <button id="nav-tab-quality" onclick="switchTab('tab-quality')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">10</span>
+                    <span class="w-5 text-center font-mono text-slate-400">07</span>
                     <i class="fa-solid fa-shield-halved w-4 text-center text-green-400"></i>
                     <span class="flex-1">Data Quality</span>
                     <span class="text-[9px] px-1 py-0.2 rounded bg-green-500/20 text-green-300 font-mono">98%</span>
                 </button>
 
-                <!-- 11 Fare Explorer -->
-                <button id="nav-tab-explorer" onclick="switchTab('tab-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">11</span>
-                    <i class="fa-solid fa-magnifying-glass-chart w-4 text-center text-yellow-400"></i>
-                    <span class="flex-1">Fare Explorer</span>
+                <!-- 08 MoSPI CPI -->
+                <button id="nav-tab-cpi-explorer" onclick="switchTab('tab-cpi-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
+                    <span class="w-5 text-center font-mono text-slate-400">08</span>
+                    <i class="fa-solid fa-calculator w-4 text-center text-orange-400"></i>
+                    <span class="flex-1">MoSPI CPI Explorer</span>
+                    <span class="text-[9px] px-1 py-0.2 rounded bg-orange-500/30 text-orange-300 font-mono">Live</span>
                 </button>
 
-                <!-- 12 API -->
+                <!-- 09 API Documentation -->
                 <button id="nav-tab-api" onclick="switchTab('tab-api')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">12</span>
+                    <span class="w-5 text-center font-mono text-slate-400">09</span>
                     <i class="fa-solid fa-code w-4 text-center text-pink-400"></i>
                     <span class="flex-1">API Documentation</span>
                 </button>
 
-                <!-- 13 Methodology -->
+                <!-- 10 Methodology -->
                 <button id="nav-tab-methodology" onclick="switchTab('tab-methodology')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">13</span>
+                    <span class="w-5 text-center font-mono text-slate-400">10</span>
                     <i class="fa-solid fa-book-open w-4 text-center text-sky-400"></i>
                     <span class="flex-1">Methodology</span>
-                </button>
-
-                <!-- 14 MoSPI CPI -->
-                <button id="nav-tab-cpi-explorer" onclick="switchTab('tab-cpi-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">14</span>
-                    <i class="fa-solid fa-calculator w-4 text-center text-orange-400"></i>
-                    <span class="flex-1">MoSPI CPI Explorer</span>
-                    <span class="text-[9px] px-1 py-0.2 rounded bg-orange-500/30 text-orange-300 font-mono">Live</span>
                 </button>
             </nav>
 
@@ -564,64 +402,170 @@
                     </div>
                 </div>
 
-                <!-- Primary Chart Row: APIx Trend + Secondary Fare Trend -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                    <!-- APIx Trend Chart (2 cols) -->
-                    <div class="lg:col-span-2 bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                            <div>
-                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-chart-line text-blue-600"></i>
-                                    <span>Real-Time Airfare Price Index (APIx) Trend</span>
-                                </h3>
-                                <p class="text-[11px] text-slate-500">Official Laspeyres vs Geometric Jevons Indices (Base Period 2024 = 100.0)</p>
+                <!-- Primary Chart Row: APIx Trend -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line text-blue-600"></i>
+                                <span>Real-Time Airfare Price Index (APIx) Trend</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500">Official Laspeyres vs Geometric Jevons Indices (Base Period 2024 = 100.0)</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+                                <button id="btn-overview-weight-psd" onclick="setOverviewWeighting('psd')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">
+                                    <i class="fa-solid fa-scale-balanced mr-1 text-[10px]"></i>PSD Weighted
+                                </button>
+                                <button id="btn-overview-weight-uni" onclick="setOverviewWeighting('uniform')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">
+                                    Uniform Weighted
+                                </button>
                             </div>
-                            <div class="flex flex-wrap items-center gap-2">
-                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-                                    <button id="btn-overview-weight-psd" onclick="setOverviewWeighting('psd')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">
-                                        <i class="fa-solid fa-scale-balanced mr-1 text-[10px]"></i>PSD Weighted
-                                    </button>
-                                    <button id="btn-overview-weight-uni" onclick="setOverviewWeighting('uniform')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">
-                                        Uniform Weighted
-                                    </button>
-                                </div>
-                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-                                    <button id="btn-overview-freq-daily" onclick="setOverviewFrequency('daily')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">Daily</button>
-                                    <button id="btn-overview-freq-weekly" onclick="setOverviewFrequency('weekly')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">7D Moving Avg</button>
-                                </div>
-                                <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D</button>
-                                    <button class="px-2 py-0.5 rounded bg-blue-600 text-white font-semibold text-[11px] shadow-xs">30D</button>
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">90D</button>
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">1Y</button>
-                                </div>
+                            <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
+                                <button id="btn-overview-freq-daily" onclick="setOverviewFrequency('daily')" class="px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer">Daily</button>
+                                <button id="btn-overview-freq-weekly" onclick="setOverviewFrequency('weekly')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">7D Moving Avg</button>
                             </div>
                         </div>
-                        <div class="h-64 w-full">
-                            <canvas id="overview-apix-chart"></canvas>
+                    </div>
+                    <div class="h-72 w-full">
+                        <canvas id="overview-apix-chart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Official MoSPI CPI vs Real-Time APIx Comprehensive Comparison -->
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center text-sm font-bold">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                                    <span>Official MoSPI CPI (Item 07.3.3) vs High-Frequency APIx Comparison</span>
+                                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Aligned Baseline (2024=100)</span>
+                                </h3>
+                                <p class="text-xs text-slate-500">Direct econometric and methodological comparison between the official monthly CPI release and daily real-time APIx</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="switchTab('tab-cpi-explorer')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 cursor-pointer">
+                                <span>Open MoSPI CPI Explorer</span>
+                                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Secondary Domestic Fare Trend Chart (1 col) -->
-                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                    <i class="fa-solid fa-indian-rupee-sign text-emerald-600"></i>
-                                    <span>Average Domestic Fare (₹)</span>
-                                </h3>
-                                <span class="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded font-semibold border border-emerald-200">30-Day Series</span>
+                    <!-- 4 Metric Cards Comparison -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <!-- Official MoSPI Airfare CPI -->
+                        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
+                            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                                <span class="font-semibold uppercase tracking-wider text-[10px]">Official MoSPI CPI (July 2026)</span>
+                                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Item 07.3.3</span>
                             </div>
-                            <p class="text-[11px] text-slate-500 mb-3">Weighted national mean ticket price across all 14 routes</p>
-                            <div class="h-56 w-full">
-                                <canvas id="overview-fare-chart"></canvas>
+                            <div class="flex items-baseline gap-2 my-1">
+                                <span class="text-2xl font-extrabold text-slate-900 font-mono">125.46</span>
+                                <span class="text-xs font-bold text-rose-600">+22.94% YoY</span>
+                            </div>
+                            <div class="text-[11px] text-slate-600 pt-2 border-t border-slate-200/80 space-y-0.5">
+                                <div class="flex justify-between"><span>Urban Index:</span><strong class="font-mono text-slate-800">119.60</strong></div>
+                                <div class="flex justify-between"><span>Rural Index:</span><strong class="font-mono text-slate-800">134.43</strong></div>
                             </div>
                         </div>
-                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                            <span>30D Low: <strong class="text-slate-800 font-mono">₹5,420</strong></span>
-                            <span>30D High: <strong class="text-slate-800 font-mono">₹6,280</strong></span>
-                            <span>Spread: <strong class="text-slate-800 font-mono">₹860</strong></span>
+
+                        <!-- Real-Time APIx Index -->
+                        <div class="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200">
+                            <div class="flex items-center justify-between text-xs text-blue-700 mb-1">
+                                <span class="font-semibold uppercase tracking-wider text-[10px]">Real-Time APIx (Sept 2026)</span>
+                                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-800 font-bold">T+0 Daily</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 my-1">
+                                <span id="overview-cpi-comp-apix" class="text-2xl font-extrabold text-blue-950 font-mono">154.19</span>
+                                <span class="text-xs font-bold text-rose-600">+24.18% MoM</span>
+                            </div>
+                            <div class="text-[11px] text-slate-600 pt-2 border-t border-blue-200/80 space-y-0.5">
+                                <div class="flex justify-between"><span>7-Day Moving Avg:</span><strong id="overview-cpi-comp-mvg" class="font-mono text-slate-800">124.67</strong></div>
+                                <div class="flex justify-between"><span>Market Median:</span><strong id="overview-cpi-comp-fare" class="font-mono text-slate-800">₹5,874</strong></div>
+                            </div>
                         </div>
+
+                        <!-- Inflation Tracking Alignment -->
+                        <div class="p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-200">
+                            <div class="flex items-center justify-between text-xs text-emerald-700 mb-1">
+                                <span class="font-semibold uppercase tracking-wider text-[10px]">Tracking Gap vs MoSPI</span>
+                                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Optimal</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 my-1">
+                                <span class="text-2xl font-extrabold text-emerald-900 font-mono">-0.79</span>
+                                <span class="text-xs font-semibold text-emerald-700">pts (7D MA)</span>
+                            </div>
+                            <div class="text-[11px] text-slate-600 pt-2 border-t border-emerald-200/80 space-y-0.5">
+                                <div class="flex justify-between"><span>Variance:</span><strong class="font-mono text-emerald-800">-0.63%</strong></div>
+                                <div class="flex justify-between"><span>Tolerance Target:</span><strong class="text-emerald-700">&lt; 3.00% (Passed)</strong></div>
+                            </div>
+                        </div>
+
+                        <!-- Policy Latency Lead -->
+                        <div class="p-3.5 rounded-xl bg-purple-50/50 border border-purple-200">
+                            <div class="flex items-center justify-between text-xs text-purple-700 mb-1">
+                                <span class="font-semibold uppercase tracking-wider text-[10px]">Policy Time Advantage</span>
+                                <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 font-bold">42-Day Lead</span>
+                            </div>
+                            <div class="flex items-baseline gap-2 my-1">
+                                <span class="text-2xl font-extrabold text-purple-950 font-mono">T+0</span>
+                                <span class="text-xs font-semibold text-purple-700">vs T+12d MoSPI</span>
+                            </div>
+                            <div class="text-[11px] text-slate-600 pt-2 border-t border-purple-200/80 space-y-0.5">
+                                <div class="flex justify-between"><span>Update Cadence:</span><strong class="text-purple-900">Hourly / Daily</strong></div>
+                                <div class="flex justify-between"><span>RBI MPC Utility:</span><strong class="text-purple-900">Real-Time Nowcast</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <div class="overflow-x-auto rounded-lg border border-slate-200">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-slate-50 text-slate-600 font-semibold text-[11px] border-b border-slate-200">
+                                <tr>
+                                    <th class="py-2.5 px-3">Evaluation Dimension</th>
+                                    <th class="py-2.5 px-3">Official MoSPI CPI (Item 07.3.3)</th>
+                                    <th class="py-2.5 px-3">Real-Time APIx Index (This Engine)</th>
+                                    <th class="py-2.5 px-3">Policy Advantage & Enhancement</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-700 font-normal">
+                                <tr class="hover:bg-slate-50/80">
+                                    <td class="py-2 px-3 font-semibold text-slate-900">Reporting Frequency & Latency</td>
+                                    <td class="py-2 px-3 text-slate-600">Monthly bulletin, released on 12th of succeeding month (~42 day total lag)</td>
+                                    <td class="py-2 px-3 font-semibold text-blue-900">Daily high-frequency index (T+0), updated in real time</td>
+                                    <td class="py-2 px-3 text-emerald-700 font-medium">Enables immediate monetary policy reaction ahead of quarterly MPC meetings</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80">
+                                    <td class="py-2 px-3 font-semibold text-slate-900">Price Collection Mechanism</td>
+                                    <td class="py-2 px-3 text-slate-600">Manual field price collection from select travel agents and airline counters</td>
+                                    <td class="py-2 px-3 font-semibold text-blue-900">Automated web scraping across 10 major airlines & OTAs (&gt;90% online market)</td>
+                                    <td class="py-2 px-3 text-emerald-700 font-medium">Reflects dynamic algorithmic surge pricing and real spot booking quotes</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80">
+                                    <td class="py-2 px-3 font-semibold text-slate-900">Spatial Granularity & Corridors</td>
+                                    <td class="py-2 px-3 text-slate-600">Single national sub-index for all domestic air passenger travel</td>
+                                    <td class="py-2 px-3 font-semibold text-blue-900">14 representative DGCA trunk corridors across 6 metro zones (DEL, BOM, BLR, etc.)</td>
+                                    <td class="py-2 px-3 text-emerald-700 font-medium">Pinpoints regional bottleneck corridors and localized demand shocks</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80">
+                                    <td class="py-2 px-3 font-semibold text-slate-900">Advance Booking Decomposition</td>
+                                    <td class="py-2 px-3 text-slate-600">Undifferentiated departure dates; typically captures non-systematic quotes</td>
+                                    <td class="py-2 px-3 font-semibold text-blue-900">5 standard forward horizons (T+1 urgent, T+7, T+15, T+30, T+45 early bird)</td>
+                                    <td class="py-2 px-3 text-emerald-700 font-medium">Isolates non-discretionary emergency price surges from underlying structural inflation</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/80">
+                                    <td class="py-2 px-3 font-semibold text-slate-900">Index Formula & Traffic Weighting</td>
+                                    <td class="py-2 px-3 text-slate-600">Consumer Expenditure Survey (CES) household budget shares</td>
+                                    <td class="py-2 px-3 font-semibold text-blue-900">DGCA scheduled domestic passenger traffic shares (PSD weights) with Jevons & Laspeyres</td>
+                                    <td class="py-2 px-3 text-emerald-700 font-medium">Complies with ILO/IMF CPI Manual standards while capturing carrier substitution elasticity</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -1195,245 +1139,7 @@
             </div>
 
             <!-- ========================================== -->
-            <!-- TAB 05: FARE COMPOSITION                   -->
-            <!-- ========================================== -->
-            <div id="tab-composition" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Ticket Fare Composition & Statutory Fee Breakdown</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Decomposition of total gross fares into base tariff, fuel surcharges (YQ), UDF, PSF, GST, and convenience fees</p>
-                    </div>
-                </div>
-
-                <!-- 6 Composition Component Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Base Airline Fare</span>
-                        <div class="text-xl font-bold text-blue-600 font-mono mt-0.5">64.6%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹3,756 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">User Dev Fee (UDF)</span>
-                        <div class="text-xl font-bold text-indigo-600 font-mono mt-0.5">11.4%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹663 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Fuel Surcharge (YQ)</span>
-                        <div class="text-xl font-bold text-amber-600 font-mono mt-0.5">9.8%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹570 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">GST & Govt Taxes</span>
-                        <div class="text-xl font-bold text-emerald-600 font-mono mt-0.5">5.9%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹343 avg (5% Eco)</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Convenience Fee</span>
-                        <div class="text-xl font-bold text-purple-600 font-mono mt-0.5">5.9%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹343 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Passenger Fee (PSF)</span>
-                        <div class="text-xl font-bold text-teal-600 font-mono mt-0.5">2.4%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹140 avg</span>
-                    </div>
-                </div>
-
-                <!-- Composition Stacked Chart + Airline Breakdown Table -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <!-- Stacked Chart -->
-                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                        <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-emerald-600"></i>
-                            <span>National Fare Component Stacked Share (%)</span>
-                        </h3>
-                        <p class="text-xs text-slate-500 mb-3">Statutory airport charges vs carrier discretionary tariffs</p>
-                        <div class="h-64 w-full">
-                            <canvas id="composition-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Breakdown by Airline -->
-                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
-                                <i class="fa-solid fa-plane-circle-check text-blue-600"></i>
-                                <span>Component Share by Carrier</span>
-                            </h3>
-                            <p class="text-xs text-slate-500 mb-3">Base fare and auxiliary fees split by operating airline</p>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-xs">
-                                    <thead>
-                                        <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
-                                            <th class="py-2 px-3">Carrier</th>
-                                            <th class="py-2 px-3">Base Fare %</th>
-                                            <th class="py-2 px-3">Taxes & UDF %</th>
-                                            <th class="py-2 px-3">Convenience Fee</th>
-                                            <th class="py-2 px-3">Avg Total (₹)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="composition-airline-tbody" class="divide-y divide-slate-100 font-mono">
-                                        <!-- Populated by JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-3 rounded-lg bg-amber-50/60 border border-amber-200 text-xs text-amber-900">
-                            <strong>Regulatory Note:</strong> Under DGCA Civil Aviation Requirements (CAR Section 3), UDF and PSF fees are determined by AERA (Airports Economic Regulatory Authority). The APIx index tracks pure base fare fluctuations separately from statutory fee changes.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- TAB 06: FARE VOLATILITY                    -->
-            <!-- ========================================== -->
-            <div id="tab-volatility" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Route Volatility & Intraday Price Oscillations</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Measuring price dispersion via Coefficient of Variation (CV %) and intraday yield swings</p>
-                    </div>
-                </div>
-
-                <!-- Volatility KPI Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">National Mean Volatility</span>
-                        <div class="text-2xl font-extrabold text-slate-900 font-mono mt-0.5">24.8%</div>
-                        <span class="text-[10px] text-slate-500">Overall CV across routes</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Most Volatile Sector</span>
-                        <div class="text-lg font-bold text-rose-600 font-mono mt-0.5">DEL-BOM (32.4%)</div>
-                        <span class="text-[10px] text-slate-500">Peak dynamic pricing</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Most Stable Sector</span>
-                        <div class="text-lg font-bold text-emerald-600 font-mono mt-0.5">BLR-HYD (14.2%)</div>
-                        <span class="text-[10px] text-slate-500">Consistent price band</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Max Intraday Swing</span>
-                        <div class="text-lg font-bold text-amber-600 font-mono mt-0.5">+₹2,450 (+42%)</div>
-                        <span class="text-[10px] text-slate-500">Evening rush surge</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Max Weekly Spread</span>
-                        <div class="text-lg font-bold text-indigo-600 font-mono mt-0.5">+₹3,180 (+54%)</div>
-                        <span class="text-[10px] text-slate-500">Weekend leisure spikes</span>
-                    </div>
-                </div>
-
-                <!-- Intraday Movement Chart -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-wave-square text-rose-500"></i>
-                                <span>Intraday Price Movement Across Daily Intervals</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Tracking fare quotes at 08:00, 10:00, 12:00, 14:00, 16:00, and 18:00 IST</p>
-                        </div>
-                    </div>
-                    <div class="h-64 w-full">
-                        <canvas id="volatility-intraday-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Volatility Ranking Table -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-list-ol text-amber-500"></i>
-                            <span>Complete Route Volatility Ranking (CV %)</span>
-                        </h3>
-                        <span class="text-xs text-slate-400">All 14 Corridors Ranked</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
-                                    <th class="py-2 px-3">Rank</th>
-                                    <th class="py-2 px-3">Route</th>
-                                    <th class="py-2 px-3">Volatility CV (%)</th>
-                                    <th class="py-2 px-3">Min Fare (₹)</th>
-                                    <th class="py-2 px-3">Max Fare (₹)</th>
-                                    <th class="py-2 px-3">Price Spread (₹)</th>
-                                    <th class="py-2 px-3">Volatility Band</th>
-                                </tr>
-                            </thead>
-                            <tbody id="volatility-table-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- TAB 07: ROUTE BASKET & WEIGHTS             -->
-            <!-- ========================================== -->
-            <div id="tab-basket" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>DGCA Passenger Traffic Route Basket & Index Weights</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Official Directorate General of Civil Aviation passenger traffic weights assigned to all 14 monitored domestic city-pairs</p>
-                    </div>
-                </div>
-
-                <!-- Weight Distribution Table -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-scale-balanced text-amber-500"></i>
-                                <span>Official DGCA City-Pair Traffic Weights</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Based on annual scheduled domestic passenger traffic statistics</p>
-                        </div>
-                        <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">Sum: 100.0%</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
-                                    <th class="py-2 px-3">Sector</th>
-                                    <th class="py-2 px-3">Origin Airport</th>
-                                    <th class="py-2 px-3">Destination Airport</th>
-                                    <th class="py-2 px-3">Corridor Category</th>
-                                    <th class="py-2 px-3">Annual Pax (Lakhs)</th>
-                                    <th class="py-2 px-3">DGCA Pax Share (%)</th>
-                                    <th class="py-2 px-3">Index Basket Weight (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="basket-weights-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Methodology Note -->
-                <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-950 space-y-2">
-                    <h4 class="font-bold text-blue-900 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-info"></i> Basket Recalibration Protocol
-                    </h4>
-                    <p>In accordance with MoSPI national accounting best practices, the route basket represents over 62% of all scheduled domestic passenger traffic in India. Delhi-Mumbai (DEL-BOM) commands the largest single weight (14.2%), followed by Delhi-Bengaluru (DEL-BLR, 10.8%). Weights are updated annually upon publication of DGCA Form A annual traffic reports.</p>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- TAB 08: DGCA BENCHMARK & 30-DAY BACKTEST   -->
+            <!-- TAB 05: DGCA BENCHMARK & 30-DAY BACKTEST   -->
             <!-- ========================================== -->
             <div id="tab-benchmark" class="tab-content space-y-6">
                 <!-- Section Header -->
@@ -1685,138 +1391,7 @@
             </div>
 
             <!-- ========================================== -->
-            <!-- TAB 11: FARE EXPLORER (QUOTE-LEVEL TABLE)  -->
-            <!-- ========================================== -->
-            <div id="tab-explorer" class="tab-content space-y-6">
-                <div id="tab-flight-explorer" class="hidden"></div>
-                <form id="interactive-search-form" onsubmit="submitInteractiveSearch(event)" class="bg-blue-50 p-4 rounded-xl border border-blue-200 space-y-3">
-                    <div class="flex flex-wrap items-end gap-3 text-xs">
-                        <label class="font-semibold">Origin<select id="search-origin" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option>DEL</option><option>BOM</option><option>BLR</option><option>HYD</option><option>CCU</option><option>MAA</option></select></label>
-                        <label class="font-semibold">Destination<select id="search-destination" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option>BLR</option><option>BOM</option><option>DEL</option><option>HYD</option><option>CCU</option><option>MAA</option></select></label>
-                        <label class="font-semibold">Departure<input id="search-departure-date" type="date" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Adults<input id="search-adults" type="number" min="1" value="1" required class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Children<input id="search-children" type="number" min="0" value="0" class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Infants<input id="search-infants" type="number" min="0" value="0" class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Cabin<select id="search-cabin" class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option value="ECONOMY">Economy</option><option value="PREMIUM_ECONOMY">Premium Economy</option><option value="BUSINESS">Business</option><option value="FIRST">First</option></select></label>
-                        <button id="interactive-search-submit" type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-1.5 rounded-lg">Search Cleartrip</button>
-                    </div>
-                    <p id="interactive-search-status" class="text-xs text-slate-600" aria-live="polite"></p>
-                </form>
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Individual Flight Quote Explorer & Microdata Export</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Explore, search, filter, and export verified flight fare quotes down to individual departures</p>
-                    </div>
-                    <!-- Export Buttons -->
-                    <div class="flex items-center gap-2">
-                        <button onclick="exportExplorerCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-file-csv"></i> Export CSV
-                        </button>
-                        <button onclick="exportExplorerJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-file-code"></i> Export JSON
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Explorer Filter Controls -->
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center gap-3 text-xs">
-                    <div class="flex-1 min-w-[180px]">
-                        <input id="explorer-search" type="text" oninput="applyExplorerFilters()" placeholder="Search flight #, airline, origin, dest..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-
-                    <select id="route-select" onchange="onExplorerRouteChange()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 font-mono">
-                        <option value="ALL">All Routes (14)</option>
-                        <option value="DEL-BOM">DEL → BOM</option>
-                        <option value="BOM-DEL">BOM → DEL</option>
-                        <option value="DEL-BLR">DEL → BLR</option>
-                        <option value="BLR-DEL">BLR → DEL</option>
-                        <option value="BOM-BLR">BOM → BLR</option>
-                        <option value="BLR-BOM">BLR → BOM</option>
-                        <option value="DEL-CCU">DEL → CCU</option>
-                        <option value="CCU-DEL">CCU → DEL</option>
-                        <option value="BLR-HYD">BLR → HYD</option>
-                        <option value="HYD-BLR">HYD → BLR</option>
-                        <option value="MAA-DEL">MAA → DEL</option>
-                        <option value="DEL-MAA">DEL → MAA</option>
-                        <option value="DEL-HYD">DEL → HYD</option>
-                        <option value="HYD-DEL">HYD → DEL</option>
-                    </select>
-
-                    <select id="explorer-airline-filter" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
-                        <option value="ALL">All Airlines</option>
-                        <option value="6E">IndiGo (6E)</option>
-                        <option value="AI">Air India (AI)</option>
-                        <option value="IX">Air India Express (IX)</option>
-                        <option value="QP">Akasa Air (QP)</option>
-                        <option value="SG">SpiceJet (SG)</option>
-                    </select>
-
-                    <select id="explorer-lead-filter" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
-                        <option value="ALL">All Horizons</option>
-                        <option value="T+1">T+1 (Urgent)</option>
-                        <option value="T+7">T+7 (1 Week)</option>
-                        <option value="T+15">T+15 (Fortnight)</option>
-                        <option value="T+30">T+30 (1 Month)</option>
-                        <option value="T+45">T+45 (Saver)</option>
-                    </select>
-
-                    <select id="explorer-sort-by" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
-                        <option value="price_asc">Price: Low to High</option>
-                        <option value="price_desc">Price: High to Low</option>
-                        <option value="time_asc">Departure: Earliest First</option>
-                    </select>
-                </div>
-
-                <!-- Quotes Table -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                    <div class="p-3 border-b border-slate-200 flex items-center justify-between text-xs text-slate-500 bg-slate-50/70">
-                        <span>Showing <strong id="explorer-count" class="text-slate-800">0</strong> matching quotes</span>
-                        <span id="explorer-pagination-info">Page 1 of 1</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table id="route-flights-table" class="w-full text-left text-xs">
-                            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-[11px]">
-                                <tr>
-                                    <th class="py-2.5 px-3">Flight #</th>
-                                    <th class="py-2.5 px-3">Airline</th>
-                                    <th class="py-2.5 px-3">Route</th>
-                                    <th class="py-2.5 px-3">Departure</th>
-                                    <th class="py-2.5 px-3">Window</th>
-                                    <th class="py-2.5 px-3">Base Fare</th>
-                                    <th class="py-2.5 px-3">Taxes & Fees</th>
-                                    <th class="py-2.5 px-3">Total Price (₹)</th>
-                                    <th class="py-2.5 px-3">Source</th>
-                                    <th class="py-2.5 px-3">Verified</th>
-                                </tr>
-                            </thead>
-                            <tbody id="explorer-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination Controls -->
-                    <div class="p-3 border-t border-slate-200 flex items-center justify-between text-xs bg-slate-50/50">
-                        <button id="explorer-prev-btn" onclick="prevExplorerPage()" class="px-3 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 cursor-pointer disabled:opacity-50">
-                            Previous
-                        </button>
-                        <div class="flex items-center gap-1 text-slate-600">
-                            <span>Page</span>
-                            <span id="explorer-current-page" class="font-bold text-slate-900">1</span>
-                            <span>of</span>
-                            <span id="explorer-total-pages" class="font-bold text-slate-900">1</span>
-                        </div>
-                        <button id="explorer-next-btn" onclick="nextExplorerPage()" class="px-3 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 cursor-pointer disabled:opacity-50">
-                            Next
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- TAB 12: API DOCUMENTATION                  -->
+            <!-- TAB 09: API DOCUMENTATION                  -->
             <!-- ========================================== -->
             <div id="tab-api" class="tab-content space-y-6">
                 <!-- Section Header -->
@@ -2122,10 +1697,6 @@
         // Active State
         let currentTab = "tab-overview";
         let activeRouteCode = "DEL-BOM";
-        let explorerQuotes = [];
-        let filteredQuotes = [];
-        let explorerPage = 1;
-        const explorerPageSize = 15;
 
         // 22 Layman Terms Dictionary
         const LAYMAN_TERMS = [
@@ -2266,12 +1837,11 @@
 
         // 1. Navigation / Tab Switching
         function switchTab(tabId) {
-            if (tabId === "tab-flight-explorer") tabId = "tab-explorer";
             currentTab = tabId;
             document.querySelectorAll(".sidebar-link").forEach(btn => {
                 btn.classList.remove("active");
             });
-            const activeBtn = document.getElementById("nav-" + tabId) || document.getElementById("nav-tab-explorer");
+            const activeBtn = document.getElementById("nav-" + tabId) || document.getElementById("nav-tab-overview");
             if (activeBtn) activeBtn.classList.add("active");
 
             document.querySelectorAll(".tab-content").forEach(el => {
@@ -2280,9 +1850,36 @@
             const activePanel = document.getElementById(tabId);
             if (activePanel) activePanel.classList.add("active");
 
+            // Re-render and resize charts for the newly active tab
+            const bp = window.__BLUEPRINT_DATA__;
+            if (bp) {
+                try {
+                    if (tabId === "tab-overview") {
+                        if (typeof initOverviewCharts === "function") initOverviewCharts();
+                    } else if (tabId === "tab-routes") {
+                        if (typeof renderSingleRouteData === "function") renderSingleRouteData(activeRouteCode);
+                    } else if (tabId === "tab-airlines") {
+                        if (bp.airlines && typeof initAirlinesChart === "function") initAirlinesChart(bp.airlines);
+                    } else if (tabId === "tab-leadtime") {
+                        if (bp.lead_time && typeof renderLeadTime === "function") renderLeadTime(bp.lead_time);
+                    } else if (tabId === "tab-benchmark") {
+                        if (bp.benchmark && typeof renderBenchmark === "function") renderBenchmark(bp.benchmark);
+                    } else if (tabId === "tab-cpi-explorer") {
+                        if (typeof renderCpiExplorer === "function") renderCpiExplorer();
+                    }
+                } catch (e) {
+                    console.warn("Tab chart re-render warning:", e);
+                }
+            }
+
             setTimeout(() => {
+                Object.values(window.__CHARTS__ || {}).forEach(chart => {
+                    if (chart && typeof chart.resize === "function") {
+                        try { chart.resize(); } catch (err) {}
+                    }
+                });
                 window.dispatchEvent(new Event("resize"));
-            }, 50);
+            }, 80);
         }
 
         // 2. Help Modal Controls
@@ -2370,13 +1967,9 @@
             renderRoutes(bp.routes);
             renderAirlines(bp.airlines);
             renderLeadTime(bp.lead_time);
-            renderComposition(bp.fare_composition);
-            renderVolatility(bp.volatility);
-            renderBasket(bp.route_basket);
             renderBenchmark(bp.benchmark);
             renderCollection(bp.data_collection);
             renderQuality(bp.data_quality);
-            initExplorer();
             renderCpiExplorer();
         }
 
@@ -2389,22 +1982,6 @@
             document.getElementById("header-status").textContent = "Status: " + (h.status_label || "LIVE");
         }
 
-        function onOriginDestChange() {
-            const orig = document.getElementById("gf-origin").value;
-            const dest = document.getElementById("gf-destination").value;
-            if (orig !== "ALL" && dest !== "ALL") {
-                const combined = orig + "-" + dest;
-                const routeSelect = document.getElementById("gf-route");
-                for (let i = 0; i < routeSelect.options.length; i++) {
-                    if (routeSelect.options[i].value === combined) {
-                        routeSelect.selectedIndex = i;
-                        onGlobalRouteChange(combined);
-                        return;
-                    }
-                }
-            }
-        }
-
         function onGlobalRouteChange(routeCode) {
             if (routeCode && routeCode !== "ALL") {
                 activeRouteCode = routeCode;
@@ -2412,21 +1989,6 @@
                 if (tabSel) tabSel.value = routeCode;
                 renderSingleRouteData(routeCode);
             }
-        }
-
-        function onGlobalFilterChange() {
-            applyExplorerFilters();
-        }
-
-        function resetGlobalFilters() {
-            document.getElementById("gf-origin").value = "ALL";
-            document.getElementById("gf-destination").value = "ALL";
-            document.getElementById("gf-route").value = "ALL";
-            document.getElementById("gf-airline").value = "ALL";
-            document.getElementById("gf-window").value = "ALL";
-            document.getElementById("gf-source").value = "ALL";
-            document.getElementById("gf-region").value = "ALL";
-            applyExplorerFilters();
         }
 
         function refreshBlueprintData() {
@@ -2502,6 +2064,17 @@
             if (elTriCpi) elTriCpi.textContent = Number(triCpiVal).toFixed(2);
             const elTriDelta = document.getElementById("tri-cpi-delta");
             if (elTriDelta) elTriDelta.textContent = (triCpiDelta >= 0 ? "+" : "") + Number(triCpiDelta).toFixed(2) + " pts";
+
+            const elCpiCompApix = document.getElementById("overview-cpi-comp-apix");
+            if (elCpiCompApix) elCpiCompApix.textContent = Number(triApixVal).toFixed(2);
+            const elCpiCompFare = document.getElementById("overview-cpi-comp-fare");
+            if (elCpiCompFare) elCpiCompFare.textContent = "₹" + Math.round(triMarketFare).toLocaleString();
+            const elCpiCompMvg = document.getElementById("overview-cpi-comp-mvg");
+            if (elCpiCompMvg) {
+                const chartData = window.__INITIAL_CHARTS__ || {};
+                const mvgList = (chartData.trend || {}).moving_avg || [];
+                if (mvgList.length > 0) elCpiCompMvg.textContent = Number(mvgList[mvgList.length - 1]).toFixed(2);
+            }
 
             const routeTbody = document.getElementById("overview-route-preview-tbody");
             if (routeTbody && ov.heatmap_preview) {
@@ -2631,6 +2204,22 @@
                 }
             ];
 
+            const cpiSeries = trend.cpi || [];
+            if (cpiSeries.length > 0) {
+                datasets.push({
+                    label: "Official MoSPI CPI (Item 07.3.3 Airfare)",
+                    data: cpiSeries,
+                    borderColor: "#059669",
+                    backgroundColor: "transparent",
+                    borderDash: [6, 4],
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.2,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                });
+            }
+
             if (overviewFrequency === 'weekly' && mvg.length > 0) {
                 datasets.push({
                     label: "7D Rolling Moving Average",
@@ -2661,34 +2250,50 @@
             const ctx1 = document.getElementById("overview-apix-chart");
             if (ctx1) {
                 if (window.__CHARTS__["overview-apix"]) window.__CHARTS__["overview-apix"].destroy();
+                const cpiSeries = trend.cpi || [];
+                const datasets = [
+                    {
+                        label: "Laspeyres APIx (Fixed DGCA Basket)",
+                        data: lasp,
+                        borderColor: "#205493",
+                        backgroundColor: "rgba(32, 84, 147, 0.08)",
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 2,
+                        pointHoverRadius: 5
+                    },
+                    {
+                        label: "Geometric Jevons APIx",
+                        data: jev,
+                        borderColor: "#dd6b20",
+                        borderDash: [4, 4],
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.3,
+                        pointRadius: 2,
+                        pointHoverRadius: 5
+                    }
+                ];
+                if (cpiSeries.length > 0) {
+                    datasets.push({
+                        label: "Official MoSPI CPI (Item 07.3.3 Airfare)",
+                        data: cpiSeries,
+                        borderColor: "#059669",
+                        backgroundColor: "transparent",
+                        borderDash: [6, 4],
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0.2,
+                        pointRadius: 2,
+                        pointHoverRadius: 5
+                    });
+                }
                 window.__CHARTS__["overview-apix"] = new Chart(ctx1, {
                     type: "line",
                     data: {
                         labels: dates,
-                        datasets: [
-                            {
-                                label: "Laspeyres APIx (Fixed DGCA Basket)",
-                                data: lasp,
-                                borderColor: "#205493",
-                                backgroundColor: "rgba(32, 84, 147, 0.08)",
-                                borderWidth: 2.5,
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 2,
-                                pointHoverRadius: 5
-                            },
-                            {
-                                label: "Geometric Jevons APIx",
-                                data: jev,
-                                borderColor: "#dd6b20",
-                                borderDash: [4, 4],
-                                borderWidth: 2,
-                                fill: false,
-                                tension: 0.3,
-                                pointRadius: 2,
-                                pointHoverRadius: 5
-                            }
-                        ]
+                        datasets: datasets
                     },
                     options: {
                         responsive: true,
@@ -2719,64 +2324,23 @@
                 });
             }
 
-            const ctx2 = document.getElementById("overview-fare-chart");
-            if (ctx2) {
-                if (window.__CHARTS__["overview-fare"]) window.__CHARTS__["overview-fare"].destroy();
-                window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
-                    type: "line",
-                    data: {
-                        labels: dates,
-                        datasets: [
-                            {
-                                label: "National Average Fare (₹)",
-                                data: fares,
-                                borderColor: "#059669",
-                                backgroundColor: "rgba(5, 150, 105, 0.08)",
-                                borderWidth: 2.5,
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(c) { return "₹" + Math.round(c.parsed.y).toLocaleString(); }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                grid: { color: "#f1f5f9" },
-                                ticks: {
-                                    font: { size: 10, family: "JetBrains Mono" },
-                                    callback: function(v) { return "₹" + v; }
-                                }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 9, family: "JetBrains Mono" } }
-                            }
-                        }
-                    }
-                });
-            }
-
             const ctx3 = document.getElementById("overview-lead-chart");
             if (ctx3) {
                 if (window.__CHARTS__["overview-lead"]) window.__CHARTS__["overview-lead"].destroy();
+                const bp = window.__BLUEPRINT_DATA__;
+                let leadLabels = ["T+1", "T+7", "T+15", "T+30", "T+45"];
+                let leadData = [8240, 6150, 5280, 4490, 4290];
+                if (bp && bp.lead_time && bp.lead_time.window_stats) {
+                    leadLabels = bp.lead_time.window_stats.map(w => w.window);
+                    leadData = bp.lead_time.window_stats.map(w => Math.round(w.average_fare_inr));
+                }
                 window.__CHARTS__["overview-lead"] = new Chart(ctx3, {
                     type: "line",
                     data: {
-                        labels: ["T+1", "T+7", "T+15", "T+30", "T+45"],
+                        labels: leadLabels,
                         datasets: [{
                             label: "Fare (₹)",
-                            data: [8240, 6150, 5280, 4490, 4290],
+                            data: leadData,
                             borderColor: "#9333ea",
                             backgroundColor: "rgba(147, 51, 234, 0.1)",
                             borderWidth: 2,
@@ -2790,7 +2354,7 @@
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
                         scales: {
-                            y: { ticks: { font: { size: 9, family: "JetBrains Mono" } } },
+                            y: { ticks: { font: { size: 9, family: "JetBrains Mono" }, callback: v => "₹" + v } },
                             x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
                         }
                     }
@@ -2883,8 +2447,6 @@
 
         function onRouteTabSelect(routeCode) {
             activeRouteCode = routeCode;
-            const gf = document.getElementById("gf-route");
-            if (gf) gf.value = routeCode;
             renderSingleRouteData(routeCode);
         }
 
@@ -3280,130 +2842,6 @@
             }
         }
 
-        // 9. Render Fare Composition
-        function renderComposition(compData) {
-            if (!compData) return;
-
-            const tbody = document.getElementById("composition-airline-tbody");
-            if (tbody && compData.by_airline) {
-                tbody.innerHTML = compData.by_airline.map(a => `
-                    <tr class="hover:bg-slate-50">
-                        <td class="py-2 px-3 font-sans font-bold text-slate-800">${a.airline_name}</td>
-                        <td class="py-2 px-3 text-blue-700 font-bold">${a.base_fare_pct}%</td>
-                        <td class="py-2 px-3 text-slate-700">${a.taxes_udf_pct}%</td>
-                        <td class="py-2 px-3 text-slate-700">₹${a.convenience_fee_inr}</td>
-                        <td class="py-2 px-3 font-bold text-slate-900">₹${Math.round(a.average_total_inr).toLocaleString()}</td>
-                    </tr>
-                `).join("");
-            }
-
-            const ctx = document.getElementById("composition-chart");
-            if (ctx) {
-                if (window.__CHARTS__["composition"]) window.__CHARTS__["composition"].destroy();
-                window.__CHARTS__["composition"] = new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: ["DEL-BOM", "BOM-DEL", "DEL-BLR", "BLR-DEL", "BOM-BLR", "BLR-HYD", "MAA-DEL"],
-                        datasets: [
-                            { label: "Base Fare (64.6%)", data: [64.6, 65.0, 64.2, 64.8, 65.2, 63.8, 64.9], backgroundColor: "#2b6cb0" },
-                            { label: "UDF (11.4%)", data: [11.4, 11.2, 11.5, 11.3, 11.2, 11.8, 11.4], backgroundColor: "#4f46e5" },
-                            { label: "Fuel YQ (9.8%)", data: [9.8, 9.7, 9.9, 9.8, 9.7, 9.9, 9.8], backgroundColor: "#dd6b20" },
-                            { label: "GST Taxes (5.9%)", data: [5.9, 5.9, 5.9, 5.9, 5.9, 5.9, 5.9], backgroundColor: "#059669" },
-                            { label: "Convenience Fee (5.9%)", data: [5.9, 5.8, 6.1, 5.8, 5.6, 6.2, 5.6], backgroundColor: "#9333ea" },
-                            { label: "PSF (2.4%)", data: [2.4, 2.4, 2.4, 2.4, 2.4, 2.4, 2.4], backgroundColor: "#0d9488" }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: { stacked: true, ticks: { font: { size: 9, family: "JetBrains Mono" } } },
-                            y: { stacked: true, max: 100, ticks: { callback: v => v + "%", font: { size: 9, family: "JetBrains Mono" } } }
-                        },
-                        plugins: {
-                            legend: { position: "top", labels: { boxWidth: 10, font: { size: 10, family: "Inter" } } }
-                        }
-                    }
-                });
-            }
-        }
-
-        // 10. Render Volatility
-        function renderVolatility(volData) {
-            if (!volData) return;
-
-            const tbody = document.getElementById("volatility-table-tbody");
-            if (tbody && volData.ranking) {
-                tbody.innerHTML = volData.ranking.map((r, idx) => `
-                    <tr class="hover:bg-slate-50 cursor-pointer" onclick="selectAndGoRoute('${r.sector}')">
-                        <td class="py-2 px-3 font-bold text-slate-500">${idx + 1}</td>
-                        <td class="py-2 px-3 font-bold text-blue-900">${r.sector}</td>
-                        <td class="py-2 px-3 font-bold ${r.volatility_cv >= 25 ? 'text-rose-600' : (r.volatility_cv >= 18 ? 'text-amber-600' : 'text-emerald-600')}">
-                            ${r.volatility_cv}%
-                        </td>
-                        <td class="py-2 px-3 text-emerald-600">₹${Math.round(r.min_fare).toLocaleString()}</td>
-                        <td class="py-2 px-3 text-rose-600">₹${Math.round(r.max_fare).toLocaleString()}</td>
-                        <td class="py-2 px-3 text-slate-800 font-bold">₹${Math.round(r.spread).toLocaleString()}</td>
-                        <td class="py-2 px-3 font-sans">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.volatility_cv >= 25 ? 'bg-rose-100 text-rose-800' : (r.volatility_cv >= 18 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800')}">
-                                ${r.volatility_cv >= 25 ? 'High Dynamic' : (r.volatility_cv >= 18 ? 'Moderate' : 'Stable Band')}
-                            </span>
-                        </td>
-                    </tr>
-                `).join("");
-            }
-
-            const ctx = document.getElementById("volatility-intraday-chart");
-            if (ctx && volData.intraday_movement) {
-                if (window.__CHARTS__["volatility-intraday"]) window.__CHARTS__["volatility-intraday"].destroy();
-                const labels = volData.intraday_movement.map(x => x.time);
-                const fares = volData.intraday_movement.map(x => x.average_fare_inr);
-
-                window.__CHARTS__["volatility-intraday"] = new Chart(ctx, {
-                    type: "line",
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: "Intraday Average Ticket Price (₹)",
-                            data: fares,
-                            borderColor: "#e11d48",
-                            backgroundColor: "rgba(225, 29, 72, 0.08)",
-                            borderWidth: 2.5,
-                            fill: true,
-                            tension: 0.35,
-                            pointRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" }, callback: v => "₹" + v } },
-                            x: { ticks: { font: { size: 10, family: "JetBrains Mono" } } }
-                        }
-                    }
-                });
-            }
-        }
-
-        // 11. Render Route Basket
-        function renderBasket(basketData) {
-            if (!basketData || !basketData.weights_table) return;
-            const tbody = document.getElementById("basket-weights-tbody");
-            if (tbody) {
-                tbody.innerHTML = basketData.weights_table.map(r => `
-                    <tr class="hover:bg-slate-50 cursor-pointer" onclick="selectAndGoRoute('${r.sector}')">
-                        <td class="py-2 px-3 font-bold text-blue-900">${r.sector}</td>
-                        <td class="py-2 px-3 font-sans text-slate-700">${r.origin_city} (${r.origin})</td>
-                        <td class="py-2 px-3 font-sans text-slate-700">${r.dest_city} (${r.destination})</td>
-                        <td class="py-2 px-3 font-sans"><span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">${r.category}</span></td>
-                        <td class="py-2 px-3 font-bold text-slate-800">${r.annual_pax_lakhs}</td>
-                        <td class="py-2 px-3 font-bold text-slate-800">${r.dgca_pax_share_pct}%</td>
-                        <td class="py-2 px-3 font-bold text-emerald-700 bg-emerald-50/50">${r.basket_weight_pct}%</td>
-                    </tr>
-                `).join("");
-            }
-        }
 
         // 12. Render Benchmark & Backtest
         function renderBenchmark(bmData) {
@@ -3516,271 +2954,6 @@
             }
         }
 
-        // 15. Fare Explorer Logic
-        function initExplorer() {
-            const initialFlights = window.__INITIAL_FLIGHTS__ || {};
-            const quotes = initialFlights.flights || [];
-            explorerQuotes = quotes;
-            applyExplorerFilters();
-        }
-
-        let activeInteractiveSearchId = null;
-
-        async function submitInteractiveSearch(event) {
-            event.preventDefault();
-            const requestId = Symbol("interactive-search");
-            window.__ACTIVE_INTERACTIVE_SEARCH__ = requestId;
-            const status = document.getElementById("interactive-search-status");
-            const button = document.getElementById("interactive-search-submit");
-            const payload = {
-                origin: document.getElementById("search-origin").value,
-                destination: document.getElementById("search-destination").value,
-                departure_date: document.getElementById("search-departure-date").value,
-                adults: Number(document.getElementById("search-adults").value),
-                children: Number(document.getElementById("search-children").value),
-                infants: Number(document.getElementById("search-infants").value),
-                cabin: document.getElementById("search-cabin").value,
-                trip_type: "ONE_WAY"
-            };
-            button.disabled = true;
-            status.textContent = `Searching ${payload.origin} → ${payload.destination} for ${payload.departure_date}...`;
-            explorerQuotes = [];
-            applyExplorerFilters();
-            try {
-                const created = await fetch("/search/jobs", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)});
-                if (!created.ok) throw new Error((await created.json()).detail || "Search request failed");
-                const job = await created.json();
-                activeInteractiveSearchId = job.job_id;
-                while (window.__ACTIVE_INTERACTIVE_SEARCH__ === requestId) {
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    const response = await fetch(`/search/jobs/${job.job_id}`);
-                    const current = await response.json();
-                    if (window.__ACTIVE_INTERACTIVE_SEARCH__ !== requestId) return;
-                    if (current.status === "failed") throw new Error(current.error || "Cleartrip search failed");
-                    if (current.status === "completed") {
-                        explorerQuotes = (current.results || []).map(f => ({
-                            offer_id: f.source?.raw_offer_id,
-                            flight_number: f.airline_code,
-                            airline_code: f.airline_code,
-                            airline_name: f.airline_code,
-                            origin: f.route.origin,
-                            destination: f.route.destination,
-                            route: `${f.route.origin}-${f.route.destination}`,
-                            departure_datetime: f.departure_at,
-                            departure_time: new Date(f.departure_at).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"}),
-                            price_inr: f.price_inr,
-                            total_price_inr: f.price_inr,
-                            base_fare_inr: f.price_inr,
-                            tax_inr: 0,
-                            source: f.source.source_name,
-                            source_name: f.source.source_name,
-                            source_type: f.source.source_type
-                        }));
-                        applyExplorerFilters();
-                        status.textContent = `Search complete: ${current.result_count} matching fares.`;
-                        break;
-                    }
-                    status.textContent = `Searching ${payload.origin} → ${payload.destination} for ${payload.departure_date} (${current.status})...`;
-                }
-            } catch (error) {
-                if (window.__ACTIVE_INTERACTIVE_SEARCH__ === requestId) status.textContent = `Search failed: ${error.message}`;
-            } finally {
-                if (window.__ACTIVE_INTERACTIVE_SEARCH__ === requestId) button.disabled = false;
-            }
-        }
-
-        async function onExplorerRouteChange() {
-            const routeFilterEl = document.getElementById("route-select") || document.getElementById("explorer-route-filter");
-            const routeVal = routeFilterEl ? routeFilterEl.value : "ALL";
-            if (routeVal !== "ALL" && routeVal.includes("-")) {
-                const [orig, dest] = routeVal.split("-");
-                try {
-                    const res = await fetch(`/dashboard/api/route-flights?origin=${orig}&destination=${dest}&limit=100`);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && data.flights && data.flights.length) {
-                            const existingIds = new Set(explorerQuotes.map(q => q.offer_id));
-                            data.flights.forEach(f => {
-                                if (!existingIds.has(f.offer_id)) {
-                                    explorerQuotes.push(f);
-                                    existingIds.add(f.offer_id);
-                                }
-                            });
-                        }
-                    }
-                } catch (e) {
-                    console.warn("Could not fetch route flights:", e);
-                }
-            }
-            applyExplorerFilters();
-        }
-
-        function applyExplorerFilters() {
-            const search = (document.getElementById("explorer-search") ? document.getElementById("explorer-search").value : "").toLowerCase().trim();
-            const routeFilterEl = document.getElementById("route-select") || document.getElementById("explorer-route-filter");
-            const route = routeFilterEl ? routeFilterEl.value : "ALL";
-            const airline = document.getElementById("explorer-airline-filter") ? document.getElementById("explorer-airline-filter").value : "ALL";
-            const lead = document.getElementById("explorer-lead-filter") ? document.getElementById("explorer-lead-filter").value : "ALL";
-            const source = document.getElementById("gf-source") ? document.getElementById("gf-source").value : "ALL";
-            const sort = document.getElementById("explorer-sort-by") ? document.getElementById("explorer-sort-by").value : "price_asc";
-
-            filteredQuotes = explorerQuotes.filter(f => {
-                const orig = (f.origin || "").toLowerCase();
-                const dest = (f.destination || "").toLowerCase();
-                const fltNum = (f.flight_number || "").toLowerCase();
-                const airCode = (f.airline_code || "").toLowerCase();
-                const airName = (f.airline_name || "").toLowerCase();
-                const src = (f.source_name || f.source || "").toLowerCase();
-                const fRoute = f.route || f.sector || `${f.origin}-${f.destination}`;
-
-                if (search) {
-                    const matchText = `${fltNum} ${airCode} ${airName} ${orig} ${dest} ${src}`;
-                    if (!matchText.includes(search)) return false;
-                }
-                if (route !== "ALL" && fRoute !== route) return false;
-                if (airline !== "ALL" && f.airline_code !== airline) return false;
-                if (lead !== "ALL" && !(f.lead_window || "").startsWith(lead)) return false;
-                if (source !== "ALL" && (f.source_type || "").toUpperCase() !== source) return false;
-                return true;
-            });
-
-            if (sort === "price_asc") {
-                filteredQuotes.sort((a, b) => (a.total_price_inr || a.price_inr || 0) - (b.total_price_inr || b.price_inr || 0));
-            } else if (sort === "price_desc") {
-                filteredQuotes.sort((a, b) => (b.total_price_inr || b.price_inr || 0) - (a.total_price_inr || a.price_inr || 0));
-            } else if (sort === "time_asc") {
-                filteredQuotes.sort((a, b) => (a.departure_time || "").localeCompare(b.departure_time || ""));
-            }
-
-            explorerPage = 1;
-            renderExplorerPage();
-        }
-
-        function renderExplorerPage() {
-            const tbody = document.getElementById("explorer-tbody");
-            if (!tbody) return;
-
-            const total = filteredQuotes.length;
-            const countEl = document.getElementById("explorer-count");
-            if (countEl) countEl.textContent = total.toLocaleString();
-
-            const totalPages = Math.max(1, Math.ceil(total / explorerPageSize));
-            const totalPagesEl = document.getElementById("explorer-total-pages");
-            if (totalPagesEl) totalPagesEl.textContent = totalPages;
-            const curPageEl = document.getElementById("explorer-current-page");
-            if (curPageEl) curPageEl.textContent = explorerPage;
-            const pagInfoEl = document.getElementById("explorer-pagination-info");
-            if (pagInfoEl) pagInfoEl.textContent = "Page " + explorerPage + " of " + totalPages;
-
-            const prevBtn = document.getElementById("explorer-prev-btn");
-            if (prevBtn) prevBtn.disabled = (explorerPage <= 1);
-            const nextBtn = document.getElementById("explorer-next-btn");
-            if (nextBtn) nextBtn.disabled = (explorerPage >= totalPages);
-
-            const startIdx = (explorerPage - 1) * explorerPageSize;
-            const pageItems = filteredQuotes.slice(startIdx, startIdx + explorerPageSize);
-
-            if (pageItems.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="10" class="py-8 text-center text-slate-400 font-sans">No matching flight quotes found. Clear filters to see all fares.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = pageItems.map(f => {
-                const totPrice = f.total_price_inr || f.price_inr || 5000;
-                const baseFare = f.base_fare_inr || Math.round(totPrice * 0.65);
-                const taxFare = f.tax_inr || Math.round(totPrice - baseFare);
-                const orig = f.origin || 'DEL';
-                const dest = f.destination || 'BOM';
-                const airName = f.airline_name || f.airline_code || 'Airline';
-                const fltNum = f.flight_number || (f.airline_code + '-101');
-                const depTime = f.departure_time || '08:30';
-                const leadWin = f.lead_window || 'T+7';
-                const srcName = f.source_name || f.source || 'Scraper';
-
-                return `
-                <tr class="hover:bg-slate-50">
-                    <td class="py-2 px-3 font-bold text-slate-900">${fltNum}</td>
-                    <td class="py-2 px-3 font-sans font-medium text-slate-800">${airName}</td>
-                    <td class="py-2 px-3 font-bold text-blue-900">${orig} → ${dest}</td>
-                    <td class="py-2 px-3 text-slate-600">${depTime}</td>
-                    <td class="py-2 px-3"><span class="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">${leadWin}</span></td>
-                    <td class="py-2 px-3 text-slate-700">₹${Math.round(baseFare).toLocaleString()}</td>
-                    <td class="py-2 px-3 text-slate-500">₹${Math.round(taxFare).toLocaleString()}</td>
-                    <td class="py-2 px-3 font-bold text-slate-900">₹${Math.round(totPrice).toLocaleString()}</td>
-                    <td class="py-2 px-3 font-sans text-slate-500">${srcName}</td>
-                    <td class="py-2 px-3 font-sans"><i class="fa-solid fa-circle-check text-emerald-500"></i></td>
-                </tr>`;
-            }).join("");
-        }
-
-        function prevExplorerPage() {
-            if (explorerPage > 1) {
-                explorerPage--;
-                renderExplorerPage();
-            }
-        }
-
-        function nextExplorerPage() {
-            const totalPages = Math.ceil(filteredQuotes.length / explorerPageSize);
-            if (explorerPage < totalPages) {
-                explorerPage++;
-                renderExplorerPage();
-            }
-        }
-
-        function exportExplorerCSV() {
-            if (!filteredQuotes || filteredQuotes.length === 0) {
-                alert("No quotes available to export.");
-                return;
-            }
-            const headers = ["flight_number", "airline", "origin", "destination", "route", "departure_time", "lead_window", "base_fare_inr", "tax_inr", "total_price_inr", "source"];
-            const rows = filteredQuotes.map(f => {
-                const tot = f.total_price_inr || f.price_inr || 0;
-                const base = f.base_fare_inr || Math.round(tot * 0.65);
-                const tax = f.tax_inr || (tot - base);
-                return [
-                    f.flight_number || "",
-                    f.airline_name || f.airline_code || "",
-                    f.origin || "",
-                    f.destination || "",
-                    f.route || f.sector || "",
-                    f.departure_time || "08:30",
-                    f.lead_window || "T+7",
-                    base,
-                    tax,
-                    tot,
-                    f.source_name || f.source || "Scraper"
-                ];
-            });
-            let csvContent = headers.join(",") + "\n";
-            rows.forEach(r => {
-                csvContent += r.map(x => '"' + String(x).replace(/"/g, '""') + '"').join(",") + "\n";
-            });
-            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "APIx_Flight_Fares_Export_" + new Date().toISOString().slice(0, 10) + ".csv";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        function exportExplorerJSON() {
-            if (!filteredQuotes || filteredQuotes.length === 0) {
-                alert("No quotes available to export.");
-                return;
-            }
-            const jsonString = JSON.stringify(filteredQuotes, null, 2);
-            const blob = new Blob([jsonString], { type: "application/json;charset=utf-8;" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "APIx_Flight_Fares_Export_" + new Date().toISOString().slice(0, 10) + ".json";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
 
         // 16. MoSPI CPI Explorer Live Fetch & Render
         function renderCpiExplorer() {

@@ -518,11 +518,11 @@ def get_blueprint_data(force_refresh: bool = False) -> Dict[str, Any]:
         d_cur = backtest_start + timedelta(days=day_i)
         d_str = d_cur.strftime("%d %b %Y")
         our_fare = round(cur_avg_fare * (1.0 + 0.05 * math.sin(day_i * 0.3) + (day_i * 0.001)), 2)
-        dgca_target = 5450.0 + (day_i * 2.5)
+        dgca_target = 5450.0
         diff_inr = round(our_fare - dgca_target, 2)
         diff_pct = round((diff_inr / dgca_target) * 100.0, 2)
         apix_val = round((our_fare / 5450.0) * 100.0, 2)
-        dgca_val = round((dgca_target / 5450.0) * 100.0, 2)
+        dgca_val = 100.0
         abs_err = round(abs(apix_val - dgca_val), 2)
         err_pct = round((abs_err / dgca_val) * 100.0, 2)
         backtest_daily.append({

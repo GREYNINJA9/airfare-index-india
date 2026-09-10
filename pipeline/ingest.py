@@ -33,6 +33,7 @@ from database.repository import (
     insert_index_result,
     invalidate_fares_cache,
     invalidate_index_cache,
+    upsert_index_result,
 )
 from index_engine.aggregation import aggregate_item_price_relatives
 from index_engine.api_index import compute_overall_airfare_index
@@ -185,7 +186,7 @@ def recompute_indices_for_fares(
             relatives = aggregate_item_price_relatives(all_stored_fares, current_period=d)
             weights = compute_psd_base_basket_weights(relatives.item_price_relatives)
             index_res = compute_overall_airfare_index(relatives, weights)
-            insert_index_result(conn, index_res)
+            upsert_index_result(conn, index_res)
             indices_created += 1
         except Exception as exc:
             logger.warning("Could not compute/persist APIx index for period %s: %s", d, exc)

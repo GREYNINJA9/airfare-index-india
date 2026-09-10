@@ -123,13 +123,20 @@ async def test_dashboard_html_contains_new_features():
         assert "Laspeyres" in html
         assert "Jevons" in html
 
-        # 2. Route & Flight Explorer Tab
-        assert "tab-flight-explorer" in html
-        assert "route-select" in html
-        assert "route-flights-table" in html
+        # 2. MoSPI CPI Overview Comparison
+        assert "Official MoSPI CPI" in html
+        assert "overview-cpi-comp-apix" in html
+        assert "Official MoSPI CPI (Item 07.3.3) vs High-Frequency APIx Comparison" in html
+        assert "Evaluation Dimension" in html
 
         # 3. MoSPI CPI Explorer Tab
         assert "tab-cpi-explorer" in html
         assert "cpi-year-select" in html
         assert "cpi-item-select" in html
         assert "Fetch Official CPI Data" in html
+
+        # 4. Confirm removed tabs are absent
+        assert "tab-flight-explorer" not in html
+        assert "tab-composition" not in html
+        assert "tab-volatility" not in html
+        assert "tab-basket" not in html

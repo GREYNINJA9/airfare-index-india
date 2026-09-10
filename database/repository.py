@@ -291,6 +291,40 @@ def insert_index_result(conn, result: IndexResult) -> int:
     return int(cur.lastrowid) if cur.rowcount > 0 else 0
 
 
+def upsert_index_result(conn, result: IndexResult) -> int:
+    """Upsert a computed :class:`models.index.IndexResult`, updating existing values on conflict."""
+    invalidate_index_cache()
+
+    sql = """
+    INSERT INTO index_results (
+        base_period,
+        current_period,
+        overall_laspeyres_index,
+        overall_jevons_index,
+        methodology_json,
+        item_indices_json
+    ) VALUES (?, ?, ?, ?, ?, ?)
+    ON CONFLICT (base_period, current_period) DO UPDATE SET
+        overall_laspeyres_index = EXCLUDED.overall_laspeyres_index,
+        overall_jevons_index = EXCLUDED.overall_jevons_index,
+        methodology_json = EXCLUDED.methodology_json,
+        item_indices_json = EXCLUDED.item_indices_json
+    """
+
+    params = (
+        result.base_period.isoformat(),
+        result.current_period.isoformat(),
+        float(result.overall_laspeyres_index),
+        float(result.overall_jevons_index),
+        result.methodology.model_dump_json(),
+        json.dumps([ii.model_dump(mode="json") for ii in result.item_indices]),
+    )
+
+    cur = conn.execute(sql, params)
+    conn.commit()
+    return int(getattr(cur, "lastrowid", 0) or getattr(cur, "rowcount", 0))
+
+
 def get_index_results(
     conn,
     *,

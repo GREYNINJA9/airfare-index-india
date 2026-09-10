@@ -45,20 +45,6 @@ COMMON_CPI_ITEMS = [
         "description": "Direct consumer airfare tariffs across Indian domestic routes",
     },
     {
-        "code": "07.3.1",
-        "name": "Passenger transport by railway",
-        "group_code": "24",
-        "class_code": "56",
-        "description": "Rail transport fares & reservation charges",
-    },
-    {
-        "code": "07.3.2",
-        "name": "Passenger transport by road (Bus / Taxi / Auto)",
-        "group_code": "24",
-        "class_code": "57",
-        "description": "Intercity and urban road passenger transport",
-    },
-    {
         "code": "07.3",
         "name": "Passenger transport services (All modes)",
         "group_code": "24",
