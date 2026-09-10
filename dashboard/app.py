@@ -84,7 +84,10 @@ def prewarm_dashboard() -> None:
     global _INITIAL_PAYLOADS
     try:
         from dashboard.blueprint_service import get_blueprint_data
-        from dashboard.flight_explorer import get_available_routes, get_route_flight_details
+        from dashboard.flight_explorer import (
+            get_available_routes,
+            get_route_flight_details,
+        )
         from index_engine.cpi_client import fetch_cpi_data, get_cpi_options
 
         payloads = {
