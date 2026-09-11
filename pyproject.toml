@@ -36,6 +36,10 @@ python_files = ["test_*.py"]
 python_functions = ["test_*"]
 asyncio_mode = "auto"
 pythonpath = [".", ".."]
+filterwarnings = [
+    "ignore::starlette.exceptions.StarletteDeprecationWarning",
+    "ignore::DeprecationWarning:starlette.*",
+]
 
 [tool.ruff]
 line-length = 88
