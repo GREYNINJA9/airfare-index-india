@@ -187,11 +187,31 @@ def get_pending_scrapes():
 
 @router.post("/dashboard/api/pipeline/ingest")
 def trigger_pipeline_ingest(file_path: Optional[str] = None):
-    """Ingest scraped files from data/normalized/cleartrip or a specific file path."""
+    """Ingest scraped files from data/normalized/cleartrip or a specific file path,
+    or run a collection cycle to scrape, process, and persist data."""
     from pipeline.ingest import ingest_normalized_directory, ingest_normalized_file
     if file_path:
         return ingest_normalized_file(file_path)
-    return ingest_normalized_directory()
+    res = ingest_normalized_directory()
+    if res.get("files_processed", 0) == 0:
+        try:
+            from scheduler.jobs import run_collection_cycle
+            cycle_res = run_collection_cycle()
+            res["collection_cycle"] = cycle_res
+            from pipeline.ingest import invalidate_all_caches
+            invalidate_all_caches()
+        except Exception as exc:
+            res["collection_cycle_error"] = str(exc)
+    return res
+
+
+@router.get("/dashboard/static/chart.umd.min.js")
+def get_chart_js():
+    """Serve bundled Chart.js UMD distribution for fast, reliable client-side rendering."""
+    from fastapi.responses import FileResponse
+    import os
+    file_path = os.path.join(os.path.dirname(__file__), "static", "chart.umd.min.js")
+    return FileResponse(file_path, media_type="application/javascript")
 
 
 @router.get("/", response_class=HTMLResponse)

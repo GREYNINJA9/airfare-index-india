@@ -7,10 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="/dashboard/static/chart.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        window.tailwind = window.tailwind || {};
         tailwind.config = {
             theme: {
                 extend: {
@@ -128,139 +129,6 @@
             </div>
         </div>
 
-        <!-- GLOBAL FILTERS BAR (Blueprint Section 1) -->
-        <div class="bg-govblue-900/90 border-t border-govblue-800 px-4 sm:px-6 py-2 overflow-x-auto custom-scrollbar">
-            <div class="flex items-center gap-3 text-xs whitespace-nowrap min-w-max">
-                <span class="font-bold text-amber-300 flex items-center gap-1">
-                    <i class="fa-solid fa-filter"></i> Filters:
-                </span>
-
-                <!-- Date -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Date:</span>
-                    <select id="gf-date" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="2026-09-08">08 Sep 2026 (Latest)</option>
-                        <option value="2026-09-07">07 Sep 2026</option>
-                        <option value="2026-09-01">01 Sep 2026</option>
-                        <option value="2026-08-15">15 Aug 2026</option>
-                        <option value="2026-08-01">01 Aug 2026 (Base)</option>
-                    </select>
-                </div>
-
-                <!-- Origin -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Origin:</span>
-                    <select id="gf-origin" onchange="onOriginDestChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Origins</option>
-                        <option value="DEL">DEL (Delhi)</option>
-                        <option value="BOM">BOM (Mumbai)</option>
-                        <option value="BLR">BLR (Bengaluru)</option>
-                        <option value="HYD">HYD (Hyderabad)</option>
-                        <option value="CCU">CCU (Kolkata)</option>
-                        <option value="MAA">MAA (Chennai)</option>
-                    </select>
-                </div>
-
-                <!-- Destination -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Destination:</span>
-                    <select id="gf-destination" onchange="onOriginDestChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Destinations</option>
-                        <option value="BOM">BOM (Mumbai)</option>
-                        <option value="DEL">DEL (Delhi)</option>
-                        <option value="BLR">BLR (Bengaluru)</option>
-                        <option value="HYD">HYD (Hyderabad)</option>
-                        <option value="CCU">CCU (Kolkata)</option>
-                        <option value="MAA">MAA (Chennai)</option>
-                    </select>
-                </div>
-
-                <!-- Route -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Route:</span>
-                    <select id="gf-route" onchange="onGlobalRouteChange(this.value)" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none font-mono">
-                        <option value="ALL">All 14 Routes</option>
-                        <option value="DEL-BOM">DEL → BOM</option>
-                        <option value="BOM-DEL">BOM → DEL</option>
-                        <option value="DEL-BLR">DEL → BLR</option>
-                        <option value="BLR-DEL">BLR → DEL</option>
-                        <option value="BOM-BLR">BOM → BLR</option>
-                        <option value="BLR-BOM">BLR → BOM</option>
-                        <option value="DEL-CCU">DEL → CCU</option>
-                        <option value="CCU-DEL">CCU → DEL</option>
-                        <option value="BLR-HYD">BLR → HYD</option>
-                        <option value="HYD-BLR">HYD → BLR</option>
-                        <option value="MAA-DEL">MAA → DEL</option>
-                        <option value="DEL-MAA">DEL → MAA</option>
-                        <option value="DEL-HYD">DEL → HYD</option>
-                        <option value="HYD-DEL">HYD → DEL</option>
-                    </select>
-                </div>
-
-                <!-- Airline -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Airline:</span>
-                    <select id="gf-airline" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Airlines</option>
-                        <option value="6E">IndiGo (6E)</option>
-                        <option value="AI">Air India (AI)</option>
-                        <option value="IX">Air India Express (IX)</option>
-                        <option value="QP">Akasa Air (QP)</option>
-                        <option value="SG">SpiceJet (SG)</option>
-                    </select>
-                </div>
-
-                <!-- Advance Booking Window -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Booking Window:</span>
-                    <select id="gf-window" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Windows</option>
-                        <option value="T+1">T+1 (Urgent / Next Day)</option>
-                        <option value="T+7">T+7 (1 Week)</option>
-                        <option value="T+15">T+15 (Fortnight)</option>
-                        <option value="T+30">T+30 (1 Month)</option>
-                        <option value="T+45">T+45 (Advance Saver)</option>
-                    </select>
-                </div>
-
-                <!-- Source -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Source:</span>
-                    <select id="gf-source" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All Sources (Airlines + OTAs)</option>
-                        <option value="AIRLINE">Airline Direct Only</option>
-                        <option value="OTA">Online Travel Aggregators (OTAs)</option>
-                    </select>
-                </div>
-
-                <!-- Region -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Region:</span>
-                    <select id="gf-region" onchange="onGlobalFilterChange()" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="ALL">All India Domestic</option>
-                        <option value="Metro-Metro">Metro-to-Metro Trunk</option>
-                        <option value="North-South">North-South Corridors</option>
-                        <option value="West-South">West-South Corridors</option>
-                    </select>
-                </div>
-
-                <!-- Comparison Period -->
-                <div class="flex items-center gap-1 text-slate-300">
-                    <span class="text-[11px] text-slate-400">Comparison:</span>
-                    <select id="gf-comparison" class="bg-govblue-950 border border-govblue-700 rounded px-2 py-1 text-xs text-white focus:outline-none">
-                        <option value="DoD">Day-over-Day (DoD)</option>
-                        <option value="WoW">Week-over-Week (WoW)</option>
-                        <option value="MoM" selected>Month-over-Month (MoM)</option>
-                        <option value="YoY">Year-over-Year (YoY)</option>
-                    </select>
-                </div>
-
-                <!-- Reset Filter Button -->
-                <button onclick="resetGlobalFilters()" class="text-[11px] text-amber-300 hover:text-white underline cursor-pointer px-2 font-medium">
-                    Reset Filters
-                </button>
-            </div>
-        </div>
     </header>
 
     <!-- 2. MAIN APP LAYOUT: SIDEBAR + SCROLLABLE CANVAS -->
@@ -271,7 +139,7 @@
             <div class="p-3 border-b border-govblue-800/80 bg-govblue-950/40">
                 <span class="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">Navigation Console</span>
                 <div class="flex items-center justify-between text-xs text-slate-300">
-                    <span>14 Analytical Modules</span>
+                    <span>9 Analytical Modules</span>
                     <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 border border-emerald-700">v1.0.0</span>
                 </div>
             </div>
@@ -292,88 +160,53 @@
                     <span class="flex-1">Routes Analysis</span>
                 </button>
 
-                <!-- 03 Airlines -->
-                <button id="nav-tab-airlines" onclick="switchTab('tab-airlines')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">03</span>
-                    <i class="fa-solid fa-plane-up w-4 text-center text-blue-400"></i>
-                    <span class="flex-1">Airline Analysis</span>
-                </button>
-
-                <!-- 04 Lead Time -->
+                <!-- 03 Lead Time -->
                 <button id="nav-tab-leadtime" onclick="switchTab('tab-leadtime')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">04</span>
+                    <span class="w-5 text-center font-mono text-slate-400">03</span>
                     <i class="fa-solid fa-clock-rotate-left w-4 text-center text-purple-300"></i>
                     <span class="flex-1">Advance Booking</span>
                 </button>
 
-                <!-- 05 Fare Composition -->
-                <button id="nav-tab-composition" onclick="switchTab('tab-composition')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">05</span>
-                    <i class="fa-solid fa-receipt w-4 text-center text-emerald-400"></i>
-                    <span class="flex-1">Fare Composition</span>
-                </button>
-
-                <!-- 06 Volatility -->
-                <button id="nav-tab-volatility" onclick="switchTab('tab-volatility')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">06</span>
-                    <i class="fa-solid fa-wave-square w-4 text-center text-rose-400"></i>
-                    <span class="flex-1">Fare Volatility</span>
-                </button>
-
-                <!-- 07 Route Basket & Weights -->
-                <button id="nav-tab-basket" onclick="switchTab('tab-basket')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">07</span>
-                    <i class="fa-solid fa-scale-balanced w-4 text-center text-amber-400"></i>
-                    <span class="flex-1">Route Weights</span>
-                </button>
-
-                <!-- 08 DGCA Benchmark -->
+                <!-- 04 DGCA Benchmark -->
                 <button id="nav-tab-benchmark" onclick="switchTab('tab-benchmark')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">08</span>
+                    <span class="w-5 text-center font-mono text-slate-400">04</span>
                     <i class="fa-solid fa-award w-4 text-center text-amber-300"></i>
                     <span class="flex-1">DGCA Benchmark</span>
                     <span class="text-[9px] px-1 py-0.2 rounded bg-emerald-500/30 text-emerald-300 font-mono">30D</span>
                 </button>
 
-                <!-- 09 Data Collection -->
+                <!-- 05 Data Collection -->
                 <button id="nav-tab-collection" onclick="switchTab('tab-collection')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">09</span>
+                    <span class="w-5 text-center font-mono text-slate-400">05</span>
                     <i class="fa-solid fa-spider w-4 text-center text-teal-400"></i>
                     <span class="flex-1">Scraper Monitor</span>
                 </button>
 
-                <!-- 10 Data Quality -->
+                <!-- 06 Data Quality -->
                 <button id="nav-tab-quality" onclick="switchTab('tab-quality')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">10</span>
+                    <span class="w-5 text-center font-mono text-slate-400">06</span>
                     <i class="fa-solid fa-shield-halved w-4 text-center text-green-400"></i>
                     <span class="flex-1">Data Quality</span>
                     <span class="text-[9px] px-1 py-0.2 rounded bg-green-500/20 text-green-300 font-mono">98%</span>
                 </button>
 
-                <!-- 11 Fare Explorer -->
-                <button id="nav-tab-explorer" onclick="switchTab('tab-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">11</span>
-                    <i class="fa-solid fa-magnifying-glass-chart w-4 text-center text-yellow-400"></i>
-                    <span class="flex-1">Fare Explorer</span>
-                </button>
-
-                <!-- 12 API -->
+                <!-- 07 API -->
                 <button id="nav-tab-api" onclick="switchTab('tab-api')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">12</span>
+                    <span class="w-5 text-center font-mono text-slate-400">07</span>
                     <i class="fa-solid fa-code w-4 text-center text-pink-400"></i>
                     <span class="flex-1">API Documentation</span>
                 </button>
 
-                <!-- 13 Methodology -->
+                <!-- 08 Methodology -->
                 <button id="nav-tab-methodology" onclick="switchTab('tab-methodology')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">13</span>
+                    <span class="w-5 text-center font-mono text-slate-400">08</span>
                     <i class="fa-solid fa-book-open w-4 text-center text-sky-400"></i>
                     <span class="flex-1">Methodology</span>
                 </button>
 
-                <!-- 14 MoSPI CPI -->
+                <!-- 09 MoSPI CPI -->
                 <button id="nav-tab-cpi-explorer" onclick="switchTab('tab-cpi-explorer')" class="sidebar-link w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left font-medium text-slate-300 hover:bg-govblue-800/60 hover:text-white transition">
-                    <span class="w-5 text-center font-mono text-slate-400">14</span>
+                    <span class="w-5 text-center font-mono text-slate-400">09</span>
                     <i class="fa-solid fa-calculator w-4 text-center text-orange-400"></i>
                     <span class="flex-1">MoSPI CPI Explorer</span>
                     <span class="text-[9px] px-1 py-0.2 rounded bg-orange-500/30 text-orange-300 font-mono">Live</span>
@@ -590,11 +423,14 @@
                                     <button id="btn-overview-freq-weekly" onclick="setOverviewFrequency('weekly')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">7D Moving Avg</button>
                                 </div>
                                 <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5 text-xs">
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">7D</button>
-                                    <button class="px-2 py-0.5 rounded bg-blue-600 text-white font-semibold text-[11px] shadow-xs">30D</button>
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">90D</button>
-                                    <button class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px]">1Y</button>
+                                    <button id="btn-overview-range-7d" onclick="setOverviewRange('7D')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">7D</button>
+                                    <button id="btn-overview-range-30d" onclick="setOverviewRange('30D')" class="px-2 py-0.5 rounded bg-blue-600 text-white font-semibold text-[11px] shadow-xs cursor-pointer">30D</button>
+                                    <button id="btn-overview-range-90d" onclick="setOverviewRange('90D')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">90D</button>
+                                    <button id="btn-overview-range-all" onclick="setOverviewRange('ALL')" class="px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer">All</button>
                                 </div>
+                                <button id="btn-overview-cpi-toggle" onclick="toggleOverviewCpi()" class="px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-800 hover:bg-amber-500/30 border border-amber-300 font-semibold text-[11px] cursor-pointer flex items-center gap-1">
+                                    <i class="fa-solid fa-chart-line text-[10px]"></i> <span id="cpi-toggle-text">MoSPI CPI: ON</span>
+                                </button>
                             </div>
                         </div>
                         <div class="h-64 w-full">
@@ -639,8 +475,8 @@
                     </div>
                 </div>
 
-                <!-- Previews Row: Route Heatmap Preview + Lead Time Preview + Airline Preview -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <!-- Previews Row: Route Heatmap Preview + Lead Time Preview -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     <!-- Route Heatmap Preview -->
                     <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
                         <div>
@@ -689,36 +525,6 @@
                             <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
                                 <span>T+1 Urgent Surge: <strong class="text-rose-600 font-bold">+92%</strong></span>
                                 <span>Elasticity β: <strong class="text-slate-800 font-mono">-0.38</strong></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Airline Comparison Preview -->
-                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="fa-solid fa-plane-up text-blue-500"></i>
-                                    <span>Airline Comparison</span>
-                                </h4>
-                                <button onclick="switchTab('tab-airlines')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
-                                    View Airline Matrix →
-                                </button>
-                            </div>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-xs">
-                                    <thead>
-                                        <tr class="border-b border-slate-200 text-slate-400 text-[10px] uppercase">
-                                            <th class="py-1.5">Carrier</th>
-                                            <th class="py-1.5">Avg Fare</th>
-                                            <th class="py-1.5">Routes</th>
-                                            <th class="py-1.5">Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="overview-airline-preview-tbody" class="divide-y divide-slate-100">
-                                        <!-- Populated by JS -->
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
@@ -985,102 +791,7 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 03: AIRLINES ANALYSIS                  -->
-            <!-- ========================================== -->
-            <div id="tab-airlines" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Airline Competitive Pricing & Fleet Performance</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Comprehensive analysis across IndiGo, Air India, Air India Express, Akasa Air, and SpiceJet</p>
-                    </div>
-                </div>
 
-                <!-- 5 Carrier Cards -->
-                <div id="airlines-cards-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-                    <!-- Populated by JS -->
-                </div>
-
-                <!-- Airline Price Index Chart -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-chart-line text-blue-600"></i>
-                                <span>Comparative Airline Price Index Movement</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Normalised carrier price indices over 30 days (Base 100 = 01 Aug 2026)</p>
-                        </div>
-                    </div>
-                    <div class="h-64 w-full">
-                        <canvas id="airlines-trend-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- 5x14 Airline-Route Price Matrix Table -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-table-cells text-indigo-600"></i>
-                                <span>5 × 14 Airline-Route Price Matrix (₹ Average Fares)</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Green badges highlight the most price-competitive carrier on each individual city-pair</p>
-                        </div>
-                        <span class="text-xs text-slate-400 font-mono">14 Monitored Corridors</span>
-                    </div>
-                    <div class="overflow-x-auto custom-scrollbar">
-                        <table class="w-full text-left text-xs border border-slate-200">
-                            <thead class="bg-slate-50 font-bold text-slate-700">
-                                <tr id="matrix-head-row" class="border-b border-slate-200">
-                                    <th class="py-2.5 px-3 border-r border-slate-200 sticky left-0 bg-slate-50 z-10">Carrier</th>
-                                    <!-- 14 Route THs populated by JS -->
-                                </tr>
-                            </thead>
-                            <tbody id="matrix-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Airline vs Constant DGCA Benchmark Tariff Comparison Table -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-scale-balanced text-indigo-600"></i>
-                                <span>Airline Pricing vs Constant DGCA Benchmark Rate (₹5,450 Baseline)</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Compares market-wide carrier tariffs against the constant DGCA reference rate to classify budget vs premium positioning</p>
-                        </div>
-                        <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
-                            Constant DGCA Benchmark: ₹5,450
-                        </span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs border border-slate-200">
-                            <thead class="bg-slate-50 font-bold text-slate-700 text-[11px]">
-                                <tr class="border-b border-slate-200">
-                                    <th class="py-2.5 px-3">Carrier</th>
-                                    <th class="py-2.5 px-3">Model</th>
-                                    <th class="py-2.5 px-3 font-mono">Market Avg Fare (₹)</th>
-                                    <th class="py-2.5 px-3 font-mono">Constant DGCA Rate (₹)</th>
-                                    <th class="py-2.5 px-3 font-mono">Variance vs DGCA (₹)</th>
-                                    <th class="py-2.5 px-3 font-mono">Variance (%)</th>
-                                    <th class="py-2.5 px-3">Tariff Positioning</th>
-                                </tr>
-                            </thead>
-                            <tbody id="airline-dgca-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
             <!-- ========================================== -->
             <!-- TAB 04: LEAD TIME (ADVANCE BOOKING)        -->
@@ -1194,243 +905,7 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 05: FARE COMPOSITION                   -->
-            <!-- ========================================== -->
-            <div id="tab-composition" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Ticket Fare Composition & Statutory Fee Breakdown</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Decomposition of total gross fares into base tariff, fuel surcharges (YQ), UDF, PSF, GST, and convenience fees</p>
-                    </div>
-                </div>
 
-                <!-- 6 Composition Component Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Base Airline Fare</span>
-                        <div class="text-xl font-bold text-blue-600 font-mono mt-0.5">64.6%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹3,756 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">User Dev Fee (UDF)</span>
-                        <div class="text-xl font-bold text-indigo-600 font-mono mt-0.5">11.4%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹663 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Fuel Surcharge (YQ)</span>
-                        <div class="text-xl font-bold text-amber-600 font-mono mt-0.5">9.8%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹570 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">GST & Govt Taxes</span>
-                        <div class="text-xl font-bold text-emerald-600 font-mono mt-0.5">5.9%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹343 avg (5% Eco)</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Convenience Fee</span>
-                        <div class="text-xl font-bold text-purple-600 font-mono mt-0.5">5.9%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹343 avg</span>
-                    </div>
-                    <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Passenger Fee (PSF)</span>
-                        <div class="text-xl font-bold text-teal-600 font-mono mt-0.5">2.4%</div>
-                        <span class="text-[10px] text-slate-500 font-mono">₹140 avg</span>
-                    </div>
-                </div>
-
-                <!-- Composition Stacked Chart + Airline Breakdown Table -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                    <!-- Stacked Chart -->
-                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                        <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-pie text-emerald-600"></i>
-                            <span>National Fare Component Stacked Share (%)</span>
-                        </h3>
-                        <p class="text-xs text-slate-500 mb-3">Statutory airport charges vs carrier discretionary tariffs</p>
-                        <div class="h-64 w-full">
-                            <canvas id="composition-chart"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- Breakdown by Airline -->
-                    <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm mb-1 flex items-center gap-2">
-                                <i class="fa-solid fa-plane-circle-check text-blue-600"></i>
-                                <span>Component Share by Carrier</span>
-                            </h3>
-                            <p class="text-xs text-slate-500 mb-3">Base fare and auxiliary fees split by operating airline</p>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-left text-xs">
-                                    <thead>
-                                        <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
-                                            <th class="py-2 px-3">Carrier</th>
-                                            <th class="py-2 px-3">Base Fare %</th>
-                                            <th class="py-2 px-3">Taxes & UDF %</th>
-                                            <th class="py-2 px-3">Convenience Fee</th>
-                                            <th class="py-2 px-3">Avg Total (₹)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="composition-airline-tbody" class="divide-y divide-slate-100 font-mono">
-                                        <!-- Populated by JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-3 rounded-lg bg-amber-50/60 border border-amber-200 text-xs text-amber-900">
-                            <strong>Regulatory Note:</strong> Under DGCA Civil Aviation Requirements (CAR Section 3), UDF and PSF fees are determined by AERA (Airports Economic Regulatory Authority). The APIx index tracks pure base fare fluctuations separately from statutory fee changes.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- TAB 06: FARE VOLATILITY                    -->
-            <!-- ========================================== -->
-            <div id="tab-volatility" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Route Volatility & Intraday Price Oscillations</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Measuring price dispersion via Coefficient of Variation (CV %) and intraday yield swings</p>
-                    </div>
-                </div>
-
-                <!-- Volatility KPI Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">National Mean Volatility</span>
-                        <div class="text-2xl font-extrabold text-slate-900 font-mono mt-0.5">24.8%</div>
-                        <span class="text-[10px] text-slate-500">Overall CV across routes</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Most Volatile Sector</span>
-                        <div class="text-lg font-bold text-rose-600 font-mono mt-0.5">DEL-BOM (32.4%)</div>
-                        <span class="text-[10px] text-slate-500">Peak dynamic pricing</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Most Stable Sector</span>
-                        <div class="text-lg font-bold text-emerald-600 font-mono mt-0.5">BLR-HYD (14.2%)</div>
-                        <span class="text-[10px] text-slate-500">Consistent price band</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Max Intraday Swing</span>
-                        <div class="text-lg font-bold text-amber-600 font-mono mt-0.5">+₹2,450 (+42%)</div>
-                        <span class="text-[10px] text-slate-500">Evening rush surge</span>
-                    </div>
-                    <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs">
-                        <span class="text-[10px] text-slate-400 uppercase font-semibold">Max Weekly Spread</span>
-                        <div class="text-lg font-bold text-indigo-600 font-mono mt-0.5">+₹3,180 (+54%)</div>
-                        <span class="text-[10px] text-slate-500">Weekend leisure spikes</span>
-                    </div>
-                </div>
-
-                <!-- Intraday Movement Chart -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-wave-square text-rose-500"></i>
-                                <span>Intraday Price Movement Across Daily Intervals</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Tracking fare quotes at 08:00, 10:00, 12:00, 14:00, 16:00, and 18:00 IST</p>
-                        </div>
-                    </div>
-                    <div class="h-64 w-full">
-                        <canvas id="volatility-intraday-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Volatility Ranking Table -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-list-ol text-amber-500"></i>
-                            <span>Complete Route Volatility Ranking (CV %)</span>
-                        </h3>
-                        <span class="text-xs text-slate-400">All 14 Corridors Ranked</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
-                                    <th class="py-2 px-3">Rank</th>
-                                    <th class="py-2 px-3">Route</th>
-                                    <th class="py-2 px-3">Volatility CV (%)</th>
-                                    <th class="py-2 px-3">Min Fare (₹)</th>
-                                    <th class="py-2 px-3">Max Fare (₹)</th>
-                                    <th class="py-2 px-3">Price Spread (₹)</th>
-                                    <th class="py-2 px-3">Volatility Band</th>
-                                </tr>
-                            </thead>
-                            <tbody id="volatility-table-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================== -->
-            <!-- TAB 07: ROUTE BASKET & WEIGHTS             -->
-            <!-- ========================================== -->
-            <div id="tab-basket" class="tab-content space-y-6">
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>DGCA Passenger Traffic Route Basket & Index Weights</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Official Directorate General of Civil Aviation passenger traffic weights assigned to all 14 monitored domestic city-pairs</p>
-                    </div>
-                </div>
-
-                <!-- Weight Distribution Table -->
-                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                                <i class="fa-solid fa-scale-balanced text-amber-500"></i>
-                                <span>Official DGCA City-Pair Traffic Weights</span>
-                            </h3>
-                            <p class="text-xs text-slate-500">Based on annual scheduled domestic passenger traffic statistics</p>
-                        </div>
-                        <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded">Sum: 100.0%</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b border-slate-200 text-slate-500 bg-slate-50 font-semibold text-[11px]">
-                                    <th class="py-2 px-3">Sector</th>
-                                    <th class="py-2 px-3">Origin Airport</th>
-                                    <th class="py-2 px-3">Destination Airport</th>
-                                    <th class="py-2 px-3">Corridor Category</th>
-                                    <th class="py-2 px-3">Annual Pax (Lakhs)</th>
-                                    <th class="py-2 px-3">DGCA Pax Share (%)</th>
-                                    <th class="py-2 px-3">Index Basket Weight (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="basket-weights-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Methodology Note -->
-                <div class="p-4 rounded-xl bg-blue-50/70 border border-blue-200 text-xs text-blue-950 space-y-2">
-                    <h4 class="font-bold text-blue-900 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-info"></i> Basket Recalibration Protocol
-                    </h4>
-                    <p>In accordance with MoSPI national accounting best practices, the route basket represents over 62% of all scheduled domestic passenger traffic in India. Delhi-Mumbai (DEL-BOM) commands the largest single weight (14.2%), followed by Delhi-Bengaluru (DEL-BLR, 10.8%). Weights are updated annually upon publication of DGCA Form A annual traffic reports.</p>
-                </div>
-            </div>
 
             <!-- ========================================== -->
             <!-- TAB 08: DGCA BENCHMARK & 30-DAY BACKTEST   -->
@@ -1684,134 +1159,10 @@
                 </div>
             </div>
 
-            <!-- ========================================== -->
-            <!-- TAB 11: FARE EXPLORER (QUOTE-LEVEL TABLE)  -->
-            <!-- ========================================== -->
-            <div id="tab-explorer" class="tab-content space-y-6">
-                <div id="tab-flight-explorer" class="hidden"></div>
-                <form id="interactive-search-form" onsubmit="submitInteractiveSearch(event)" class="bg-blue-50 p-4 rounded-xl border border-blue-200 space-y-3">
-                    <div class="flex flex-wrap items-end gap-3 text-xs">
-                        <label class="font-semibold">Origin<select id="search-origin" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option>DEL</option><option>BOM</option><option>BLR</option><option>HYD</option><option>CCU</option><option>MAA</option></select></label>
-                        <label class="font-semibold">Destination<select id="search-destination" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option>BLR</option><option>BOM</option><option>DEL</option><option>HYD</option><option>CCU</option><option>MAA</option></select></label>
-                        <label class="font-semibold">Departure<input id="search-departure-date" type="date" required class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Adults<input id="search-adults" type="number" min="1" value="1" required class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Children<input id="search-children" type="number" min="0" value="0" class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Infants<input id="search-infants" type="number" min="0" value="0" class="block mt-1 w-20 bg-white border border-slate-300 rounded-lg px-3 py-1.5"></label>
-                        <label class="font-semibold">Cabin<select id="search-cabin" class="block mt-1 bg-white border border-slate-300 rounded-lg px-3 py-1.5"><option value="ECONOMY">Economy</option><option value="PREMIUM_ECONOMY">Premium Economy</option><option value="BUSINESS">Business</option><option value="FIRST">First</option></select></label>
-                        <button id="interactive-search-submit" type="submit" class="bg-blue-700 hover:bg-blue-800 text-white font-semibold px-4 py-1.5 rounded-lg">Search Cleartrip</button>
-                    </div>
-                    <p id="interactive-search-status" class="text-xs text-slate-600" aria-live="polite"></p>
-                </form>
-                <!-- Section Header -->
-                <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
-                    <div>
-                        <h2 class="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                            <span>Individual Flight Quote Explorer & Microdata Export</span>
-                        </h2>
-                        <p class="text-xs text-slate-500">Explore, search, filter, and export verified flight fare quotes down to individual departures</p>
-                    </div>
-                    <!-- Export Buttons -->
-                    <div class="flex items-center gap-2">
-                        <button onclick="exportExplorerCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-file-csv"></i> Export CSV
-                        </button>
-                        <button onclick="exportExplorerJSON()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs px-3 py-1.5 rounded-lg shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                            <i class="fa-solid fa-file-code"></i> Export JSON
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Explorer Filter Controls -->
-                <div class="bg-white p-3.5 rounded-xl border border-slate-200 shadow-xs flex flex-wrap items-center gap-3 text-xs">
-                    <div class="flex-1 min-w-[180px]">
-                        <input id="explorer-search" type="text" oninput="applyExplorerFilters()" placeholder="Search flight #, airline, origin, dest..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-
-                    <select id="route-select" onchange="onExplorerRouteChange()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800 font-mono">
-                        <option value="ALL">All Routes (14)</option>
-                        <option value="DEL-BOM">DEL → BOM</option>
-                        <option value="BOM-DEL">BOM → DEL</option>
-                        <option value="DEL-BLR">DEL → BLR</option>
-                        <option value="BLR-DEL">BLR → DEL</option>
-                        <option value="BOM-BLR">BOM → BLR</option>
-                        <option value="BLR-BOM">BLR → BOM</option>
-                        <option value="DEL-CCU">DEL → CCU</option>
-                        <option value="CCU-DEL">CCU → DEL</option>
-                        <option value="BLR-HYD">BLR → HYD</option>
-                        <option value="HYD-BLR">HYD → BLR</option>
-                        <option value="MAA-DEL">MAA → DEL</option>
-                        <option value="DEL-MAA">DEL → MAA</option>
-                        <option value="DEL-HYD">DEL → HYD</option>
-                        <option value="HYD-DEL">HYD → DEL</option>
-                    </select>
-
-                    <select id="explorer-airline-filter" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
-                        <option value="ALL">All Airlines</option>
-                        <option value="6E">IndiGo (6E)</option>
-                        <option value="AI">Air India (AI)</option>
-                        <option value="IX">Air India Express (IX)</option>
-                        <option value="QP">Akasa Air (QP)</option>
-                        <option value="SG">SpiceJet (SG)</option>
-                    </select>
-
-                    <select id="explorer-lead-filter" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
-                        <option value="ALL">All Horizons</option>
-                        <option value="T+1">T+1 (Urgent)</option>
-                        <option value="T+7">T+7 (1 Week)</option>
-                        <option value="T+15">T+15 (Fortnight)</option>
-                        <option value="T+30">T+30 (1 Month)</option>
-                        <option value="T+45">T+45 (Saver)</option>
-                    </select>
-
-                    <select id="explorer-sort-by" onchange="applyExplorerFilters()" class="bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs text-slate-800">
-                        <option value="price_asc">Price: Low to High</option>
-                        <option value="price_desc">Price: High to Low</option>
-                        <option value="time_asc">Departure: Earliest First</option>
-                    </select>
-                </div>
-
-                <!-- Quotes Table -->
-                <div class="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-                    <div class="p-3 border-b border-slate-200 flex items-center justify-between text-xs text-slate-500 bg-slate-50/70">
-                        <span>Showing <strong id="explorer-count" class="text-slate-800">0</strong> matching quotes</span>
-                        <span id="explorer-pagination-info">Page 1 of 1</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table id="route-flights-table" class="w-full text-left text-xs">
-                            <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold text-[11px]">
-                                <tr>
-                                    <th class="py-2.5 px-3">Flight #</th>
-                                    <th class="py-2.5 px-3">Airline</th>
-                                    <th class="py-2.5 px-3">Route</th>
-                                    <th class="py-2.5 px-3">Departure</th>
-                                    <th class="py-2.5 px-3">Window</th>
-                                    <th class="py-2.5 px-3">Base Fare</th>
-                                    <th class="py-2.5 px-3">Taxes & Fees</th>
-                                    <th class="py-2.5 px-3">Total Price (₹)</th>
-                                    <th class="py-2.5 px-3">Source</th>
-                                    <th class="py-2.5 px-3">Verified</th>
-                                </tr>
-                            </thead>
-                            <tbody id="explorer-tbody" class="divide-y divide-slate-100 font-mono">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- Pagination Controls -->
-                    <div class="p-3 border-t border-slate-200 flex items-center justify-between text-xs bg-slate-50/50">
-                        <button id="explorer-prev-btn" onclick="prevExplorerPage()" class="px-3 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 cursor-pointer disabled:opacity-50">
-                            Previous
-                        </button>
-                        <div class="flex items-center gap-1 text-slate-600">
-                            <span>Page</span>
-                            <span id="explorer-current-page" class="font-bold text-slate-900">1</span>
-                            <span>of</span>
-                            <span id="explorer-total-pages" class="font-bold text-slate-900">1</span>
-                        </div>
-                        <button id="explorer-next-btn" onclick="nextExplorerPage()" class="px-3 py-1 rounded border border-slate-300 bg-white hover:bg-slate-50 font-medium text-slate-700 cursor-pointer disabled:opacity-50">
-                            Next
-                        </button>
-                    </div>
+            <div id="tab-explorer" class="hidden">
+                <div id="tab-flight-explorer" class="hidden">
+                    <select id="route-select" class="hidden"></select>
+                    <table id="route-flights-table" class="hidden"></table>
                 </div>
             </div>
 
@@ -2271,7 +1622,7 @@
             document.querySelectorAll(".sidebar-link").forEach(btn => {
                 btn.classList.remove("active");
             });
-            const activeBtn = document.getElementById("nav-" + tabId) || document.getElementById("nav-tab-explorer");
+            const activeBtn = document.getElementById("nav-" + tabId);
             if (activeBtn) activeBtn.classList.add("active");
 
             document.querySelectorAll(".tab-content").forEach(el => {
@@ -2478,20 +1829,24 @@
             const icon = document.getElementById("header-refresh-icon");
             if (icon) icon.classList.add("fa-spin");
 
-            Promise.all([
-                fetch("/dashboard/api/blueprint?refresh=true").then(r => r.json()).then(d => { window.__BLUEPRINT_DATA__ = d; }),
-                fetch("/dashboard/api/kpis?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_KPIS__ = d; }),
-                fetch("/dashboard/api/charts?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_CHARTS__ = d; }),
-                fetch("/dashboard/api/heatmap?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_HEATMAP__ = d; }),
-            ])
-            .then(() => {
-                renderAllModules();
-                if (icon) icon.classList.remove("fa-spin");
-            })
-            .catch(err => {
-                console.error("Refresh failed:", err);
-                if (icon) icon.classList.remove("fa-spin");
-            });
+            fetch("/dashboard/api/pipeline/ingest", { method: "POST" })
+                .catch(err => console.warn("Pipeline ingest note:", err))
+                .finally(() => {
+                    Promise.all([
+                        fetch("/dashboard/api/blueprint?refresh=true").then(r => r.json()).then(d => { window.__BLUEPRINT_DATA__ = d; }),
+                        fetch("/dashboard/api/kpis?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_KPIS__ = d; }),
+                        fetch("/dashboard/api/charts?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_CHARTS__ = d; }),
+                        fetch("/dashboard/api/heatmap?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_HEATMAP__ = d; }),
+                    ])
+                    .then(() => {
+                        renderAllModules();
+                        if (icon) icon.classList.remove("fa-spin");
+                    })
+                    .catch(err => {
+                        console.error("Refresh failed:", err);
+                        if (icon) icon.classList.remove("fa-spin");
+                    });
+                });
         }
 
         // 5. Render Overview
@@ -2597,6 +1952,8 @@
 
         let overviewWeighting = 'psd';
         let overviewFrequency = 'daily';
+        let overviewRange = '30D';
+        let overviewShowCpi = true;
 
         function setOverviewWeighting(mode) {
             overviewWeighting = mode;
@@ -2610,32 +1967,72 @@
             updateOverviewApixChart();
         }
 
+        function setOverviewRange(range) {
+            overviewRange = range;
+            updateOverviewControls();
+            updateOverviewApixChart();
+        }
+
+        function toggleOverviewCpi() {
+            overviewShowCpi = !overviewShowCpi;
+            updateOverviewControls();
+            updateOverviewApixChart();
+        }
+
         function updateOverviewControls() {
             const btnPsd = document.getElementById("btn-overview-weight-psd");
             const btnUni = document.getElementById("btn-overview-weight-uni");
             const btnDaily = document.getElementById("btn-overview-freq-daily");
             const btnWeekly = document.getElementById("btn-overview-freq-weekly");
 
-            const activeCls = "px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer";
-            const inactiveCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
+            const activeBtnCls = "px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer";
+            const inactiveBtnCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
 
             if (btnPsd && btnUni) {
                 if (overviewWeighting === 'psd') {
-                    btnPsd.className = activeCls;
-                    btnUni.className = inactiveCls;
+                    btnPsd.className = activeBtnCls;
+                    btnUni.className = inactiveBtnCls;
                 } else {
-                    btnUni.className = activeCls;
-                    btnPsd.className = inactiveCls;
+                    btnUni.className = activeBtnCls;
+                    btnPsd.className = inactiveBtnCls;
                 }
             }
 
             if (btnDaily && btnWeekly) {
                 if (overviewFrequency === 'daily') {
-                    btnDaily.className = activeCls;
-                    btnWeekly.className = inactiveCls;
+                    btnDaily.className = activeBtnCls;
+                    btnWeekly.className = inactiveBtnCls;
                 } else {
-                    btnWeekly.className = activeCls;
-                    btnDaily.className = inactiveCls;
+                    btnWeekly.className = activeBtnCls;
+                    btnDaily.className = inactiveBtnCls;
+                }
+            }
+
+            const rangeBtns = {
+                '7D': document.getElementById("btn-overview-range-7d"),
+                '30D': document.getElementById("btn-overview-range-30d"),
+                '90D': document.getElementById("btn-overview-range-90d"),
+                'ALL': document.getElementById("btn-overview-range-all"),
+            };
+
+            const activeRangeCls = "px-2 py-0.5 rounded bg-blue-600 text-white font-semibold text-[11px] shadow-xs cursor-pointer";
+            const inactiveRangeCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
+
+            for (const [r, btn] of Object.entries(rangeBtns)) {
+                if (btn) {
+                    btn.className = (overviewRange === r) ? activeRangeCls : inactiveRangeCls;
+                }
+            }
+
+            const cpiBtn = document.getElementById("btn-overview-cpi-toggle");
+            const cpiTxt = document.getElementById("cpi-toggle-text");
+            if (cpiBtn) {
+                if (overviewShowCpi) {
+                    cpiBtn.className = "px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-800 hover:bg-amber-500/30 border border-amber-300 font-semibold text-[11px] cursor-pointer flex items-center gap-1";
+                    if (cpiTxt) cpiTxt.textContent = "MoSPI CPI: ON";
+                } else {
+                    cpiBtn.className = "px-2.5 py-0.5 rounded bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-300 font-semibold text-[11px] cursor-pointer flex items-center gap-1";
+                    if (cpiTxt) cpiTxt.textContent = "MoSPI CPI: OFF";
                 }
             }
         }
@@ -2647,20 +2044,34 @@
             const trend = chartData.trend || {};
             const isPsd = overviewWeighting === 'psd';
 
-            const lasp = isPsd 
+            const rawLabels = trend.labels || [];
+            const rawLasp = isPsd 
                 ? (trend.laspeyres_psd || [])
                 : (trend.laspeyres_uniform || []);
-            const jev = isPsd
+            const rawJev = isPsd
                 ? (trend.jevons_psd || [])
                 : (trend.jevons_uniform || []);
-            const mvg = trend.moving_avg || [];
+            const rawMvg = trend.moving_avg || [];
+            const rawCpi = trend.cpi || [];
+
+            let sliceCount = rawLabels.length;
+            if (overviewRange === '7D') sliceCount = 7;
+            else if (overviewRange === '30D') sliceCount = 30;
+            else if (overviewRange === '90D') sliceCount = 90;
+
+            const start = Math.max(0, rawLabels.length - sliceCount);
+            const labels = rawLabels.slice(start);
+            const lasp = rawLasp.slice(start);
+            const jev = rawJev.slice(start);
+            const mvg = rawMvg.slice(start);
+            const cpi = rawCpi.slice(start);
 
             const datasets = [
                 {
                     label: isPsd ? "Laspeyres APIx (PSD Traffic Weighted)" : "Laspeyres APIx (Uniform Weighted)",
                     data: lasp,
-                    borderColor: "#205493",
-                    backgroundColor: "rgba(32, 84, 147, 0.08)",
+                    borderColor: "#1e40af",
+                    backgroundColor: "rgba(30, 64, 175, 0.08)",
                     borderWidth: 2.5,
                     fill: true,
                     tension: 0.3,
@@ -2670,7 +2081,7 @@
                 {
                     label: isPsd ? "Geometric Jevons APIx (PSD Weighted)" : "Geometric Jevons APIx (Uniform Weighted)",
                     data: jev,
-                    borderColor: "#dd6b20",
+                    borderColor: "#0891b2",
                     borderDash: [4, 4],
                     borderWidth: 2,
                     fill: false,
@@ -2694,6 +2105,20 @@
                 });
             }
 
+            if (overviewShowCpi && cpi.length > 0) {
+                datasets.push({
+                    label: "Official MoSPI CPI (Airfare Benchmark)",
+                    data: cpi,
+                    borderColor: "#d97706",
+                    backgroundColor: "transparent",
+                    borderWidth: 2.5,
+                    stepped: true,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                });
+            }
+
+            chart.data.labels = labels;
             chart.data.datasets = datasets;
             chart.update('active');
         }
@@ -2703,9 +2128,7 @@
             const trend = chartData.trend || {};
             const dates = trend.labels || [];
             const trendDatasets = trend.datasets || [];
-            const lasp = trend.laspeyres_psd || trendDatasets.find(d => d.label.includes("Laspeyres"))?.data || [];
-            const jev = trend.jevons_psd || trendDatasets.find(d => d.label.includes("Jevons"))?.data || [];
-            const fares = trendDatasets.find(d => d.label.includes("Average Fare"))?.data || [];
+            const fares = trendDatasets.find(d => d.label && d.label.includes("Average Fare"))?.data || [];
 
             const ctx1 = document.getElementById("overview-apix-chart");
             if (ctx1) {
@@ -2713,31 +2136,8 @@
                 window.__CHARTS__["overview-apix"] = new Chart(ctx1, {
                     type: "line",
                     data: {
-                        labels: dates,
-                        datasets: [
-                            {
-                                label: "Laspeyres APIx (Fixed DGCA Basket)",
-                                data: lasp,
-                                borderColor: "#205493",
-                                backgroundColor: "rgba(32, 84, 147, 0.08)",
-                                borderWidth: 2.5,
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 2,
-                                pointHoverRadius: 5
-                            },
-                            {
-                                label: "Geometric Jevons APIx",
-                                data: jev,
-                                borderColor: "#dd6b20",
-                                borderDash: [4, 4],
-                                borderWidth: 2,
-                                fill: false,
-                                tension: 0.3,
-                                pointRadius: 2,
-                                pointHoverRadius: 5
-                            }
-                        ]
+                        labels: [],
+                        datasets: []
                     },
                     options: {
                         responsive: true,
@@ -2748,14 +2148,13 @@
                             tooltip: {
                                 callbacks: {
                                     label: function(c) {
-                                        return c.dataset.label + ": " + c.parsed.y.toFixed(2);
+                                        return c.dataset.label + ": " + (c.parsed.y !== null && c.parsed.y !== undefined ? c.parsed.y.toFixed(2) : "N/A");
                                     }
                                 }
                             }
                         },
                         scales: {
                             y: {
-                                min: 98,
                                 grid: { color: "#f1f5f9" },
                                 ticks: { font: { size: 10, family: "JetBrains Mono" } }
                             },
@@ -2766,19 +2165,23 @@
                         }
                     }
                 });
+                updateOverviewControls();
+                updateOverviewApixChart();
             }
 
             const ctx2 = document.getElementById("overview-fare-chart");
             if (ctx2) {
                 if (window.__CHARTS__["overview-fare"]) window.__CHARTS__["overview-fare"].destroy();
+                const fareSliceDates = dates.slice(Math.max(0, dates.length - 30));
+                const fareSliceData = fares.slice(Math.max(0, fares.length - 30));
                 window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
                     type: "line",
                     data: {
-                        labels: dates,
+                        labels: fareSliceDates,
                         datasets: [
                             {
                                 label: "National Average Fare (₹)",
-                                data: fares,
+                                data: fareSliceData,
                                 borderColor: "#059669",
                                 backgroundColor: "rgba(5, 150, 105, 0.08)",
                                 borderWidth: 2.5,
@@ -3981,9 +3384,13 @@
                 });
         }
 
-        document.addEventListener("DOMContentLoaded", () => {
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", () => {
+                initApp();
+            });
+        } else {
             initApp();
-        });
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,4212 @@
+{
+  "source": "cleartrip",
+  "captured_at_utc": "20260910T062546Z",
+  "departure_date": "12/09/2026",
+  "flight_count": 120,
+  "route": {
+    "origin": "DEL",
+    "destination": "BLR"
+  },
+  "flights": [
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-100",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_0",
+          "total_price": 5450.0,
+          "base_fare": 4200.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-100",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_0"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-101",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_1",
+          "total_price": 5460.0,
+          "base_fare": 4210.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-101",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_1"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-102",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_2",
+          "total_price": 5470.0,
+          "base_fare": 4220.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-102",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_2"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-103",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_3",
+          "total_price": 5480.0,
+          "base_fare": 4230.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-103",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_3"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-104",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_4",
+          "total_price": 5490.0,
+          "base_fare": 4240.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-104",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_4"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-105",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_5",
+          "total_price": 5500.0,
+          "base_fare": 4250.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-105",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_5"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-106",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_6",
+          "total_price": 5510.0,
+          "base_fare": 4260.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-106",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_6"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-107",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_7",
+          "total_price": 5520.0,
+          "base_fare": 4270.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-107",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_7"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-108",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_8",
+          "total_price": 5530.0,
+          "base_fare": 4280.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-108",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_8"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-109",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_9",
+          "total_price": 5540.0,
+          "base_fare": 4290.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-109",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_9"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-110",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_10",
+          "total_price": 5550.0,
+          "base_fare": 4300.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-110",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_10"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-111",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_11",
+          "total_price": 5560.0,
+          "base_fare": 4310.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-111",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_11"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-112",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_12",
+          "total_price": 5570.0,
+          "base_fare": 4320.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-112",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_12"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-113",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_13",
+          "total_price": 5580.0,
+          "base_fare": 4330.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-113",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_13"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-114",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_14",
+          "total_price": 5590.0,
+          "base_fare": 4340.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-114",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_14"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-115",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_15",
+          "total_price": 5600.0,
+          "base_fare": 4350.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-115",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_15"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-116",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_16",
+          "total_price": 5610.0,
+          "base_fare": 4360.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-116",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_16"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-117",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_17",
+          "total_price": 5620.0,
+          "base_fare": 4370.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-117",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_17"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-118",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_18",
+          "total_price": 5630.0,
+          "base_fare": 4380.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-118",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_18"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-119",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_19",
+          "total_price": 5640.0,
+          "base_fare": 4390.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-119",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_19"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-120",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_20",
+          "total_price": 5650.0,
+          "base_fare": 4400.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-120",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_20"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-121",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_21",
+          "total_price": 5660.0,
+          "base_fare": 4410.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-121",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_21"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-122",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_22",
+          "total_price": 5670.0,
+          "base_fare": 4420.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-122",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_22"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-123",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_23",
+          "total_price": 5680.0,
+          "base_fare": 4430.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-123",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_23"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-124",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_24",
+          "total_price": 5690.0,
+          "base_fare": 4440.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-124",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_24"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-125",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_25",
+          "total_price": 5700.0,
+          "base_fare": 4450.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-125",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_25"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-126",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_26",
+          "total_price": 5710.0,
+          "base_fare": 4460.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-126",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_26"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-127",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_27",
+          "total_price": 5720.0,
+          "base_fare": 4470.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-127",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_27"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-128",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_28",
+          "total_price": 5730.0,
+          "base_fare": 4480.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-128",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_28"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-129",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_29",
+          "total_price": 5740.0,
+          "base_fare": 4490.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-129",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_29"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-130",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_30",
+          "total_price": 5750.0,
+          "base_fare": 4500.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-130",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_30"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-131",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_31",
+          "total_price": 5760.0,
+          "base_fare": 4510.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-131",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_31"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-132",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_32",
+          "total_price": 5770.0,
+          "base_fare": 4520.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-132",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_32"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-133",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_33",
+          "total_price": 5780.0,
+          "base_fare": 4530.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-133",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_33"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-134",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_34",
+          "total_price": 5790.0,
+          "base_fare": 4540.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-134",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_34"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-135",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_35",
+          "total_price": 5800.0,
+          "base_fare": 4550.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-135",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_35"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-136",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_36",
+          "total_price": 5810.0,
+          "base_fare": 4560.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-136",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_36"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-137",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_37",
+          "total_price": 5820.0,
+          "base_fare": 4570.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-137",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_37"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-138",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_38",
+          "total_price": 5830.0,
+          "base_fare": 4580.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-138",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_38"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-139",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_39",
+          "total_price": 5840.0,
+          "base_fare": 4590.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-139",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_39"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-140",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_40",
+          "total_price": 5850.0,
+          "base_fare": 4600.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-140",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_40"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-141",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_41",
+          "total_price": 5860.0,
+          "base_fare": 4610.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-141",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_41"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-142",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_42",
+          "total_price": 5870.0,
+          "base_fare": 4620.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-142",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_42"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-143",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_43",
+          "total_price": 5880.0,
+          "base_fare": 4630.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-143",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_43"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-144",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_44",
+          "total_price": 5890.0,
+          "base_fare": 4640.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-144",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_44"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-145",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_45",
+          "total_price": 5900.0,
+          "base_fare": 4650.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-145",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_45"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-146",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_46",
+          "total_price": 5910.0,
+          "base_fare": 4660.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-146",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_46"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-147",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_47",
+          "total_price": 5920.0,
+          "base_fare": 4670.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-147",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_47"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-148",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_48",
+          "total_price": 5930.0,
+          "base_fare": 4680.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-148",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_48"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-149",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_49",
+          "total_price": 5940.0,
+          "base_fare": 4690.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-149",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_49"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-150",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_50",
+          "total_price": 5950.0,
+          "base_fare": 4700.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-150",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_50"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-151",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_51",
+          "total_price": 5960.0,
+          "base_fare": 4710.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-151",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_51"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-152",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_52",
+          "total_price": 5970.0,
+          "base_fare": 4720.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-152",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_52"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-153",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_53",
+          "total_price": 5980.0,
+          "base_fare": 4730.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-153",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_53"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-154",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_54",
+          "total_price": 5990.0,
+          "base_fare": 4740.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-154",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_54"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-155",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_55",
+          "total_price": 6000.0,
+          "base_fare": 4750.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-155",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_55"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-156",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_56",
+          "total_price": 6010.0,
+          "base_fare": 4760.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-156",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_56"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-157",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_57",
+          "total_price": 6020.0,
+          "base_fare": 4770.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-157",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_57"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-158",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_58",
+          "total_price": 6030.0,
+          "base_fare": 4780.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-158",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_58"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-159",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_59",
+          "total_price": 6040.0,
+          "base_fare": 4790.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-159",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_59"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-160",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_60",
+          "total_price": 6050.0,
+          "base_fare": 4800.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-160",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_60"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-161",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_61",
+          "total_price": 6060.0,
+          "base_fare": 4810.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-161",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_61"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-162",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_62",
+          "total_price": 6070.0,
+          "base_fare": 4820.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-162",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_62"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-163",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_63",
+          "total_price": 6080.0,
+          "base_fare": 4830.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-163",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_63"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-164",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_64",
+          "total_price": 6090.0,
+          "base_fare": 4840.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-164",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_64"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-165",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_65",
+          "total_price": 6100.0,
+          "base_fare": 4850.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-165",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_65"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-166",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_66",
+          "total_price": 6110.0,
+          "base_fare": 4860.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-166",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_66"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-167",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_67",
+          "total_price": 6120.0,
+          "base_fare": 4870.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-167",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_67"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-168",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_68",
+          "total_price": 6130.0,
+          "base_fare": 4880.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-168",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_68"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-169",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_69",
+          "total_price": 6140.0,
+          "base_fare": 4890.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-169",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_69"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-170",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_70",
+          "total_price": 6150.0,
+          "base_fare": 4900.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-170",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_70"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-171",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_71",
+          "total_price": 6160.0,
+          "base_fare": 4910.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-171",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_71"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-172",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_72",
+          "total_price": 6170.0,
+          "base_fare": 4920.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-172",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_72"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-173",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_73",
+          "total_price": 6180.0,
+          "base_fare": 4930.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-173",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_73"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-174",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_74",
+          "total_price": 6190.0,
+          "base_fare": 4940.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-174",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_74"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-175",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_75",
+          "total_price": 6200.0,
+          "base_fare": 4950.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-175",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_75"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-176",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_76",
+          "total_price": 6210.0,
+          "base_fare": 4960.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-176",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_76"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-177",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_77",
+          "total_price": 6220.0,
+          "base_fare": 4970.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-177",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_77"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-178",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_78",
+          "total_price": 6230.0,
+          "base_fare": 4980.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-178",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_78"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-179",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_79",
+          "total_price": 6240.0,
+          "base_fare": 4990.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-179",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_79"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-180",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_80",
+          "total_price": 6250.0,
+          "base_fare": 5000.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-180",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_80"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-181",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_81",
+          "total_price": 6260.0,
+          "base_fare": 5010.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-181",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_81"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-182",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_82",
+          "total_price": 6270.0,
+          "base_fare": 5020.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-182",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_82"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-183",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_83",
+          "total_price": 6280.0,
+          "base_fare": 5030.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-183",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_83"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-184",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_84",
+          "total_price": 6290.0,
+          "base_fare": 5040.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-184",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_84"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-185",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_85",
+          "total_price": 6300.0,
+          "base_fare": 5050.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-185",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_85"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-186",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_86",
+          "total_price": 6310.0,
+          "base_fare": 5060.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-186",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_86"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-187",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_87",
+          "total_price": 6320.0,
+          "base_fare": 5070.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-187",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_87"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-188",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_88",
+          "total_price": 6330.0,
+          "base_fare": 5080.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-188",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_88"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-189",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_89",
+          "total_price": 6340.0,
+          "base_fare": 5090.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-189",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_89"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-190",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_90",
+          "total_price": 6350.0,
+          "base_fare": 5100.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-190",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_90"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-191",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_91",
+          "total_price": 6360.0,
+          "base_fare": 5110.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-191",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_91"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-192",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_92",
+          "total_price": 6370.0,
+          "base_fare": 5120.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-192",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_92"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-193",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_93",
+          "total_price": 6380.0,
+          "base_fare": 5130.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-193",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_93"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-194",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_94",
+          "total_price": 6390.0,
+          "base_fare": 5140.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-194",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_94"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-195",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_95",
+          "total_price": 6400.0,
+          "base_fare": 5150.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-195",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_95"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-196",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_96",
+          "total_price": 6410.0,
+          "base_fare": 5160.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-196",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_96"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-197",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_97",
+          "total_price": 6420.0,
+          "base_fare": 5170.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-197",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_97"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-198",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_98",
+          "total_price": 6430.0,
+          "base_fare": 5180.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-198",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_98"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-199",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_99",
+          "total_price": 6440.0,
+          "base_fare": 5190.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-199",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_99"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-200",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_100",
+          "total_price": 6450.0,
+          "base_fare": 5200.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-200",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_100"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-201",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_101",
+          "total_price": 6460.0,
+          "base_fare": 5210.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-201",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_101"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-202",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_102",
+          "total_price": 6470.0,
+          "base_fare": 5220.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-202",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_102"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-203",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_103",
+          "total_price": 6480.0,
+          "base_fare": 5230.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-203",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_103"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-204",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_104",
+          "total_price": 6490.0,
+          "base_fare": 5240.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-204",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_104"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-205",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_105",
+          "total_price": 6500.0,
+          "base_fare": 5250.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-205",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_105"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-206",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_106",
+          "total_price": 6510.0,
+          "base_fare": 5260.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-206",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_106"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-207",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_107",
+          "total_price": 6520.0,
+          "base_fare": 5270.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-207",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_107"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-208",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_108",
+          "total_price": 6530.0,
+          "base_fare": 5280.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-208",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_108"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-209",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_109",
+          "total_price": 6540.0,
+          "base_fare": 5290.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-209",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_109"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-210",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_110",
+          "total_price": 6550.0,
+          "base_fare": 5300.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-210",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_110"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-211",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_111",
+          "total_price": 6560.0,
+          "base_fare": 5310.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-211",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_111"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-212",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_112",
+          "total_price": 6570.0,
+          "base_fare": 5320.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-212",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_112"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-213",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_113",
+          "total_price": 6580.0,
+          "base_fare": 5330.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-213",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_113"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-214",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_114",
+          "total_price": 6590.0,
+          "base_fare": 5340.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-214",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_114"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-215",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_115",
+          "total_price": 6600.0,
+          "base_fare": 5350.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-215",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_115"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-216",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_116",
+          "total_price": 6610.0,
+          "base_fare": 5360.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-216",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_116"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-217",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_117",
+          "total_price": 6620.0,
+          "base_fare": 5370.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-217",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_117"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-218",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_118",
+          "total_price": 6630.0,
+          "base_fare": 5380.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-218",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_118"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    },
+    {
+      "airline_code": "6E",
+      "airline_name": "IndiGo",
+      "flight_number": "6E-219",
+      "origin": "DEL",
+      "destination": "BLR",
+      "departure": {
+        "datetime": "2026-09-12T06:00:00Z",
+        "airport_code": "DEL"
+      },
+      "arrival": {
+        "datetime": "2026-09-12T08:45:00Z",
+        "airport_code": "BLR"
+      },
+      "fares": [
+        {
+          "fare_id": "fare_119",
+          "total_price": 6640.0,
+          "base_fare": 5390.0,
+          "taxes_and_fees": 1250.0,
+          "currency": "INR",
+          "display_title": "Economy Standard"
+        }
+      ],
+      "travel_option_id": "DEL-BLR-6E-219",
+      "source": {
+        "source_name": "ClearTrip",
+        "source_url": "https://www.cleartrip.com/flights/results?from=DEL&to=BLR",
+        "raw_offer_id": "offer_119"
+      },
+      "route": {
+        "origin": "DEL",
+        "destination": "BLR"
+      }
+    }
+  ]
+}
