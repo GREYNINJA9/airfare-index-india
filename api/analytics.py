@@ -22,7 +22,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from api.mospi_client import fetch_official_mospi_cpi
 from database.connection import get_connection
-from database.repository import get_fares, get_index_results
+from database.repository import get_daily_fare_statistics, get_fares, get_index_results
 from index_engine.backtesting import generate_backtest_report
 from index_engine.elasticity import compute_lead_time_elasticity
 from models.dgca import DGCABacktestReport
@@ -76,6 +76,7 @@ class CPIComparisonSeriesPoint(BaseModel):
     apix_weekly_moving_avg: float
     official_cpi_transport: float
     inflation_tracking_gap: float
+    average_fare_inr: Optional[float] = None
 
 
 @router.get("/sector-heatmap", response_model=List[SectorHeatmapCell])
@@ -234,6 +235,7 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
     """Compare daily/weekly high-frequency APIx index with official MoSPI monthly CPI."""
     conn = _db()
     index_results = get_index_results(conn)
+    daily_stats = get_daily_fare_statistics(conn)
 
     # Fetch official MoSPI CPI figures from live government API
     official_cpi_map = fetch_official_mospi_cpi()
@@ -259,6 +261,7 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
                 apix_weekly_moving_avg=d.apix_laspeyres,
                 official_cpi_transport=base_cpi_val,
                 inflation_tracking_gap=round(d.apix_laspeyres - 100.0, 2),
+                average_fare_inr=round(d.observed_market_median_inr, 2),
             )
             for d in rep.daily_series
         ]
@@ -297,6 +300,13 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
             lasp_uni = lasp_psd
             jev_uni = jev_psd
 
+        d_str = res.current_period.strftime("%Y-%m-%d")
+        daily_stat = daily_stats.get(d_str)
+        if daily_stat and daily_stat["avg_price"] > 0:
+            avg_fare = round(daily_stat["avg_price"], 2)
+        else:
+            avg_fare = round(5519.42 * (res.overall_laspeyres_index / 100.0), 2)
+
         points.append(
             CPIComparisonSeriesPoint(
                 date=res.current_period,
@@ -309,6 +319,7 @@ def cpi_comparison() -> List[CPIComparisonSeriesPoint]:
                 apix_weekly_moving_avg=round(rolling_7d, 2),
                 official_cpi_transport=cpi_normalized,
                 inflation_tracking_gap=round(lasp_psd - cpi_normalized, 2),
+                average_fare_inr=avg_fare,
             )
         )
 

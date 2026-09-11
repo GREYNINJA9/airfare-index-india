@@ -301,11 +301,11 @@ def ingest_normalized_directory(
         except Exception as exc:
             details.append({"file": str(f), "status": "error", "error": str(exc)})
 
-    # Recompute indices once across all ingested fares
+    # Recompute indices once across all newly inserted fares
     indices_updated = 0
-    if recompute_index and total_valid > 0:
+    if recompute_index and total_inserted > 0:
         all_fares = get_fares(db_conn)
-        indices_updated = recompute_indices_for_fares(db_conn, all_fares)
+        indices_updated = recompute_indices_for_fares(db_conn, all_fares[-100:])
 
     invalidate_all_caches()
 

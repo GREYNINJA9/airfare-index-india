@@ -27,6 +27,9 @@ _FARES_CACHE_TIME: float = 0.0
 _FARES_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
 _FARES_LOCK = threading.Lock()
 
+_DAILY_FARE_STATS_CACHE: dict | None = None
+_DAILY_FARE_STATS_TIME: float = 0.0
+
 _INDEX_CACHE: List[IndexResult] | None = None
 _INDEX_CACHE_TIME: float = 0.0
 _INDEX_CACHE_TTL: float = 600.0  # seconds (auto-invalidated on write)
@@ -40,10 +43,12 @@ def _is_postgres_connection(conn) -> bool:
 
 def invalidate_fares_cache() -> None:
     """Invalidate in-memory fares cache."""
-    global _FARES_CACHE, _FARES_CACHE_TIME
+    global _FARES_CACHE, _FARES_CACHE_TIME, _DAILY_FARE_STATS_CACHE, _DAILY_FARE_STATS_TIME
     with _FARES_LOCK:
         _FARES_CACHE = None
         _FARES_CACHE_TIME = 0.0
+        _DAILY_FARE_STATS_CACHE = None
+        _DAILY_FARE_STATS_TIME = 0.0
 
 
 def invalidate_index_cache() -> None:
@@ -175,6 +180,44 @@ def count_fares(conn) -> int:
     """Return the total number of stored fares."""
     cur = conn.execute("SELECT COUNT(*) AS n FROM fares")
     return int(cur.fetchone()["n"])
+
+
+def get_daily_fare_statistics(conn) -> dict:
+    """Return daily fare statistics aggregated across all routes keyed by date string (YYYY-MM-DD)."""
+    global _DAILY_FARE_STATS_CACHE, _DAILY_FARE_STATS_TIME
+    now = time.time()
+    with _FARES_LOCK:
+        if _DAILY_FARE_STATS_CACHE is not None and (now - _DAILY_FARE_STATS_TIME) < _FARES_CACHE_TTL:
+            return dict(_DAILY_FARE_STATS_CACHE)
+
+    cur = conn.execute(
+        """
+        SELECT substr(scraped_at, 1, 10) as fare_date,
+               AVG(price_inr) as avg_price,
+               MIN(price_inr) as min_price,
+               MAX(price_inr) as max_price,
+               COUNT(*) as n_fares
+        FROM fares
+        WHERE price_inr IS NOT NULL AND price_inr > 0
+        GROUP BY substr(scraped_at, 1, 10)
+        ORDER BY fare_date ASC
+        """
+    )
+    result = {}
+    for row in cur.fetchall():
+        d_str = str(row["fare_date"])
+        result[d_str] = {
+            "avg_price": float(row["avg_price"]) if row["avg_price"] is not None else 0.0,
+            "min_price": float(row["min_price"]) if row["min_price"] is not None else 0.0,
+            "max_price": float(row["max_price"]) if row["max_price"] is not None else 0.0,
+            "n_fares": int(row["n_fares"]) if row["n_fares"] is not None else 0,
+        }
+
+    with _FARES_LOCK:
+        _DAILY_FARE_STATS_CACHE = result
+        _DAILY_FARE_STATS_TIME = time.time()
+
+    return result
 
 
 def get_fares(conn) -> List[Fare]:

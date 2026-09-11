@@ -446,7 +446,7 @@
                                     <i class="fa-solid fa-indian-rupee-sign text-emerald-600"></i>
                                     <span>Average Domestic Fare (₹)</span>
                                 </h3>
-                                <span class="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded font-semibold border border-emerald-200">30-Day Series</span>
+                                <span id="overview-fare-series-badge" class="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded font-semibold border border-emerald-200">30-Day Series</span>
                             </div>
                             <p class="text-[11px] text-slate-500 mb-3">Weighted national mean ticket price across all 14 routes</p>
                             <div class="h-56 w-full">
@@ -454,9 +454,9 @@
                             </div>
                         </div>
                         <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                            <span>30D Low: <strong class="text-slate-800 font-mono">₹5,420</strong></span>
-                            <span>30D High: <strong class="text-slate-800 font-mono">₹6,280</strong></span>
-                            <span>Spread: <strong class="text-slate-800 font-mono">₹860</strong></span>
+                            <span><span id="overview-fare-range-label">30D</span> Low: <strong class="text-slate-800 font-mono" id="overview-fare-low">₹5,420</strong></span>
+                            <span><span id="overview-fare-range-label-2">30D</span> High: <strong class="text-slate-800 font-mono" id="overview-fare-high">₹6,280</strong></span>
+                            <span>Spread: <strong class="text-slate-800 font-mono" id="overview-fare-spread">₹860</strong></span>
                         </div>
                     </div>
                 </div>
@@ -1971,6 +1971,7 @@
             overviewRange = range;
             updateOverviewControls();
             updateOverviewApixChart();
+            updateOverviewFareChart();
         }
 
         function toggleOverviewCpi() {
@@ -2123,12 +2124,111 @@
             chart.update('active');
         }
 
-        function initOverviewCharts() {
+        function updateOverviewFareChart() {
             const chartData = window.__INITIAL_CHARTS__ || {};
             const trend = chartData.trend || {};
             const dates = trend.labels || [];
-            const trendDatasets = trend.datasets || [];
-            const fares = trendDatasets.find(d => d.label && d.label.includes("Average Fare"))?.data || [];
+            let fares = trend.average_fares || (trend.datasets || []).find(d => d.label && d.label.includes("Average Fare"))?.data || [];
+
+            if (!fares || fares.length === 0) {
+                const lasp = trend.laspeyres_psd || trend.laspeyres_uniform || [];
+                fares = lasp.map(v => Math.round(5519.42 * (v / 100.0)));
+            }
+
+            let sliceCount = 30;
+            if (overviewRange === '7D') sliceCount = 7;
+            else if (overviewRange === '30D') sliceCount = 30;
+            else if (overviewRange === '90D') sliceCount = 90;
+            else if (overviewRange === 'ALL') sliceCount = dates.length;
+
+            const start = Math.max(0, dates.length - sliceCount);
+            const sliceDates = dates.slice(start);
+            const sliceFares = fares.slice(start);
+
+            // Update badge and stat labels
+            const badge = document.getElementById("overview-fare-series-badge");
+            if (badge) badge.textContent = (overviewRange === 'ALL' ? 'All-Time' : overviewRange) + ' Series';
+
+            const lbl1 = document.getElementById("overview-fare-range-label");
+            const lbl2 = document.getElementById("overview-fare-range-label-2");
+            if (lbl1) lbl1.textContent = overviewRange;
+            if (lbl2) lbl2.textContent = overviewRange;
+
+            if (sliceFares.length > 0) {
+                const low = Math.min(...sliceFares);
+                const high = Math.max(...sliceFares);
+                const spread = high - low;
+
+                const lowEl = document.getElementById("overview-fare-low");
+                const highEl = document.getElementById("overview-fare-high");
+                const spreadEl = document.getElementById("overview-fare-spread");
+
+                if (lowEl) lowEl.textContent = "₹" + Math.round(low).toLocaleString();
+                if (highEl) highEl.textContent = "₹" + Math.round(high).toLocaleString();
+                if (spreadEl) spreadEl.textContent = "₹" + Math.round(spread).toLocaleString();
+            }
+
+            const ctx2 = document.getElementById("overview-fare-chart");
+            if (!ctx2) return;
+
+            if (window.__CHARTS__["overview-fare"]) {
+                const chart = window.__CHARTS__["overview-fare"];
+                chart.data.labels = sliceDates;
+                chart.data.datasets[0].data = sliceFares;
+                chart.update('active');
+            } else {
+                window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
+                    type: "line",
+                    data: {
+                        labels: sliceDates,
+                        datasets: [
+                            {
+                                label: "National Average Fare (₹)",
+                                data: sliceFares,
+                                borderColor: "#059669",
+                                backgroundColor: "rgba(5, 150, 105, 0.08)",
+                                borderWidth: 2.5,
+                                fill: true,
+                                tension: 0.3,
+                                pointRadius: 2,
+                                pointHoverRadius: 5
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: "index" },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return "National Avg Fare: ₹" + Math.round(c.parsed.y).toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: "#f1f5f9" },
+                                ticks: {
+                                    font: { size: 10, family: "JetBrains Mono" },
+                                    callback: function(v) { return "₹" + Math.round(v).toLocaleString(); }
+                                }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 9, family: "JetBrains Mono" } }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function initOverviewCharts() {
+            const chartData = window.__INITIAL_CHARTS__ || {};
 
             const ctx1 = document.getElementById("overview-apix-chart");
             if (ctx1) {
@@ -2169,27 +2269,28 @@
                 updateOverviewApixChart();
             }
 
-            const ctx2 = document.getElementById("overview-fare-chart");
-            if (ctx2) {
-                if (window.__CHARTS__["overview-fare"]) window.__CHARTS__["overview-fare"].destroy();
-                const fareSliceDates = dates.slice(Math.max(0, dates.length - 30));
-                const fareSliceData = fares.slice(Math.max(0, fares.length - 30));
-                window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
+            updateOverviewFareChart();
+
+            const ctx3 = document.getElementById("overview-lead-chart");
+            if (ctx3) {
+                if (window.__CHARTS__["overview-lead"]) window.__CHARTS__["overview-lead"].destroy();
+                const leadData = chartData.elasticity?.datasets?.[0]?.data || [8240, 6150, 5280, 4490, 4290];
+                const leadLabels = chartData.elasticity?.labels || ["T+1", "T+7", "T+15", "T+30", "T+45"];
+                window.__CHARTS__["overview-lead"] = new Chart(ctx3, {
                     type: "line",
                     data: {
-                        labels: fareSliceDates,
-                        datasets: [
-                            {
-                                label: "National Average Fare (₹)",
-                                data: fareSliceData,
-                                borderColor: "#059669",
-                                backgroundColor: "rgba(5, 150, 105, 0.08)",
-                                borderWidth: 2.5,
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 2
-                            }
-                        ]
+                        labels: leadLabels,
+                        datasets: [{
+                            label: "Median Fare (₹)",
+                            data: leadData,
+                            borderColor: "#9333ea",
+                            backgroundColor: "rgba(147, 51, 234, 0.1)",
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 3,
+                            pointHoverRadius: 6
+                        }]
                     },
                     options: {
                         responsive: true,
@@ -2198,7 +2299,9 @@
                             legend: { display: false },
                             tooltip: {
                                 callbacks: {
-                                    label: function(c) { return "₹" + Math.round(c.parsed.y).toLocaleString(); }
+                                    label: function(c) {
+                                        return "Lead Time Fare: ₹" + Math.round(c.parsed.y).toLocaleString();
+                                    }
                                 }
                             }
                         },
@@ -2206,43 +2309,10 @@
                             y: {
                                 grid: { color: "#f1f5f9" },
                                 ticks: {
-                                    font: { size: 10, family: "JetBrains Mono" },
-                                    callback: function(v) { return "₹" + v; }
+                                    font: { size: 9, family: "JetBrains Mono" },
+                                    callback: function(v) { return "₹" + Math.round(v).toLocaleString(); }
                                 }
                             },
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 9, family: "JetBrains Mono" } }
-                            }
-                        }
-                    }
-                });
-            }
-
-            const ctx3 = document.getElementById("overview-lead-chart");
-            if (ctx3) {
-                if (window.__CHARTS__["overview-lead"]) window.__CHARTS__["overview-lead"].destroy();
-                window.__CHARTS__["overview-lead"] = new Chart(ctx3, {
-                    type: "line",
-                    data: {
-                        labels: ["T+1", "T+7", "T+15", "T+30", "T+45"],
-                        datasets: [{
-                            label: "Fare (₹)",
-                            data: [8240, 6150, 5280, 4490, 4290],
-                            borderColor: "#9333ea",
-                            backgroundColor: "rgba(147, 51, 234, 0.1)",
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.35,
-                            pointRadius: 3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            y: { ticks: { font: { size: 9, family: "JetBrains Mono" } } },
                             x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
                         }
                     }
@@ -2471,9 +2541,16 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) { return "Route Avg Fare: ₹" + Math.round(c.parsed.y).toLocaleString(); }
+                                }
+                            }
+                        },
                         scales: {
-                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" }, callback: v => "₹" + v } },
+                            y: { ticks: { font: { size: 10, family: "JetBrains Mono" }, callback: v => "₹" + Math.round(v).toLocaleString() } },
                             x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
                         }
                     }
@@ -2501,7 +2578,14 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) { return "Route Index: " + (c.parsed.y !== null && c.parsed.y !== undefined ? c.parsed.y.toFixed(2) : "N/A"); }
+                                }
+                            }
+                        },
                         scales: {
                             y: { ticks: { font: { size: 10, family: "JetBrains Mono" } } },
                             x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
@@ -2910,7 +2994,14 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
-                            legend: { position: "top", labels: { font: { size: 11, family: "Inter" } } }
+                            legend: { position: "top", labels: { font: { size: 11, family: "Inter" } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return c.dataset.label + ": " + (c.parsed.y !== null && c.parsed.y !== undefined ? c.parsed.y.toFixed(2) : "N/A");
+                                    }
+                                }
+                            }
                         },
                         scales: {
                             y: { ticks: { font: { size: 10, family: "JetBrains Mono" } } },

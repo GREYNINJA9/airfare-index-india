@@ -88,7 +88,13 @@ class PostgresConnectionWrapper:
                 pg_sql += " ON CONFLICT (raw_offer_id) DO NOTHING"
             elif "index_results" in pg_sql.lower():
                 pg_sql = pg_sql.rstrip().rstrip(";")
-                pg_sql += " ON CONFLICT (base_period, current_period) DO NOTHING"
+                pg_sql += (
+                    " ON CONFLICT (base_period, current_period) DO UPDATE SET "
+                    "overall_laspeyres_index = EXCLUDED.overall_laspeyres_index, "
+                    "overall_jevons_index = EXCLUDED.overall_jevons_index, "
+                    "item_indices_json = EXCLUDED.item_indices_json, "
+                    "methodology_json = EXCLUDED.methodology_json"
+                )
 
         cur = self.pg_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         cur.execute(pg_sql, params)

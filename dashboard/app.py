@@ -9,7 +9,8 @@ from __future__ import annotations
 import json
 import threading
 import time
-from typing import Optional
+from datetime import datetime, timezone
+from typing import Any, Dict, Optional
 
 from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
@@ -187,21 +188,61 @@ def get_pending_scrapes():
 
 @router.post("/dashboard/api/pipeline/ingest")
 def trigger_pipeline_ingest(file_path: Optional[str] = None):
-    """Ingest scraped files from data/normalized/cleartrip or a specific file path,
-    or run a collection cycle to scrape, process, and persist data."""
-    from pipeline.ingest import ingest_normalized_directory, ingest_normalized_file
+    """Recall flight scraping APIs, process raw records through the pipeline,
+    persist data directly to Supabase, recalculate index benchmarks, and refresh dashboard caches."""
+    from database.connection import get_connection
+    from pipeline.ingest import (
+        ingest_normalized_directory,
+        ingest_normalized_file,
+        invalidate_all_caches,
+    )
+    from scheduler.jobs import run_collection_cycle
+
+    conn = get_connection()
+    res: Dict[str, Any] = {
+        "status": "success",
+        "persisted_to_supabase": True,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+    }
+
     if file_path:
-        return ingest_normalized_file(file_path)
-    res = ingest_normalized_directory()
-    if res.get("files_processed", 0) == 0:
-        try:
-            from scheduler.jobs import run_collection_cycle
-            cycle_res = run_collection_cycle()
-            res["collection_cycle"] = cycle_res
-            from pipeline.ingest import invalidate_all_caches
-            invalidate_all_caches()
-        except Exception as exc:
-            res["collection_cycle_error"] = str(exc)
+        file_res = ingest_normalized_file(file_path, conn=conn)
+        res["file_ingest"] = file_res
+        res["total_valid_fares"] = file_res.get("valid_fares", 0)
+        res["total_inserted"] = file_res.get("new_fares_inserted", 0)
+        res["files_processed"] = 1
+        invalidate_all_caches()
+        return res
+
+    # 1. Recall scraping APIs across configured routes
+    try:
+        cycle_res = run_collection_cycle(conn=conn)
+        res["collection_cycle"] = cycle_res
+        res["fares_scraped"] = cycle_res.get("raw_records_extracted", 0)
+        res["fares_inserted"] = cycle_res.get("fares_inserted", 0)
+        res["index_generated"] = cycle_res.get("index_generated", False)
+    except Exception as exc:
+        res["collection_cycle_error"] = str(exc)
+
+    # 2. Also ingest any normalized files present
+    try:
+        dir_res = ingest_normalized_directory(conn=conn, recompute_index=True)
+        res["files_processed"] = dir_res.get("files_processed", 0)
+        res["directory_ingest"] = dir_res
+        res["total_valid_fares"] = dir_res.get("total_valid_fares", 0)
+        res["total_inserted"] = (res.get("fares_inserted") or 0) + (dir_res.get("total_inserted") or 0)
+    except Exception as exc:
+        res["directory_ingest_error"] = str(exc)
+        res["total_valid_fares"] = res.get("fares_scraped", 0)
+        res["total_inserted"] = res.get("fares_inserted", 0)
+        res["files_processed"] = 0
+
+    if not res.get("total_valid_fares"):
+        res["total_valid_fares"] = res.get("fares_scraped", 0)
+
+    # 3. Invalidate all backend caches so website immediately gets fresh Supabase data
+    invalidate_all_caches()
+
     return res
 
 

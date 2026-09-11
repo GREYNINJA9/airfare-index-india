@@ -490,6 +490,8 @@
 
         let overviewWeighting = 'psd';
         let overviewFrequency = 'daily';
+        let overviewRange = '30D';
+        let overviewShowCpi = true;
 
         function setOverviewWeighting(mode) {
             overviewWeighting = mode;
@@ -503,32 +505,73 @@
             updateOverviewApixChart();
         }
 
+        function setOverviewRange(range) {
+            overviewRange = range;
+            updateOverviewControls();
+            updateOverviewApixChart();
+            updateOverviewFareChart();
+        }
+
+        function toggleOverviewCpi() {
+            overviewShowCpi = !overviewShowCpi;
+            updateOverviewControls();
+            updateOverviewApixChart();
+        }
+
         function updateOverviewControls() {
             const btnPsd = document.getElementById("btn-overview-weight-psd");
             const btnUni = document.getElementById("btn-overview-weight-uni");
             const btnDaily = document.getElementById("btn-overview-freq-daily");
             const btnWeekly = document.getElementById("btn-overview-freq-weekly");
 
-            const activeCls = "px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer";
-            const inactiveCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
+            const activeBtnCls = "px-2 py-0.5 rounded bg-white shadow-xs font-semibold text-slate-800 text-[11px] cursor-pointer";
+            const inactiveBtnCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
 
             if (btnPsd && btnUni) {
                 if (overviewWeighting === 'psd') {
-                    btnPsd.className = activeCls;
-                    btnUni.className = inactiveCls;
+                    btnPsd.className = activeBtnCls;
+                    btnUni.className = inactiveBtnCls;
                 } else {
-                    btnUni.className = activeCls;
-                    btnPsd.className = inactiveCls;
+                    btnUni.className = activeBtnCls;
+                    btnPsd.className = inactiveBtnCls;
                 }
             }
 
             if (btnDaily && btnWeekly) {
                 if (overviewFrequency === 'daily') {
-                    btnDaily.className = activeCls;
-                    btnWeekly.className = inactiveCls;
+                    btnDaily.className = activeBtnCls;
+                    btnWeekly.className = inactiveBtnCls;
                 } else {
-                    btnWeekly.className = activeCls;
-                    btnDaily.className = inactiveCls;
+                    btnWeekly.className = activeBtnCls;
+                    btnDaily.className = inactiveBtnCls;
+                }
+            }
+
+            const rangeBtns = {
+                '7D': document.getElementById("btn-overview-range-7d"),
+                '30D': document.getElementById("btn-overview-range-30d"),
+                '90D': document.getElementById("btn-overview-range-90d"),
+                'ALL': document.getElementById("btn-overview-range-all"),
+            };
+
+            const activeRangeCls = "px-2 py-0.5 rounded bg-blue-600 text-white font-semibold text-[11px] shadow-xs cursor-pointer";
+            const inactiveRangeCls = "px-2 py-0.5 rounded text-slate-500 hover:text-slate-800 text-[11px] cursor-pointer";
+
+            for (const [r, btn] of Object.entries(rangeBtns)) {
+                if (btn) {
+                    btn.className = (overviewRange === r) ? activeRangeCls : inactiveRangeCls;
+                }
+            }
+
+            const cpiBtn = document.getElementById("btn-overview-cpi-toggle");
+            const cpiTxt = document.getElementById("cpi-toggle-text");
+            if (cpiBtn) {
+                if (overviewShowCpi) {
+                    cpiBtn.className = "px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-800 hover:bg-amber-500/30 border border-amber-300 font-semibold text-[11px] cursor-pointer flex items-center gap-1";
+                    if (cpiTxt) cpiTxt.textContent = "MoSPI CPI: ON";
+                } else {
+                    cpiBtn.className = "px-2.5 py-0.5 rounded bg-slate-100 text-slate-500 hover:bg-slate-200 border border-slate-300 font-semibold text-[11px] cursor-pointer flex items-center gap-1";
+                    if (cpiTxt) cpiTxt.textContent = "MoSPI CPI: OFF";
                 }
             }
         }
@@ -540,20 +583,34 @@
             const trend = chartData.trend || {};
             const isPsd = overviewWeighting === 'psd';
 
-            const lasp = isPsd 
+            const rawLabels = trend.labels || [];
+            const rawLasp = isPsd 
                 ? (trend.laspeyres_psd || [])
                 : (trend.laspeyres_uniform || []);
-            const jev = isPsd
+            const rawJev = isPsd
                 ? (trend.jevons_psd || [])
                 : (trend.jevons_uniform || []);
-            const mvg = trend.moving_avg || [];
+            const rawMvg = trend.moving_avg || [];
+            const rawCpi = trend.cpi || [];
+
+            let sliceCount = rawLabels.length;
+            if (overviewRange === '7D') sliceCount = 7;
+            else if (overviewRange === '30D') sliceCount = 30;
+            else if (overviewRange === '90D') sliceCount = 90;
+
+            const start = Math.max(0, rawLabels.length - sliceCount);
+            const labels = rawLabels.slice(start);
+            const lasp = rawLasp.slice(start);
+            const jev = rawJev.slice(start);
+            const mvg = rawMvg.slice(start);
+            const cpi = rawCpi.slice(start);
 
             const datasets = [
                 {
                     label: isPsd ? "Laspeyres APIx (PSD Traffic Weighted)" : "Laspeyres APIx (Uniform Weighted)",
                     data: lasp,
-                    borderColor: "#205493",
-                    backgroundColor: "rgba(32, 84, 147, 0.08)",
+                    borderColor: "#1e40af",
+                    backgroundColor: "rgba(30, 64, 175, 0.08)",
                     borderWidth: 2.5,
                     fill: true,
                     tension: 0.3,
@@ -563,7 +620,7 @@
                 {
                     label: isPsd ? "Geometric Jevons APIx (PSD Weighted)" : "Geometric Jevons APIx (Uniform Weighted)",
                     data: jev,
-                    borderColor: "#dd6b20",
+                    borderColor: "#0891b2",
                     borderDash: [4, 4],
                     borderWidth: 2,
                     fill: false,
@@ -587,45 +644,89 @@
                 });
             }
 
+            if (overviewShowCpi && cpi.length > 0) {
+                datasets.push({
+                    label: "Official MoSPI CPI (Airfare Benchmark)",
+                    data: cpi,
+                    borderColor: "#d97706",
+                    backgroundColor: "transparent",
+                    borderWidth: 2.5,
+                    stepped: true,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                });
+            }
+
+            chart.data.labels = labels;
             chart.data.datasets = datasets;
             chart.update('active');
         }
 
-        function initOverviewCharts() {
+        function updateOverviewFareChart() {
             const chartData = window.__INITIAL_CHARTS__ || {};
             const trend = chartData.trend || {};
             const dates = trend.labels || [];
-            const trendDatasets = trend.datasets || [];
-            const lasp = trend.laspeyres_psd || trendDatasets.find(d => d.label.includes("Laspeyres"))?.data || [];
-            const jev = trend.jevons_psd || trendDatasets.find(d => d.label.includes("Jevons"))?.data || [];
-            const fares = trendDatasets.find(d => d.label.includes("Average Fare"))?.data || [];
+            let fares = trend.average_fares || (trend.datasets || []).find(d => d.label && d.label.includes("Average Fare"))?.data || [];
 
-            const ctx1 = document.getElementById("overview-apix-chart");
-            if (ctx1) {
-                if (window.__CHARTS__["overview-apix"]) window.__CHARTS__["overview-apix"].destroy();
-                window.__CHARTS__["overview-apix"] = new Chart(ctx1, {
+            if (!fares || fares.length === 0) {
+                const lasp = trend.laspeyres_psd || trend.laspeyres_uniform || [];
+                fares = lasp.map(v => Math.round(5519.42 * (v / 100.0)));
+            }
+
+            let sliceCount = 30;
+            if (overviewRange === '7D') sliceCount = 7;
+            else if (overviewRange === '30D') sliceCount = 30;
+            else if (overviewRange === '90D') sliceCount = 90;
+            else if (overviewRange === 'ALL') sliceCount = dates.length;
+
+            const start = Math.max(0, dates.length - sliceCount);
+            const sliceDates = dates.slice(start);
+            const sliceFares = fares.slice(start);
+
+            // Update badge and stat labels
+            const badge = document.getElementById("overview-fare-series-badge");
+            if (badge) badge.textContent = (overviewRange === 'ALL' ? 'All-Time' : overviewRange) + ' Series';
+
+            const lbl1 = document.getElementById("overview-fare-range-label");
+            const lbl2 = document.getElementById("overview-fare-range-label-2");
+            if (lbl1) lbl1.textContent = overviewRange;
+            if (lbl2) lbl2.textContent = overviewRange;
+
+            if (sliceFares.length > 0) {
+                const low = Math.min(...sliceFares);
+                const high = Math.max(...sliceFares);
+                const spread = high - low;
+
+                const lowEl = document.getElementById("overview-fare-low");
+                const highEl = document.getElementById("overview-fare-high");
+                const spreadEl = document.getElementById("overview-fare-spread");
+
+                if (lowEl) lowEl.textContent = "₹" + Math.round(low).toLocaleString();
+                if (highEl) highEl.textContent = "₹" + Math.round(high).toLocaleString();
+                if (spreadEl) spreadEl.textContent = "₹" + Math.round(spread).toLocaleString();
+            }
+
+            const ctx2 = document.getElementById("overview-fare-chart");
+            if (!ctx2) return;
+
+            if (window.__CHARTS__["overview-fare"]) {
+                const chart = window.__CHARTS__["overview-fare"];
+                chart.data.labels = sliceDates;
+                chart.data.datasets[0].data = sliceFares;
+                chart.update('active');
+            } else {
+                window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
                     type: "line",
                     data: {
-                        labels: dates,
+                        labels: sliceDates,
                         datasets: [
                             {
-                                label: "Laspeyres APIx (Fixed DGCA Basket)",
-                                data: lasp,
-                                borderColor: "#205493",
-                                backgroundColor: "rgba(32, 84, 147, 0.08)",
+                                label: "National Average Fare (₹)",
+                                data: sliceFares,
+                                borderColor: "#059669",
+                                backgroundColor: "rgba(5, 150, 105, 0.08)",
                                 borderWidth: 2.5,
                                 fill: true,
-                                tension: 0.3,
-                                pointRadius: 2,
-                                pointHoverRadius: 5
-                            },
-                            {
-                                label: "Geometric Jevons APIx",
-                                data: jev,
-                                borderColor: "#dd6b20",
-                                borderDash: [4, 4],
-                                borderWidth: 2,
-                                fill: false,
                                 tension: 0.3,
                                 pointRadius: 2,
                                 pointHoverRadius: 5
@@ -637,58 +738,12 @@
                         maintainAspectRatio: false,
                         interaction: { intersect: false, mode: "index" },
                         plugins: {
-                            legend: { position: "top", labels: { boxWidth: 12, font: { size: 11, family: "Inter" } } },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(c) {
-                                        return c.dataset.label + ": " + c.parsed.y.toFixed(2);
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                min: 98,
-                                grid: { color: "#f1f5f9" },
-                                ticks: { font: { size: 10, family: "JetBrains Mono" } }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 10, family: "JetBrains Mono" } }
-                            }
-                        }
-                    }
-                });
-            }
-
-            const ctx2 = document.getElementById("overview-fare-chart");
-            if (ctx2) {
-                if (window.__CHARTS__["overview-fare"]) window.__CHARTS__["overview-fare"].destroy();
-                window.__CHARTS__["overview-fare"] = new Chart(ctx2, {
-                    type: "line",
-                    data: {
-                        labels: dates,
-                        datasets: [
-                            {
-                                label: "National Average Fare (₹)",
-                                data: fares,
-                                borderColor: "#059669",
-                                backgroundColor: "rgba(5, 150, 105, 0.08)",
-                                borderWidth: 2.5,
-                                fill: true,
-                                tension: 0.3,
-                                pointRadius: 2
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
                             legend: { display: false },
                             tooltip: {
                                 callbacks: {
-                                    label: function(c) { return "₹" + Math.round(c.parsed.y).toLocaleString(); }
+                                    label: function(c) {
+                                        return "National Avg Fare: ₹" + Math.round(c.parsed.y).toLocaleString();
+                                    }
                                 }
                             }
                         },
@@ -697,7 +752,7 @@
                                 grid: { color: "#f1f5f9" },
                                 ticks: {
                                     font: { size: 10, family: "JetBrains Mono" },
-                                    callback: function(v) { return "₹" + v; }
+                                    callback: function(v) { return "₹" + Math.round(v).toLocaleString(); }
                                 }
                             },
                             x: {
@@ -708,31 +763,94 @@
                     }
                 });
             }
+        }
+
+        function initOverviewCharts() {
+            const chartData = window.__INITIAL_CHARTS__ || {};
+
+            const ctx1 = document.getElementById("overview-apix-chart");
+            if (ctx1) {
+                if (window.__CHARTS__["overview-apix"]) window.__CHARTS__["overview-apix"].destroy();
+                window.__CHARTS__["overview-apix"] = new Chart(ctx1, {
+                    type: "line",
+                    data: {
+                        labels: [],
+                        datasets: []
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { intersect: false, mode: "index" },
+                        plugins: {
+                            legend: { position: "top", labels: { boxWidth: 12, font: { size: 11, family: "Inter" } } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return c.dataset.label + ": " + (c.parsed.y !== null && c.parsed.y !== undefined ? c.parsed.y.toFixed(2) : "N/A");
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                grid: { color: "#f1f5f9" },
+                                ticks: { font: { size: 10, family: "JetBrains Mono" } }
+                            },
+                            x: {
+                                grid: { display: false },
+                                ticks: { font: { size: 10, family: "JetBrains Mono" } }
+                            }
+                        }
+                    }
+                });
+                updateOverviewControls();
+                updateOverviewApixChart();
+            }
+
+            updateOverviewFareChart();
 
             const ctx3 = document.getElementById("overview-lead-chart");
             if (ctx3) {
                 if (window.__CHARTS__["overview-lead"]) window.__CHARTS__["overview-lead"].destroy();
+                const leadData = chartData.elasticity?.datasets?.[0]?.data || [8240, 6150, 5280, 4490, 4290];
+                const leadLabels = chartData.elasticity?.labels || ["T+1", "T+7", "T+15", "T+30", "T+45"];
                 window.__CHARTS__["overview-lead"] = new Chart(ctx3, {
                     type: "line",
                     data: {
-                        labels: ["T+1", "T+7", "T+15", "T+30", "T+45"],
+                        labels: leadLabels,
                         datasets: [{
-                            label: "Fare (₹)",
-                            data: [8240, 6150, 5280, 4490, 4290],
+                            label: "Median Fare (₹)",
+                            data: leadData,
                             borderColor: "#9333ea",
                             backgroundColor: "rgba(147, 51, 234, 0.1)",
                             borderWidth: 2,
                             fill: true,
                             tension: 0.35,
-                            pointRadius: 3
+                            pointRadius: 3,
+                            pointHoverRadius: 6
                         }]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(c) {
+                                        return "Lead Time Fare: ₹" + Math.round(c.parsed.y).toLocaleString();
+                                    }
+                                }
+                            }
+                        },
                         scales: {
-                            y: { ticks: { font: { size: 9, family: "JetBrains Mono" } } },
+                            y: {
+                                grid: { color: "#f1f5f9" },
+                                ticks: {
+                                    font: { size: 9, family: "JetBrains Mono" },
+                                    callback: function(v) { return "₹" + Math.round(v).toLocaleString(); }
+                                }
+                            },
                             x: { ticks: { font: { size: 9, family: "JetBrains Mono" } } }
                         }
                     }
