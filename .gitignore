@@ -41,6 +41,8 @@ data/raw/*
 !data/raw/.gitkeep
 data/normalized/*
 !data/normalized/.gitkeep
+!data/normalized/cleartrip/
+!data/normalized/cleartrip/*.json
 data/processed/*
 !data/processed/.gitkeep
 data/sample/*
