@@ -44,7 +44,7 @@ data/raw/*
 data/normalized/*
 !data/normalized/.gitkeep
 !data/normalized/cleartrip/
-!data/normalized/cleartrip/cleartrip_flights_20260910T062546Z.json
+!data/normalized/cleartrip/*.json
 data/processed/*
 !data/processed/.gitkeep
 data/sample/*

@@ -1,0 +1,12 @@
+{
+  "source": "cleartrip",
+  "route": {
+    "origin": "DEL",
+    "destination": "BLR"
+  },
+  "departure_date": "16/09/2026",
+  "status": "no_v2_response",
+  "flight_count": 0,
+  "flights": [],
+  "captured_at_utc": "20260909T125454Z"
+}
