@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import os
 import re
+import threading
 
 import psycopg2
 import psycopg2.extras
@@ -26,19 +27,32 @@ DEFAULT_PG_DSN = "postgresql://postgres:postgres@localhost:5432/airfare_index"
 class _PgCursor:
     """Thin cursor wrapper that exposes ``lastrowid`` and ``rowcount``."""
 
-    def __init__(self, pg_cursor):
+    def __init__(self, pg_cursor, rows=None):
         self._cur = pg_cursor
+        self._rows = rows
+        self._idx = 0
         self.lastrowid: int = 0
         self.rowcount: int = 0
 
     def fetchone(self):
-        row = self._cur.fetchone()
-        return row
+        if self._rows is not None:
+            if self._idx < len(self._rows):
+                row = self._rows[self._idx]
+                self._idx += 1
+                return row
+            return None
+        return self._cur.fetchone()
 
     def fetchall(self):
+        if self._rows is not None:
+            remaining = self._rows[self._idx :]
+            self._idx = len(self._rows)
+            return remaining
         return self._cur.fetchall()
 
     def __iter__(self):
+        if self._rows is not None:
+            return iter(self._rows)
         return iter(self._cur)
 
 
@@ -50,10 +64,12 @@ class PostgresConnectionWrapper:
     * ``INSERT OR IGNORE`` → ``INSERT … ON CONFLICT DO NOTHING``
     * ``dict``-like row access via ``RealDictCursor``
     * ``executescript`` for multi-statement DDL
+    * Thread-safe query execution with cursor buffering
     """
 
     def __init__(self, pg_conn):
         self.pg_conn = pg_conn
+        self._lock = threading.Lock()
 
     # ---- SQL translation helpers ----
 
@@ -78,51 +94,59 @@ class PostgresConnectionWrapper:
     # ---- public API matching sqlite3.Connection ----
 
     def execute(self, sql: str, params: tuple = ()):
-        needs_conflict = self._needs_on_conflict(sql)
-        pg_sql = self._rewrite_sql(sql)
+        with self._lock:
+            needs_conflict = self._needs_on_conflict(sql)
+            pg_sql = self._rewrite_sql(sql)
 
-        if needs_conflict:
-            # Detect target table to choose the right conflict target.
-            if "fares" in pg_sql.lower():
-                pg_sql = pg_sql.rstrip().rstrip(";")
-                pg_sql += " ON CONFLICT (raw_offer_id) DO NOTHING"
-            elif "index_results" in pg_sql.lower():
-                pg_sql = pg_sql.rstrip().rstrip(";")
-                pg_sql += (
-                    " ON CONFLICT (base_period, current_period) DO UPDATE SET "
-                    "overall_laspeyres_index = EXCLUDED.overall_laspeyres_index, "
-                    "overall_jevons_index = EXCLUDED.overall_jevons_index, "
-                    "item_indices_json = EXCLUDED.item_indices_json, "
-                    "methodology_json = EXCLUDED.methodology_json"
-                )
+            if needs_conflict:
+                # Detect target table to choose the right conflict target.
+                if "fares" in pg_sql.lower():
+                    pg_sql = pg_sql.rstrip().rstrip(";")
+                    pg_sql += " ON CONFLICT (raw_offer_id) DO NOTHING"
+                elif "index_results" in pg_sql.lower():
+                    pg_sql = pg_sql.rstrip().rstrip(";")
+                    pg_sql += (
+                        " ON CONFLICT (base_period, current_period) DO UPDATE SET "
+                        "overall_laspeyres_index = EXCLUDED.overall_laspeyres_index, "
+                        "overall_jevons_index = EXCLUDED.overall_jevons_index, "
+                        "item_indices_json = EXCLUDED.item_indices_json, "
+                        "methodology_json = EXCLUDED.methodology_json"
+                    )
 
-        cur = self.pg_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(pg_sql, params)
+            cur = self.pg_conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            cur.execute(pg_sql, params)
 
-        wrapper = _PgCursor(cur)
-        wrapper.rowcount = cur.rowcount if cur.rowcount >= 0 else 0
+            rows = None
+            if cur.description is not None:
+                rows = cur.fetchall()
 
-        if needs_conflict and wrapper.rowcount > 0:
-            # Fetch the id of the just-inserted row.
-            try:
-                cur2 = self.pg_conn.cursor()
-                cur2.execute("SELECT lastval()")
-                wrapper.lastrowid = cur2.fetchone()[0]
-            except Exception:
-                wrapper.lastrowid = 0
-        return wrapper
+            wrapper = _PgCursor(cur, rows=rows)
+            wrapper.rowcount = cur.rowcount if cur.rowcount >= 0 else 0
+
+            if needs_conflict and wrapper.rowcount > 0:
+                # Fetch the id of the just-inserted row.
+                try:
+                    cur2 = self.pg_conn.cursor()
+                    cur2.execute("SELECT lastval()")
+                    wrapper.lastrowid = cur2.fetchone()[0]
+                except Exception:
+                    wrapper.lastrowid = 0
+            return wrapper
 
     def executescript(self, sql: str):
         """Execute multiple DDL statements (used by init_schema fallback)."""
-        cur = self.pg_conn.cursor()
-        cur.execute(sql)
-        self.pg_conn.commit()
+        with self._lock:
+            cur = self.pg_conn.cursor()
+            cur.execute(sql)
+            self.pg_conn.commit()
 
     def commit(self):
-        self.pg_conn.commit()
+        with self._lock:
+            self.pg_conn.commit()
 
     def close(self):
-        self.pg_conn.close()
+        with self._lock:
+            self.pg_conn.close()
 
 
 class PostgresConnector:

@@ -1825,28 +1825,52 @@
             applyExplorerFilters();
         }
 
-        function refreshBlueprintData() {
+        async function refreshBlueprintData() {
             const icon = document.getElementById("header-refresh-icon");
             if (icon) icon.classList.add("fa-spin");
 
-            fetch("/dashboard/api/pipeline/ingest", { method: "POST" })
-                .catch(err => console.warn("Pipeline ingest note:", err))
-                .finally(() => {
-                    Promise.all([
-                        fetch("/dashboard/api/blueprint?refresh=true").then(r => r.json()).then(d => { window.__BLUEPRINT_DATA__ = d; }),
-                        fetch("/dashboard/api/kpis?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_KPIS__ = d; }),
-                        fetch("/dashboard/api/charts?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_CHARTS__ = d; }),
-                        fetch("/dashboard/api/heatmap?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_HEATMAP__ = d; }),
-                    ])
-                    .then(() => {
-                        renderAllModules();
-                        if (icon) icon.classList.remove("fa-spin");
-                    })
-                    .catch(err => {
-                        console.error("Refresh failed:", err);
-                        if (icon) icon.classList.remove("fa-spin");
-                    });
-                });
+            try {
+                // 1. Ingest any pending pipeline files and run collection cycle
+                const ingestResp = await fetch("/dashboard/api/pipeline/ingest", { method: "POST" });
+                if (!ingestResp.ok) {
+                    console.warn("Pipeline ingest HTTP status:", ingestResp.status);
+                }
+            } catch (err) {
+                console.warn("Pipeline ingest non-critical notice:", err);
+            }
+
+            try {
+                // 2. Fetch fresh dashboard data with HTTP status verification
+                const [bpResp, kpisResp, chartsResp, heatmapResp] = await Promise.all([
+                    fetch("/dashboard/api/blueprint?refresh=true"),
+                    fetch("/dashboard/api/kpis?refresh=true"),
+                    fetch("/dashboard/api/charts?refresh=true"),
+                    fetch("/dashboard/api/heatmap?refresh=true"),
+                ]);
+
+                if (bpResp.ok) {
+                    const bpData = await bpResp.json();
+                    if (bpData) window.__BLUEPRINT_DATA__ = bpData;
+                }
+                if (kpisResp.ok) {
+                    const kpisData = await kpisResp.json();
+                    if (kpisData) window.__INITIAL_KPIS__ = kpisData;
+                }
+                if (chartsResp.ok) {
+                    const chartsData = await chartsResp.json();
+                    if (chartsData) window.__INITIAL_CHARTS__ = chartsData;
+                }
+                if (heatmapResp.ok) {
+                    const heatmapData = await heatmapResp.json();
+                    if (heatmapData) window.__INITIAL_HEATMAP__ = heatmapData;
+                }
+
+                renderAllModules();
+            } catch (err) {
+                console.error("Refresh failed:", err);
+            } finally {
+                if (icon) icon.classList.remove("fa-spin");
+            }
         }
 
         // 5. Render Overview
