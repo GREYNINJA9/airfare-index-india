@@ -39,6 +39,8 @@ htmlcov/
 # Scraper / Data Artifacts
 data/raw/*
 !data/raw/.gitkeep
+!data/raw/cleartrip/
+!data/raw/cleartrip/cleartrip_raw_20260909T053756Z.json
 data/normalized/*
 !data/normalized/.gitkeep
 !data/normalized/cleartrip/

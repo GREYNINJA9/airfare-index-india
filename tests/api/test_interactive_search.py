@@ -1,6 +1,6 @@
 
 import pytest
-from fastapi.testclient import TestClient
+from httpx import ASGITransport, AsyncClient
 
 from api.main import app
 from api.search import InteractiveSearchRequest
@@ -69,7 +69,8 @@ def test_interactive_request_rejects_invalid_or_unsupported_searches():
         )
 
 
-def test_unknown_interactive_job_returns_404():
-    with TestClient(app) as client:
-        response = client.get("/search/jobs/not-a-real-job")
+@pytest.mark.asyncio
+async def test_unknown_interactive_job_returns_404():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
+        response = await client.get("/search/jobs/not-a-real-job")
     assert response.status_code == 404
