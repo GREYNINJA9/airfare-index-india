@@ -374,16 +374,24 @@
         function refreshBlueprintData() {
             const icon = document.getElementById("header-refresh-icon");
             if (icon) icon.classList.add("fa-spin");
-            fetch("/dashboard/api/blueprint?refresh=true")
-                .then(r => r.json())
-                .then(data => {
-                    window.__BLUEPRINT_DATA__ = data;
-                    renderAllModules();
-                    if (icon) icon.classList.remove("fa-spin");
-                })
-                .catch(err => {
-                    console.error("Refresh failed:", err);
-                    if (icon) icon.classList.remove("fa-spin");
+
+            fetch("/dashboard/api/pipeline/ingest", { method: "POST" })
+                .catch(err => console.warn("Pipeline ingest note:", err))
+                .finally(() => {
+                    Promise.all([
+                        fetch("/dashboard/api/blueprint?refresh=true").then(r => r.json()).then(d => { window.__BLUEPRINT_DATA__ = d; }),
+                        fetch("/dashboard/api/kpis?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_KPIS__ = d; }),
+                        fetch("/dashboard/api/charts?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_CHARTS__ = d; }),
+                        fetch("/dashboard/api/heatmap?refresh=true").then(r => r.json()).then(d => { window.__INITIAL_HEATMAP__ = d; }),
+                    ])
+                    .then(() => {
+                        renderAllModules();
+                        if (icon) icon.classList.remove("fa-spin");
+                    })
+                    .catch(err => {
+                        console.error("Refresh failed:", err);
+                        if (icon) icon.classList.remove("fa-spin");
+                    });
                 });
         }
 
